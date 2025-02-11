@@ -1,4 +1,9 @@
+using LinkBlog.ApiService;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add business logic services
+builder.Services.AddActivatedSingleton<IPostStore, StaticPostStore>();
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
@@ -8,6 +13,8 @@ builder.Services.AddProblemDetails();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -20,6 +27,8 @@ if (app.Environment.IsDevelopment())
 }
 
 string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+
+app.MapControllers();
 
 app.MapGet("/weatherforecast", () =>
 {
