@@ -2,13 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.0.0
 MinimumVisualStudioVersion = 17.8.0.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.AppHost", "LinkBlog.AppHost\LinkBlog.AppHost.csproj", "{5F1E5F98-31A3-4389-B08D-6B4FC8FAEBF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.AppHost", "src\LinkBlog.AppHost\LinkBlog.AppHost.csproj", "{5F1E5F98-31A3-4389-B08D-6B4FC8FAEBF0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.ServiceDefaults", "LinkBlog.ServiceDefaults\LinkBlog.ServiceDefaults.csproj", "{2432D3CD-AC2E-402B-B4AA-BD20DC0BA6DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.ServiceDefaults", "src\LinkBlog.ServiceDefaults\LinkBlog.ServiceDefaults.csproj", "{2432D3CD-AC2E-402B-B4AA-BD20DC0BA6DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.ApiService", "LinkBlog.ApiService\LinkBlog.ApiService.csproj", "{1D46329F-AA92-4848-A506-2B57D95A093C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.ApiService", "src\LinkBlog.ApiService\LinkBlog.ApiService.csproj", "{1D46329F-AA92-4848-A506-2B57D95A093C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.Web", "LinkBlog.Web\LinkBlog.Web.csproj", "{9B11F45A-3377-4652-86A3-B2D294E57E3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.Web", "src\LinkBlog.Web\LinkBlog.Web.csproj", "{9B11F45A-3377-4652-86A3-B2D294E57E3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
