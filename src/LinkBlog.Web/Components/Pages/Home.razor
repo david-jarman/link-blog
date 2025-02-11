@@ -1,7 +1,45 @@
 ﻿@page "/"
+@attribute [StreamRendering(true)]
+@attribute [OutputCache(Duration = 5)]
+
+@inject PostsClient PostsClient
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>David Jarman's Links</h1>
 
-Welcome to your new app.
+@if (posts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <main>
+        @foreach (var post in posts)
+        {
+            <article>
+                <h2>@post.Title</h2>
+                <p class="meta">
+                    Posted on <time datetime="@post.Date.ToString("yyyy-MM-dd")">@post.Date.ToString("f")</time>
+                </p>
+                <p>
+                    @if (post.Url != null)
+                    {
+                        <a href="@post.Url">@post.Url</a>
+                    }
+
+                    @post.Contents
+                </p>
+            </article>
+        }
+    </main>
+}
+
+@code {
+    private Post[]? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await PostsClient.GetPostsAsync();
+    }
+}
