@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.0.0
 MinimumVisualStudioVersion = 17.8.0.0
@@ -9,6 +9,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.ApiService", "src\LinkBlog.ApiService\LinkBlog.ApiService.csproj", "{1D46329F-AA92-4848-A506-2B57D95A093C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.Web", "src\LinkBlog.Web\LinkBlog.Web.csproj", "{9B11F45A-3377-4652-86A3-B2D294E57E3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AE0024C3-CB33-487B-940F-4BEE5453BD5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Contracts", "src\LinkBlog.Contracts\LinkBlog.Contracts.csproj", "{C0EDC700-D716-4F04-BF9B-711AFA6D354E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,11 +36,18 @@ Global
 		{9B11F45A-3377-4652-86A3-B2D294E57E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B11F45A-3377-4652-86A3-B2D294E57E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B11F45A-3377-4652-86A3-B2D294E57E3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0EDC700-D716-4F04-BF9B-711AFA6D354E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0EDC700-D716-4F04-BF9B-711AFA6D354E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0EDC700-D716-4F04-BF9B-711AFA6D354E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0EDC700-D716-4F04-BF9B-711AFA6D354E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {89DE4088-5F26-449B-B073-B4C1D8EBE2E2}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C0EDC700-D716-4F04-BF9B-711AFA6D354E} = {AE0024C3-CB33-487B-940F-4BEE5453BD5B}
 	EndGlobalSection
 EndGlobal

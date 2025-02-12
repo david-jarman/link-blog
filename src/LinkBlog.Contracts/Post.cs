@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LinkBlog.ApiService;
+namespace LinkBlog.Contracts;
 
 public sealed class Post
 {

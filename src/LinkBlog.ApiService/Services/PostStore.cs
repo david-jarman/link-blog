@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using LinkBlog.Contracts;
 
 namespace LinkBlog.ApiService;
 
