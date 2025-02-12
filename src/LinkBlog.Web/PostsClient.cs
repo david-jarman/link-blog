@@ -27,18 +27,21 @@ public class PostsClient(HttpClient httpClient)
 
 public sealed class Post
 {
+    [JsonConstructor]
     public Post(
         string id,
         string title,
         DateTimeOffset date,
-        string? url = null,
+        string? link = null,
+        string? linkTitle = null,
         string? contents = null,
         string[]? tags = null)
     {
         Id = id;
         Title = title;
         Date = date;
-        Url = url;
+        Link = link;
+        LinkTitle = linkTitle;
         Contents = contents;
         Tags = tags ?? Array.Empty<string>();
     }
@@ -52,8 +55,11 @@ public sealed class Post
     [JsonPropertyName("date")]
     public DateTimeOffset Date { get; }
 
-    [JsonPropertyName("url")]
-    public string? Url { get; }
+    [JsonPropertyName("link")]
+    public string? Link { get; }
+
+    [JsonPropertyName("linkTitle")]
+    public string? LinkTitle { get; }
 
     [JsonPropertyName("contents")]
     public string? Contents { get; }

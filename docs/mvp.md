@@ -21,6 +21,7 @@ What data should a post contain?
 
 - Id (permanent reference)
 - Link (optional)
+- Link Title
 - Contents (optional, if Link is specified)
 - Title
 - Date

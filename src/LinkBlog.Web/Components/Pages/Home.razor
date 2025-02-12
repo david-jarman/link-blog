@@ -23,13 +23,14 @@ else
                     Posted on <time datetime="@post.Date.ToString("yyyy-MM-dd")">@post.Date.ToString("f")</time>
                 </p>
                 <p>
-                    @if (post.Url != null)
+                    @if (post.Link != null)
                     {
-                        <a href="@post.Url" target="_blank" rel="noopener noreferrer">@post.Url</a>
+                        <a href="@post.Link" target="_blank" rel="noopener noreferrer">@post.LinkTitle</a>
                         <br><br>
                     }
 
-                    @post.Contents
+                    <!-- The post contents can contain Html tags for formatting. -->
+                    @((MarkupString)post.Contents!)
                 </p>
             </article>
         }
