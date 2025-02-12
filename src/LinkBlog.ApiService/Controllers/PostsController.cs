@@ -1,5 +1,5 @@
 using LinkBlog.ApiService;
-using Microsoft.AspNetCore.Http;
+using LinkBlog.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyApp.Namespace
@@ -21,6 +21,14 @@ namespace MyApp.Namespace
             var posts = postStore.GetPosts().Skip(page * 10).Take(10);
 
             return Ok(posts);
+        }
+
+        [HttpGet]
+        [Route("tag/{tag}")]
+        [ProducesResponseType(200)]
+        public IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken ct)
+        {
+            return postStore.GetPostsForTag(tag, ct);
         }
     }
 }
