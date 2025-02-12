@@ -17,7 +17,7 @@ else
     <main>
         @foreach (var post in posts)
         {
-            <article>
+            <article class="post">
                 <h2>@post.Title</h2>
                 <p class="meta">
                     Posted on <time datetime="@post.Date.ToString("yyyy-MM-dd")">@post.Date.ToString("f")</time>
@@ -25,7 +25,8 @@ else
                 <p>
                     @if (post.Url != null)
                     {
-                        <a href="@post.Url">@post.Url</a>
+                        <a href="@post.Url" target="_blank" rel="noopener noreferrer">@post.Url</a>
+                        <br><br>
                     }
 
                     @post.Contents
