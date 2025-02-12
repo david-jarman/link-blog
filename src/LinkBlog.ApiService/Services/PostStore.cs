@@ -37,6 +37,7 @@ public class StaticPostStore : IPostStore
     {
         using var activity = _activitySource.StartActivity(nameof(GetPostsForTag));
         activity?.SetTag("tag", tag);
+        cancellationToken.Register(() => activity?.AddEvent(new ActivityEvent("Cancelled")));
 
         await foreach (var post in GetAllPosts(cancellationToken))
         {
