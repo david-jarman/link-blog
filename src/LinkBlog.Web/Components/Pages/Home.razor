@@ -33,6 +33,9 @@ else
                     <!-- The post contents can contain Html tags for formatting. -->
                     @((MarkupString)post.Contents!)
                 </p>
+                <p>
+                    Tags: @string.Join(", ", post.Tags)
+                </p>
             </article>
         }
     </main>
