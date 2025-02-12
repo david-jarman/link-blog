@@ -1,0 +1,48 @@
+﻿@page "/posts/{tag}"
+@using LinkBlog.Contracts
+@using LinkBlog.Web.Components.Posts
+@attribute [StreamRendering(true)]
+@attribute [OutputCache(Duration = 5)]
+
+@inject PostsClient PostsClient
+@inject ILogger<PostsForTag> Logger
+
+<PageTitle>Filter by tag</PageTitle>
+
+<h1>Tag: @Tag</h1>
+
+@if (posts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <PostList Posts="posts" />
+}
+
+@code {
+    [Parameter]
+    public string? Tag { get; set; }
+
+    private Post[]? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Tag))
+        {
+            Logger.LogWarning("No tag specified.");
+            return;
+        }
+
+        List<Post> posts = new List<Post>();
+        await foreach (var post in PostsClient.GetPostsForTagAsync(Tag))
+        {
+            if (post != null)
+            {
+                posts.Add(post);
+            }
+        }
+
+        this.posts = posts.ToArray();
+    }
+}

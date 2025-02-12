@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using LinkBlog.Contracts
+@using LinkBlog.Web.Components.Posts
 @attribute [StreamRendering(true)]
 @attribute [OutputCache(Duration = 5)]
 
@@ -15,30 +16,7 @@
 }
 else
 {
-    <main>
-        @foreach (var post in posts)
-        {
-            <article class="post">
-                <h2>@post.Title</h2>
-                <p class="meta">
-                    Posted on <time datetime="@post.Date.ToString("yyyy-MM-dd")">@post.Date.ToString("f")</time>
-                </p>
-                <p>
-                    @if (post.Link != null)
-                    {
-                        <a href="@post.Link" target="_blank" rel="noopener noreferrer">@post.LinkTitle</a>
-                        <br><br>
-                    }
-
-                    <!-- The post contents can contain Html tags for formatting. -->
-                    @((MarkupString)post.Contents!)
-                </p>
-                <p>
-                    Tags: @string.Join(", ", post.Tags)
-                </p>
-            </article>
-        }
-    </main>
+    <PostList Posts="posts" />
 }
 
 @code {

@@ -1,0 +1,41 @@
+@using LinkBlog.Contracts
+@using Microsoft.AspNetCore.Components
+
+@if (Posts == null || Posts.Length == 0)
+{
+    <p><em>No posts to display.</em></p>
+}
+else
+{
+    <main>
+        @foreach (var post in Posts)
+        {
+            <article class="post">
+                <h2>@post.Title</h2>
+                <p class="meta">
+                    Posted on <time datetime="@post.Date.ToString("yyyy-MM-dd")">@post.Date.ToString("f")</time>
+                </p>
+                <p>
+                    @if (post.Link != null)
+                    {
+                        <a href="@post.Link" target="_blank" rel="noopener noreferrer">@post.LinkTitle</a>
+                        <br /><br />
+                    }
+                    <!-- The post contents can contain HTML tags for formatting. -->
+                    @((MarkupString)post.Contents!)
+                </p>
+                <p>
+                    Tags: @foreach (var tag in post.Tags)
+                    {
+                        <a href="/posts/@tag" class="tag">@tag</a>@(tag != post.Tags.Last() ? ", " : "")
+                    }
+                </p>
+            </article>
+        }
+    </main>
+}
+
+@code {
+    [Parameter]
+    public Post[]? Posts { get; set; }
+}

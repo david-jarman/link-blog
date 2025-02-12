@@ -23,4 +23,9 @@ public class PostsClient(HttpClient httpClient)
 
         return posts?.ToArray() ?? [];
     }
+
+    public IAsyncEnumerable<Post?> GetPostsForTagAsync(string tag, CancellationToken cancellationToken = default)
+    {
+        return httpClient.GetFromJsonAsAsyncEnumerable<Post>($"/api/posts/tag/{tag}", cancellationToken);
+    }
 }
