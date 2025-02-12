@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using LinkBlog.Contracts;
 
@@ -13,6 +14,8 @@ public interface IPostStore
 
 public class StaticPostStore : IPostStore
 {
+    private static readonly ActivitySource _activitySource = new("LinkBlog.ApiService");
+
     private readonly ILogger<StaticPostStore> _logger;
     private readonly DirectoryInfo _directory;
 
@@ -32,6 +35,9 @@ public class StaticPostStore : IPostStore
 
     public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        using var activity = _activitySource.StartActivity(nameof(GetPostsForTag));
+        activity?.SetTag("tag", tag);
+
         await foreach (var post in GetAllPosts(cancellationToken))
         {
             if (post.Tags.Contains(tag, StringComparer.OrdinalIgnoreCase))
