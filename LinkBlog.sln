@@ -6,8 +6,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.AppHost", "src\Lin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.ServiceDefaults", "src\LinkBlog.ServiceDefaults\LinkBlog.ServiceDefaults.csproj", "{2432D3CD-AC2E-402B-B4AA-BD20DC0BA6DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.ApiService", "src\LinkBlog.ApiService\LinkBlog.ApiService.csproj", "{1D46329F-AA92-4848-A506-2B57D95A093C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.Web", "src\LinkBlog.Web\LinkBlog.Web.csproj", "{9B11F45A-3377-4652-86A3-B2D294E57E3A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AE0024C3-CB33-487B-940F-4BEE5453BD5B}"
@@ -28,10 +26,6 @@ Global
 		{2432D3CD-AC2E-402B-B4AA-BD20DC0BA6DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2432D3CD-AC2E-402B-B4AA-BD20DC0BA6DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2432D3CD-AC2E-402B-B4AA-BD20DC0BA6DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D46329F-AA92-4848-A506-2B57D95A093C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D46329F-AA92-4848-A506-2B57D95A093C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D46329F-AA92-4848-A506-2B57D95A093C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D46329F-AA92-4848-A506-2B57D95A093C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B11F45A-3377-4652-86A3-B2D294E57E3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B11F45A-3377-4652-86A3-B2D294E57E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B11F45A-3377-4652-86A3-B2D294E57E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
