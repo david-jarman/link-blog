@@ -12,7 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinkBlog.ApiService\LinkBlog.ApiService.csproj" />
     <ProjectReference Include="..\LinkBlog.Web\LinkBlog.Web.csproj" />
   </ItemGroup>
 

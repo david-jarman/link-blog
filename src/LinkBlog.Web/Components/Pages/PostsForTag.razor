@@ -1,10 +1,11 @@
 ﻿@page "/posts/{tag}"
 @using LinkBlog.Contracts
 @using LinkBlog.Web.Components.Posts
+@using LinkBlog.Web.Services
 @attribute [StreamRendering(true)]
 @attribute [OutputCache(Duration = 5)]
 
-@inject PostsClient PostsClient
+@inject IPostStore PostStore
 @inject ILogger<PostsForTag> Logger
 
 <PageTitle>Filter by tag</PageTitle>
@@ -35,7 +36,8 @@ else
         }
 
         List<Post> posts = new List<Post>();
-        await foreach (var post in PostsClient.GetPostsForTagAsync(Tag))
+        // REVIEW: Is there a way to get a cancellation token?
+        await foreach (var post in PostStore.GetPostsForTag(Tag))
         {
             if (post != null)
             {

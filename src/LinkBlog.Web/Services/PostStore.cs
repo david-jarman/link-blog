@@ -3,13 +3,13 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using LinkBlog.Contracts;
 
-namespace LinkBlog.ApiService;
+namespace LinkBlog.Web.Services;
 
 public interface IPostStore
 {
-    IEnumerable<Post?> GetPosts();
+    IAsyncEnumerable<Post> GetPosts(CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken cancellationToken);
+    IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken cancellationToken = default);
 }
 
 public class StaticPostStore : IPostStore
@@ -25,15 +25,12 @@ public class StaticPostStore : IPostStore
         _directory = new DirectoryInfo("Data");
     }
 
-    public IEnumerable<Post?> GetPosts()
+    public IAsyncEnumerable<Post> GetPosts(CancellationToken cancellationToken = default)
     {
-        this._logger.LogDebug("Getting posts from {Directory}", _directory.FullName);
-
-        return _directory.GetFiles("*.json")
-            .Select(file => JsonSerializer.Deserialize<Post>(File.ReadAllText(file.FullName)));
+        return GetAllPosts(cancellationToken);
     }
 
-    public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         using var activity = _activitySource.StartActivity(nameof(GetPostsForTag));
         activity?.SetTag("tag", tag);

@@ -1,10 +1,11 @@
 ﻿@page "/"
 @using LinkBlog.Contracts
 @using LinkBlog.Web.Components.Posts
+@using LinkBlog.Web.Services
 @attribute [StreamRendering(true)]
 @attribute [OutputCache(Duration = 5)]
 
-@inject PostsClient PostsClient
+@inject IPostStore PostStore
 
 <PageTitle>Home</PageTitle>
 
@@ -24,6 +25,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        posts = await PostsClient.GetPostsAsync();
+        // REVIEW: Is there a way to get a cancellation token?
+        List<Post> posts = new List<Post>();
+        await foreach (var post in PostStore.GetPosts())
+        {
+            if (post != null)
+            {
+                posts.Add(post);
+            }
+        }
+
+        this.posts = posts.ToArray();
     }
 }
