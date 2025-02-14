@@ -12,7 +12,9 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutputCache();
 
-builder.Services.AddActivatedSingleton<IPostStore, StaticPostStore>();
+builder.AddNpgsqlDbContext<PostDbContext>(connectionName: "postgresdb");
+
+builder.Services.AddScoped<IPostStore, PostStoreDb>();
 
 var app = builder.Build();
 

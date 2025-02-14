@@ -4,43 +4,24 @@ namespace LinkBlog.Contracts;
 
 public sealed class Post
 {
-    [JsonConstructor]
-    public Post(
-        string id,
-        string title,
-        DateTimeOffset date,
-        string? link = null,
-        string? linkTitle = null,
-        string? contents = null,
-        string[]? tags = null)
-    {
-        Id = id;
-        Title = title;
-        Date = date;
-        Link = link;
-        LinkTitle = linkTitle;
-        Contents = contents;
-        Tags = tags ?? Array.Empty<string>();
-    }
-
     [JsonPropertyName("id")]
-    public string Id { get; }
+    public string Id { get; set; }
 
     [JsonPropertyName("title")]
-    public string Title { get; }
+    public string Title { get; set; }
 
     [JsonPropertyName("date")]
-    public DateTimeOffset Date { get; }
+    public DateTimeOffset Date { get; set; }
 
     [JsonPropertyName("link")]
-    public string? Link { get; }
+    public string? Link { get; set; }
 
     [JsonPropertyName("linkTitle")]
-    public string? LinkTitle { get; }
+    public string? LinkTitle { get; set; }
 
     [JsonPropertyName("contents")]
-    public string? Contents { get; }
+    public string? Contents { get; set; }
 
     [JsonPropertyName("tags")]
-    public string[] Tags { get; }
+    public string[] Tags { get; set; }
 }

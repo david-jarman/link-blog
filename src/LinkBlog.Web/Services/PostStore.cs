@@ -12,6 +12,39 @@ public interface IPostStore
     IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken cancellationToken = default);
 }
 
+public class PostStoreDb : IPostStore
+{
+    private readonly PostDbContext postDbContext;
+
+    public PostStoreDb(PostDbContext postDbContext)
+    {
+        this.postDbContext = postDbContext;
+    }
+
+    public async IAsyncEnumerable<Post> GetPosts([EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+         await foreach (var post in this.postDbContext.Posts.AsAsyncEnumerable())
+         {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            yield return post;
+         }
+    }
+
+    public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        await foreach (var post in this.postDbContext.Posts.AsAsyncEnumerable())
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (post.Tags.Contains(tag, StringComparer.OrdinalIgnoreCase))
+            {
+                yield return post;
+            }
+        }
+    }
+}
+
 public class StaticPostStore : IPostStore
 {
     private static readonly ActivitySource _activitySource = new("LinkBlog.ApiService");
