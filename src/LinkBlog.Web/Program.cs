@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using LinkBlog.Web.Components;
 using LinkBlog.Web.Services;
 
@@ -12,7 +13,15 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutputCache();
 
-builder.AddNpgsqlDbContext<PostDbContext>(connectionName: "postgresdb");
+var isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
+builder.AddNpgsqlDbContext<PostDbContext>(connectionName: "postgresdb", options =>
+{
+    if (isHeroku)
+    {
+        var match = Regex.Match(Environment.GetEnvironmentVariable("DATABASE_URL") ?? "", @"postgres://(.*):(.*)@(.*):(.*)/(.*)");
+        options.ConnectionString = $"Server={match.Groups[3]};Port={match.Groups[4]};User Id={match.Groups[1]};Password={match.Groups[2]};Database={match.Groups[5]};sslmode=Prefer;Trust Server Certificate=true";
+    }
+});
 
 builder.Services.AddScoped<IPostStore, PostStoreDb>();
 
