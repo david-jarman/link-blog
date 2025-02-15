@@ -24,7 +24,7 @@ public class PostStoreDb : IPostStore
 
     public async IAsyncEnumerable<Post> GetPosts([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-         await foreach (var post in this.postDbContext.Posts.AsAsyncEnumerable())
+         await foreach (var post in this.postDbContext.Posts.Include(p => p.Tags).AsAsyncEnumerable())
          {
             cancellationToken.ThrowIfCancellationRequested();
 
