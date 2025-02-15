@@ -32,6 +32,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
 }
 
+app.UseHttpsRedirection();
+
 app.UseAntiforgery();
 
 app.UseOutputCache();
