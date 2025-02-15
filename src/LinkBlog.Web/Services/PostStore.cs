@@ -34,7 +34,10 @@ public class PostStoreDb : IPostStore
 
     public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        Tag? tagFromDb = await this.postDbContext.Tags.FirstAsync(t => t.Name == tag, cancellationToken);
+        Tag? tagFromDb = await this.postDbContext.Tags
+            .Include(t => t.Posts)
+            .ThenInclude(p => p.Tags)
+            .FirstAsync(t => t.Name == tag, cancellationToken);
         if (tagFromDb == null)
         {
             yield break;
