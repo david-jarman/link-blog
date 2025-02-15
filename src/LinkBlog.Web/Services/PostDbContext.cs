@@ -11,4 +11,6 @@ public class PostDbContext : DbContext
     }
 
     public DbSet<Post> Posts { get; set; } = null!;
+
+    public DbSet<Tag> Tags { get; set; } = null!;
 }
