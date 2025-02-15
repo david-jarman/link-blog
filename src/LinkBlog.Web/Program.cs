@@ -11,6 +11,10 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+builder.Services.AddAntiforgery();
+
 builder.Services.AddOutputCache();
 
 var isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
@@ -33,6 +37,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseAntiforgery();
 
