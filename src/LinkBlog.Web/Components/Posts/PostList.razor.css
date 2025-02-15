@@ -2,4 +2,7 @@
     border-bottom: 1px solid #ccc;
     padding: 1rem 0;
     margin: 1rem 0;
+
+    background-color: orange;
+    box-shadow: 10px 10px;
 }

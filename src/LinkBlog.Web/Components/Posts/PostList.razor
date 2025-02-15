@@ -12,10 +12,10 @@ else
         {
             <article class="post">
                 <h2>@post.Title</h2>
-                <p class="meta">
+                <div class="meta">
                     Posted on <time datetime="@post.Date.ToString("yyyy-MM-dd")">@post.Date.ToString("f")</time>
-                </p>
-                <p>
+                </div>
+                <div>
                     @if (post.Link != null)
                     {
                         <a href="@post.Link" target="_blank" rel="noopener noreferrer">@post.LinkTitle</a>
@@ -23,13 +23,13 @@ else
                     }
                     <!-- The post contents can contain HTML tags for formatting. -->
                     @((MarkupString)post.Contents!)
-                </p>
-                <p>
+                </div>
+                <div class="tags">
                     Tags: @foreach (var tag in post.Tags)
                     {
                         <a href="/posts/@tag.Name" class="tag">@tag.Name</a>@(tag != post.Tags.Last() ? ", " : "")
                     }
-                </p>
+                </div>
             </article>
         }
     </main>
