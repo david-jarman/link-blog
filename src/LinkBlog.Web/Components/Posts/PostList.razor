@@ -27,7 +27,7 @@ else
                 <p>
                     Tags: @foreach (var tag in post.Tags)
                     {
-                        <a href="/posts/@tag" class="tag">@tag</a>@(tag != post.Tags.Last() ? ", " : "")
+                        <a href="/posts/@tag.Name" class="tag">@tag.Name</a>@(tag != post.Tags.Last() ? ", " : "")
                     }
                 </p>
             </article>
