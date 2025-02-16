@@ -17,7 +17,7 @@ public sealed class GitHubAccountOptions : OAuthOptions
 {
     public GitHubAccountOptions()
     {
-        CallbackPath = new PathString("/signin-microsoft");
+        CallbackPath = new PathString("/signin-github");
         AuthorizationEndpoint = GitHubAccountDefaults.AuthorizationEndpoint;
         TokenEndpoint = GitHubAccountDefaults.TokenEndpoint;
         UserInformationEndpoint = GitHubAccountDefaults.UserInformationEndpoint;
