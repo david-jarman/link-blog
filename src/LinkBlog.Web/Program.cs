@@ -70,11 +70,17 @@ builder.Services.AddScoped<IPostStore, PostStoreDb>();
 
 var app = builder.Build();
 
+// Server sits behind a reverse proxy, so promote the forwarded headers
+// so we know if the client connected via http or https
 app.UseForwardedHeaders();
+
+// Now that forwarded headers are taken care of, we can see
+// if we need to redirect the user to the https endpoint.
 app.UseHttpsRedirection();
 
 if (!app.Environment.IsDevelopment())
 {
+    // For any unhandled exceptions, show the user a friendly error page.
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
@@ -83,11 +89,15 @@ else
     app.UseDeveloperExceptionPage();
 }
 
+// Show the error page with the status code.
+// This is especially nice for 404s, so the user can see that the page doesn't exist.
 app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
 
+// Now we can authenticate the user, if the requested route requires it.
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Make sure the user is not a CSRF attack.
 app.UseAntiforgery();
 
 app.UseOutputCache();
