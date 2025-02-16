@@ -76,7 +76,10 @@ app.UseHttpsRedirection();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseHsts();
 }
+
+app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
 
 app.UseAuthentication();
 app.UseAuthorization();

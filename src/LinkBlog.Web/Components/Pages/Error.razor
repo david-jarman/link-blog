@@ -4,4 +4,27 @@
 
 <h1>Whoa there partner</h1>
 
-<p class="error">Whoops, something went wrong.</p>
+<p class="error">@ErrorMessage</p>
+
+@code {
+    [SupplyParameterFromQuery(Name = "statusCode")]
+    private string? statusCode { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (statusCode == "404")
+        {
+            ErrorMessage = "The page you are looking for does not exist.";
+        }
+        else if (!string.IsNullOrWhiteSpace(statusCode))
+        {
+            ErrorMessage = $"An error occurred: {statusCode}";
+        }
+        else
+        {
+            ErrorMessage = "An error occurred";
+        }
+    }
+}
