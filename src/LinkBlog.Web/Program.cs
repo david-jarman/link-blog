@@ -32,7 +32,6 @@ builder.Services.AddAuthentication(options =>
     })
     .AddCookie();
 builder.Services.AddAuthorization();
-//builder.Services.AddAntiforgery();
 builder.Services.AddOutputCache();
 
 var isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
@@ -78,7 +77,7 @@ if (!app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseAntiforgery();
+app.UseAntiforgery();
 
 app.UseOutputCache();
 
