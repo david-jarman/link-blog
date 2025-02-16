@@ -1,0 +1,15 @@
+﻿@page "/admin"
+@using LinkBlog.Contracts
+@using LinkBlog.Web.Services
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+@inject IPostStore PostStore
+
+<PageTitle>Admin</PageTitle>
+
+<h1>Admin page</h1>
+
+@code {
+    
+}

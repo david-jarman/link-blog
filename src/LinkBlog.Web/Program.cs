@@ -1,8 +1,16 @@
 using System.Text.RegularExpressions;
 using LinkBlog.Web.Components;
+using LinkBlog.Web.Security;
 using LinkBlog.Web.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
+var config = builder.Configuration;
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
@@ -11,7 +19,17 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GitHubAccountDefaults.AuthenticationScheme;
+    })
+    .AddGitHubAccount(options =>
+    {
+        options.ClientId = config["CLIENT_ID"] ?? throw new InvalidOperationException("GitHub:ClientId is required.");
+        options.ClientSecret = config["CLIENT_SECRET"] ?? throw new InvalidOperationException("GitHub:ClientSecret is required.");
+    })
+    .AddCookie();
 builder.Services.AddAuthorization();
 builder.Services.AddAntiforgery();
 
