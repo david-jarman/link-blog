@@ -68,14 +68,13 @@ builder.Services.AddScoped<IPostStore, PostStoreDb>();
 
 var app = builder.Build();
 
+app.UseForwardedHeaders();
+app.UseHttpsRedirection();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
 }
-
-app.UseForwardedHeaders();
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
