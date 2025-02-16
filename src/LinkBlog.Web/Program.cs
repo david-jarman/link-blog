@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
@@ -31,7 +32,10 @@ builder.Services.AddAuthentication(options =>
         options.ClientSecret = config["CLIENT_SECRET"] ?? throw new InvalidOperationException("GitHub:ClientSecret is required.");
     })
     .AddCookie();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(policy =>
+{
+    policy.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.NameIdentifier, AdminIdentifiers.DavidJarmanGitHubId));
+});
 builder.Services.AddOutputCache();
 
 var isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
