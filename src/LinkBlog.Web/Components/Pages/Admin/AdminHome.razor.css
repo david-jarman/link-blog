@@ -1,0 +1,12 @@
+/* Use deep to make sure style applies to the child element, InputTextArea.
+   This is due to the way blazor performs css isolation. Otherwise, this 
+   style would only apply to the AdminHome page and not child components. */
+::deep .post-editor {
+    width: 100%; /* Makes it stretch across its container */
+    min-height: 150px; /* Adjust height for multiple lines */
+    padding: 10px; /* Adds space inside the box */
+    font-size: 16px; /* Increases text size */
+    border: 1px solid #ccc; /* Adds a subtle border */
+    border-radius: 5px; /* Rounds the corners */
+    resize: vertical; /* Allows resizing only vertically */
+}

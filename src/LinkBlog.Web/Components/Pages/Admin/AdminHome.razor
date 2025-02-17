@@ -16,18 +16,22 @@
             Title:
             <InputText @bind-Value="Post!.Title" />
         </label>
+        <br/><br/>
         <label>
             Post content:
-            <InputText @bind-Value="Post!.Contents" />
+            <InputTextArea @bind-Value="Post!.Contents" class="post-editor" />
         </label>
+        <br/><br/>
         <label>
             Link:
             <InputText @bind-Value="Post!.Link" />
         </label>
+        <br/><br/>
         <label>
             Link Title:
             <InputText @bind-Value="Post!.LinkTitle" />
         </label>
+        <br/><br/>
         <label>
             Tags (comma separated):
             <InputText @bind-Value="Tags" />
