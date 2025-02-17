@@ -10,6 +10,54 @@
 
 <h1>Admin page</h1>
 
+<EditForm Model="Post" FormName="postForm" OnSubmit="HandleSubmitAsync">
+    <div>
+        <label>
+            Title:
+            <InputText @bind-Value="Post!.Title" />
+        </label>
+        <label>
+            Post content:
+            <InputText @bind-Value="Post!.Contents" />
+        </label>
+        <label>
+            Link:
+            <InputText @bind-Value="Post!.Link" />
+        </label>
+        <label>
+            Link Title:
+            <InputText @bind-Value="Post!.LinkTitle" />
+        </label>
+        <label>
+            Tags (comma separated):
+            <InputText @bind-Value="Tags" />
+        </label>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</EditForm>
+
 @code {
-    
+    [SupplyParameterFromForm]
+    private Post? Post { get; set; }
+
+    private string Tags { get; set; } = string.Empty;
+
+    protected override void OnInitialized() => Post ??= new();
+
+    private async Task HandleSubmitAsync()
+    {
+        if (Post == null)
+        {
+            return;
+        }
+
+        // TODO: Figure out tags
+
+        this.Post.Id = Guid.NewGuid().ToString();
+        this.Post.Date = DateTimeOffset.UtcNow;
+
+        await PostStore.CreatePost(this.Post);
+    }
 }
