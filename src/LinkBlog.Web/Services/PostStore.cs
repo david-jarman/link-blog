@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
+﻿using System.Runtime.CompilerServices;
 using LinkBlog.Contracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +31,12 @@ public class PostStoreDb : IPostStore
 
     public async IAsyncEnumerable<Post> GetPosts([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-         await foreach (var post in this.postDbContext.Posts.Include(p => p.Tags).AsAsyncEnumerable())
+        var posts = this.postDbContext.Posts
+            .Include(p => p.Tags)
+            .OrderByDescending(p => p.Date)
+            .AsAsyncEnumerable();
+
+         await foreach (var post in posts)
          {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -52,7 +55,7 @@ public class PostStoreDb : IPostStore
             yield break;
         }
 
-        foreach (var post in tagFromDb.Posts)
+        foreach (var post in tagFromDb.Posts.OrderByDescending(p => p.Date))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
