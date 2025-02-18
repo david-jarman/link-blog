@@ -47,7 +47,8 @@
 @code {
     [SupplyParameterFromForm]
     private Post? Post { get; set; }
-    private string Tags { get; set; } = string.Empty;
+    [SupplyParameterFromForm]
+    private string? Tags { get; set; }
     private string? ErrorMessage { get; set; }
     private string? SuccessMessage { get; set; }
 
@@ -64,6 +65,31 @@
 
         this.Post.Id = Guid.NewGuid().ToString();
         this.Post.Date = DateTimeOffset.UtcNow;
+
+        // Split tags and get from database
+        if (Tags != null)
+        {
+            List<string> tagNames = Tags.Split(',').Select(t => t.Trim()).ToList();
+            List<Tag> tags = new List<Tag>();
+            foreach (var tagName in tagNames.Where(t => !string.IsNullOrWhiteSpace(t)))
+            {
+                Tag? tag = await PostStore.GetTagAsync(tagName);
+                if (tag == null)
+                {
+                    tag = new Tag { Name = tagName, Id = Guid.NewGuid().ToString() };
+                    var success = await PostStore.CreateTagAsync(tag);
+                    if (!success)
+                    {
+                        OnError($"Failed to create tag {tagName}");
+                        return;
+                    }
+                }
+
+                tags.Add(tag);
+            }
+
+            this.Post.Tags = tags;
+        }
 
         try
         {

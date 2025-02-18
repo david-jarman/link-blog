@@ -11,6 +11,10 @@ public interface IPostStore
     IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken cancellationToken = default);
 
     Task<bool> CreatePostAsync(Post post, CancellationToken cancellationToken = default);
+
+    Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default);
+
+    Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default);
 }
 
 public class PostStoreDb : IPostStore
@@ -25,8 +29,17 @@ public class PostStoreDb : IPostStore
     public async Task<bool> CreatePostAsync(Post post, CancellationToken cancellationToken = default)
     {
         this.postDbContext.Posts.Add(post);
-        int entries = await this.postDbContext.SaveChangesAsync(cancellationToken);
-        return entries == 1;
+        await this.postDbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    public async Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default)
+    {
+        this.postDbContext.Tags.Add(tag);
+
+        await this.postDbContext.SaveChangesAsync(cancellationToken);
+
+        return true;
     }
 
     public async IAsyncEnumerable<Post> GetPosts([EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -61,5 +74,11 @@ public class PostStoreDb : IPostStore
 
             yield return post;
         }
+    }
+
+    public Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default)
+    {
+        return this.postDbContext.Tags
+            .FirstOrDefaultAsync(t => t.Name == tag, cancellationToken);
     }
 }
