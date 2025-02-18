@@ -53,6 +53,6 @@
         this.Post.Id = Guid.NewGuid().ToString();
         this.Post.Date = DateTimeOffset.UtcNow;
 
-        await PostStore.CreatePost(this.Post);
+        await PostStore.CreatePostAsync(this.Post);
     }
 }
