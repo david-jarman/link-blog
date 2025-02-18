@@ -12,7 +12,7 @@
 }
 
 ::deep input {
-    width: 500px; /* Makes it stretch across its container */
+    width: 100%; /* Makes it stretch across its container */
     padding: 10px; /* Adds space inside the box */
     font-size: 16px; /* Increases text size */
     border: 1px solid #ccc; /* Adds a subtle border */
