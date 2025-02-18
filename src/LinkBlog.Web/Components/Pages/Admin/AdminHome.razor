@@ -1,4 +1,4 @@
-﻿@page "/admin"
+@page "/admin"
 @using LinkBlog.Contracts
 @using LinkBlog.Web.Services
 @using Microsoft.AspNetCore.Authorization
@@ -115,6 +115,7 @@
         Post = new();
         Tags = string.Empty;
         ErrorMessage = null;
+        StateHasChanged();
     }
 
     private void OnSuccess()
