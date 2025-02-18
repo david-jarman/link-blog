@@ -21,7 +21,7 @@
     <p style="color: green;">@SuccessMessage</p>
 }
 
-<EditForm Model="Post" FormName="postForm" OnSubmit="HandleSubmitAsync">
+<EditForm Model="Post" FormName="postForm" OnValidSubmit="HandleSubmitAsync" Enhance="true">
     <div>
         <label for="PostTitle">Title: </label>
         <InputText id="PostTitle" @bind-Value="Post!.Title" />
