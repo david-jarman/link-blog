@@ -12,30 +12,20 @@
 
 <EditForm Model="Post" FormName="postForm" OnSubmit="HandleSubmitAsync">
     <div>
-        <label>
-            Title:
-            <InputText @bind-Value="Post!.Title" />
-        </label>
+        <label for="PostTitle">Title: </label>
+        <InputText id="PostTitle" @bind-Value="Post!.Title" />
         <br/><br/>
-        <label>
-            Post content:
-            <InputTextArea @bind-Value="Post!.Contents" class="post-editor" />
-        </label>
+        <label for="PostContent">Post content: </label>
+        <InputTextArea id="PostContent" @bind-Value="Post!.Contents" class="post-editor" />
         <br/><br/>
-        <label>
-            Link:
-            <InputText @bind-Value="Post!.Link" />
-        </label>
+        <label for="PostLink">Link: </label>
+        <InputText id="PostLink" @bind-Value="Post!.Link" />
         <br/><br/>
-        <label>
-            Link Title:
-            <InputText @bind-Value="Post!.LinkTitle" />
-        </label>
+        <label for="LinkTitle">Link Title:</label>
+        <InputText id="LinkTitle" @bind-Value="Post!.LinkTitle" />
         <br/><br/>
-        <label>
-            Tags (comma separated):
-            <InputText @bind-Value="Tags" />
-        </label>
+        <label for="PostTags">Tags (comma separated):</label>
+        <InputText id="PostTags" @bind-Value="Tags" />
     </div>
     <div>
         <button type="submit">Submit</button>
