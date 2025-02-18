@@ -35,6 +35,7 @@ builder.Services.AddAuthorization(policy =>
 {
     policy.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.NameIdentifier, AdminIdentifiers.DavidJarmanGitHubId));
 });
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 
 var isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
