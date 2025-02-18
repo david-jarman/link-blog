@@ -8,16 +8,9 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>David Jarman's Links</h1>
+<h1>David Jarman's Blog</h1>
 
-@if (posts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <PostList Posts="posts" />
-}
+<PostList Posts="posts" />
 
 @code {
     private Post[]? posts;
@@ -28,10 +21,7 @@ else
         List<Post> posts = new List<Post>();
         await foreach (var post in PostStore.GetPosts())
         {
-            if (post != null)
-            {
-                posts.Add(post);
-            }
+            posts.Add(post);
         }
 
         this.posts = posts.ToArray();
