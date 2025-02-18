@@ -5,10 +5,21 @@
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IPostStore PostStore
+@inject ILogger<AdminHome> Logger
 
 <PageTitle>Admin</PageTitle>
 
 <h1>Admin page</h1>
+
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <p style="color: red;">Error creating post: @ErrorMessage</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(SuccessMessage))
+{
+    <p style="color: green;">@SuccessMessage</p>
+}
 
 <EditForm Model="Post" FormName="postForm" OnSubmit="HandleSubmitAsync">
     <div>
@@ -36,8 +47,9 @@
 @code {
     [SupplyParameterFromForm]
     private Post? Post { get; set; }
-
     private string Tags { get; set; } = string.Empty;
+    private string? ErrorMessage { get; set; }
+    private string? SuccessMessage { get; set; }
 
     protected override void OnInitialized() => Post ??= new();
 
@@ -53,6 +65,50 @@
         this.Post.Id = Guid.NewGuid().ToString();
         this.Post.Date = DateTimeOffset.UtcNow;
 
-        await PostStore.CreatePostAsync(this.Post);
+        try
+        {
+            bool success = await PostStore.CreatePostAsync(this.Post);
+
+            if (success)
+            {
+                OnSuccess();
+            }
+            else
+            {
+                OnError("Failed to create post");
+            }
+        }
+        catch (Exception ex)
+        {
+            OnError($"Failed to create post: {ex.Message}", ex);
+        }
+    }
+
+    private void ClearForm()
+    {
+        Post = new();
+        Tags = string.Empty;
+        ErrorMessage = null;
+    }
+
+    private void OnSuccess()
+    {
+        SuccessMessage = "Post created successfully";
+        Logger.LogInformation(SuccessMessage);
+        ClearForm();
+    }
+
+    private void OnError(string message, Exception? exception = null)
+    {
+        ErrorMessage = message;
+
+        if (exception != null)
+        {
+            Logger.LogError(exception, message);
+        }
+        else
+        {
+            Logger.LogError(message);
+        }
     }
 }
