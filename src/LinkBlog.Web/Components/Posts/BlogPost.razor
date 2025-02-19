@@ -1,0 +1,32 @@
+@using LinkBlog.Contracts
+@using Microsoft.AspNetCore.Components
+
+@if (DisplayPost != null)
+{
+    <article class="post">
+        <h2>@DisplayPost.Title</h2>
+        <div class="meta">
+            Posted on <time datetime="@DisplayPost.Date.ToString("yyyy-MM-dd")">@DisplayPost.Date.ToString("f")</time>
+        </div>
+        <div>
+            @if (DisplayPost.Link != null)
+            {
+                <a href="@DisplayPost.Link" target="_blank" rel="noopener noreferrer">@DisplayPost.LinkTitle</a>
+                <br /><br />
+            }
+            <!-- The post contents can contain HTML tags for formatting. -->
+            @((MarkupString)DisplayPost.Contents!)
+        </div>
+        <div class="tags">
+            Tags: @foreach (var tag in DisplayPost.Tags)
+            {
+                <a href="/posts/@tag.Name" class="tag">@tag.Name</a>@(tag != DisplayPost.Tags.Last() ? ", " : "")
+            }
+        </div>
+    </article>
+}
+
+@code {
+    [Parameter]
+    public Post? DisplayPost { get; set; }
+}
