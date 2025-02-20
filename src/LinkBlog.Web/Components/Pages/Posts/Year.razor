@@ -1,0 +1,48 @@
+@page "/archive/{yearArg}"
+@using LinkBlog.Contracts
+@using LinkBlog.Web.Components.Posts
+@using LinkBlog.Web.Services
+@attribute [OutputCache(Duration = 5)]
+
+@inject IPostStore PostStore
+@inject ILogger<PostsForTag> Logger
+
+<PageTitle>Posts for @YearArg</PageTitle>
+
+<h1>@YearArg</h1>
+
+@if (posts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <PostList Posts="posts" />
+}
+
+@code {
+    [Parameter]
+    public string? YearArg { get; set; }
+
+    private Post[]? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(YearArg) || !int.TryParse(YearArg, out int year))
+        {
+            Logger.LogWarning("Invalid year.");
+            return;
+        }
+
+        List<Post> posts = new List<Post>();
+        await foreach (var post in PostStore.GetPostsForYear(year))
+        {
+            if (post != null)
+            {
+                posts.Add(post);
+            }
+        }
+
+        this.posts = posts.ToArray();
+    }
+}

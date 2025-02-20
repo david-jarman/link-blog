@@ -15,6 +15,9 @@ public interface IPostStore
     Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default);
 
     Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<Post> GetPostsForYear(int year, CancellationToken cancellationToken = default);
+
 }
 
 public class PostStoreDb : IPostStore
@@ -74,6 +77,17 @@ public class PostStoreDb : IPostStore
 
             yield return post;
         }
+    }
+
+    public IAsyncEnumerable<Post> GetPostsForYear(int year, CancellationToken cancellationToken = default)
+    {
+        var posts = this.postDbContext.Posts
+            .Include(p => p.Tags)
+            .Where(p => p.Date.Year == year)
+            .OrderByDescending(p => p.Date)
+            .AsAsyncEnumerable();
+
+        return posts;
     }
 
     public Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default)

@@ -20,7 +20,7 @@
         <div class="tags">
             Tags: @foreach (var tag in DisplayPost.Tags)
             {
-                <a href="/posts/@tag.Name" class="tag">@tag.Name</a>@(tag != DisplayPost.Tags.Last() ? ", " : "")
+                <a href="/tags/@tag.Name" class="tag">@tag.Name</a>@(tag != DisplayPost.Tags.Last() ? ", " : "")
             }
         </div>
     </article>
