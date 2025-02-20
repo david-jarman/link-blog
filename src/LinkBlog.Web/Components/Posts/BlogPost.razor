@@ -6,7 +6,7 @@
     <article class="post">
         <h2>@DisplayPost.Title</h2>
         <div class="meta">
-            Posted on <time datetime="@DisplayPost.Date.ToLocalTime().ToString("yyyy-MM-dd")">@DisplayPost.Date.ToLocalTime().ToString("f")</time>
+            Posted on <time datetime="@DisplayDate.ToString("yyyy-MM-dd")">@DisplayDate.ToString("f")</time>
         </div>
         <div>
             @if (DisplayPost.Link != null)
@@ -29,4 +29,17 @@
 @code {
     [Parameter]
     public Post? DisplayPost { get; set; }
+
+    public DateTimeOffset DisplayDate;
+
+    protected override void OnInitialized()
+    {
+        DateTimeOffset utcDateTime = DisplayPost!.Date;
+        
+        // Specify the target time zone (Pacific Standard Time)
+        TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+        
+        // Convert to the target time zone
+        DisplayDate = TimeZoneInfo.ConvertTime(utcDateTime, pacificZone);
+    }
 }
