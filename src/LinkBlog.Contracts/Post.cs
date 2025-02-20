@@ -35,16 +35,4 @@ public sealed class Post
         LinkTitle = null;
         Contents = string.Empty;
     }
-
-    public Post(string id, string title, string shortTitle, DateTimeOffset date, string? link, string? linkTitle, string contents, List<Tag> tags)
-    {
-        Id = id;
-        Title = title;
-        ShortTitle = shortTitle;
-        Date = date;
-        Link = link;
-        LinkTitle = linkTitle;
-        Contents = contents;
-        Tags = tags;
-    }
 }
