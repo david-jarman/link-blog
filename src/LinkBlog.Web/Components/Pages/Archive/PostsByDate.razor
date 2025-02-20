@@ -40,12 +40,19 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        DateTime startDate;
-        DateTime endDate;
+        DateTimeOffset startDate;
+        DateTimeOffset endDate;
         
         if (Day.HasValue && Month.HasValue)
         {
-            startDate = new DateTime(Year, Month.Value, Day.Value);
+            // Assume the date provided is in pacific standard time. Convert to UTC.
+            var startTime = new DateTime(Year, Month.Value, Day.Value);
+
+            // Define the Pacific Time Zone
+            TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+            // Specify that the input DateTime is in Pacific Time (make it DateTimeOffset)
+            startDate  = new DateTimeOffset(startTime, pacificZone.GetUtcOffset(startTime));
             endDate = startDate.AddDays(1);
 
             Caption = $"Posts for {startDate:MMMM d, yyyy}";
