@@ -1,8 +1,13 @@
 .post {
-    border-bottom: 1px solid #ccc;
+    /* Border around post */
+    border-style: solid;
+    border-radius: 1rem;
+    box-shadow: 10px 10px;
+
+    /* Space around post */
     padding: 15px;
     margin: 1rem 0;
 
+    /* Colors */
     background-color: orange;
-    box-shadow: 10px 10px;
 }
