@@ -10,9 +10,9 @@
 @inject IPostStore PostStore
 @inject ILogger<PostsForTag> Logger
 
-<PageTitle>Posts for @Year</PageTitle>
+<PageTitle>@Caption</PageTitle>
 
-<h1>@Year</h1>
+<h1>@Dates</h1>
 
 @if (posts == null)
 {
@@ -35,6 +35,9 @@ else
 
     private Post[]? posts;
 
+    private string? Caption;
+    private string? Dates;
+
     protected override async Task OnInitializedAsync()
     {
         DateTime startDate;
@@ -44,16 +47,25 @@ else
         {
             startDate = new DateTime(Year, Month.Value, Day.Value);
             endDate = startDate.AddDays(1);
+
+            Caption = $"Posts for {startDate:MMMM d, yyyy}";
+            Dates = $"{startDate:MMMM d, yyyy}";
         }
         else if (Month.HasValue)
         {
             startDate = new DateTime(Year, Month.Value, 1);
             endDate = startDate.AddMonths(1);
+
+            Caption = $"Posts for {startDate:MMMM yyyy}";
+            Dates = $"{startDate:MMMM yyyy}";
         }
         else
         {
             startDate = new DateTime(Year, 1, 1);
             endDate = startDate.AddYears(1);
+
+            Caption = $"Posts for {startDate:yyyy}";
+            Dates = $"{startDate:yyyy}";
         }
 
         IAsyncEnumerable<Post> asyncPosts = PostStore.GetPostsForDateRange(startDate.ToUniversalTime(), endDate.ToUniversalTime());
