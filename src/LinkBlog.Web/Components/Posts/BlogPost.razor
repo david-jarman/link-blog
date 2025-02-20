@@ -6,7 +6,7 @@
     <article class="post">
         <h2>@DisplayPost.Title</h2>
         <div class="meta">
-            Posted on <time datetime="@DisplayDate.ToString("yyyy-MM-dd")">@DisplayDate.ToString("f")</time>
+            Posted on <time datetime="@DisplayDate.ToString("yyyy-MM-dd")">@DisplayDateTime</time>
         </div>
         <div>
             @if (DisplayPost.Link != null)
@@ -31,6 +31,7 @@
     public Post? DisplayPost { get; set; }
 
     public DateTimeOffset DisplayDate;
+    public string? DisplayDateTime;
 
     protected override void OnInitialized()
     {
@@ -41,5 +42,13 @@
         
         // Convert to the target time zone
         DisplayDate = TimeZoneInfo.ConvertTime(utcDateTime, pacificZone);
+        DisplayDateTime = $"{DisplayDate:MMMM d}{GetDaySuffix(DisplayDate.Day)}, {DisplayDate:yyyy 'at' h:mmtt} PST";
+    }
+
+    private static string GetDaySuffix(int day)
+    {
+        return (day % 10 == 1 && day != 11) ? "st" :
+               (day % 10 == 2 && day != 12) ? "nd" :
+               (day % 10 == 3 && day != 13) ? "rd" : "th";
     }
 }
