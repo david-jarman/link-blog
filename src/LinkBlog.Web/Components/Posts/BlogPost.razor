@@ -6,7 +6,7 @@
     <article class="post">
         <h2>@DisplayPost.Title</h2>
         <div class="meta">
-            Posted on <time datetime="@DisplayPost.Date.ToString("yyyy-MM-dd")">@DisplayPost.Date.ToString("f")</time>
+            Posted on <time datetime="@DisplayPost.Date.ToLocalTime().ToString("yyyy-MM-dd")">@DisplayPost.Date.ToLocalTime().ToString("f")</time>
         </div>
         <div>
             @if (DisplayPost.Link != null)

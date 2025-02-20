@@ -1,0 +1,71 @@
+@page "/archive/{year:int}"
+@page "/archive/{year:int}/{month:int}"
+@page "/archive/{year:int}/{month:int}/{day:int}"
+
+@using LinkBlog.Contracts
+@using LinkBlog.Web.Components.Posts
+@using LinkBlog.Web.Services
+@attribute [OutputCache(Duration = 5)]
+
+@inject IPostStore PostStore
+@inject ILogger<PostsForTag> Logger
+
+<PageTitle>Posts for @Year</PageTitle>
+
+<h1>@Year</h1>
+
+@if (posts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <PostList Posts="posts" />
+}
+
+@code {
+    [Parameter]
+    public int Year { get; set; }
+
+    [Parameter]
+    public int? Month { get; set; }
+
+    [Parameter]
+    public int? Day { get; set; }
+
+    private Post[]? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DateTime startDate;
+        DateTime endDate;
+        
+        if (Day.HasValue && Month.HasValue)
+        {
+            startDate = new DateTime(Year, Month.Value, Day.Value);
+            endDate = startDate.AddDays(1);
+        }
+        else if (Month.HasValue)
+        {
+            startDate = new DateTime(Year, Month.Value, 1);
+            endDate = startDate.AddMonths(1);
+        }
+        else
+        {
+            startDate = new DateTime(Year, 1, 1);
+            endDate = startDate.AddYears(1);
+        }
+
+        IAsyncEnumerable<Post> asyncPosts = PostStore.GetPostsForDateRange(startDate.ToUniversalTime(), endDate.ToUniversalTime());
+        List<Post> posts = new List<Post>();
+        await foreach (var post in asyncPosts)
+        {
+            if (post != null)
+            {
+                posts.Add(post);
+            }
+        }
+
+        this.posts = posts.ToArray();
+    }
+}
