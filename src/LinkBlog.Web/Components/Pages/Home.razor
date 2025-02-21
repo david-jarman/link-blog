@@ -6,15 +6,23 @@
 
 @inject IPostStore PostStore
 
-<PageTitle>David Jarman's Blog</PageTitle>
+<HeadContent>
+    <!-- Open Graph tags  -->
+    <meta property="og:title" content="@BlogTitle" />
+    <meta property="og:type" content="website" />
+</HeadContent>
 
-<h1>David Jarman's Blog</h1>
+<PageTitle>@BlogTitle</PageTitle>
+
+<h1>@BlogTitle</h1>
 
 <hr class="title-divider">
 
 <PostList Posts="posts" />
 
 @code {
+    private const string BlogTitle = "David Jarman's Blog";
+
     private Post[]? posts;
 
     protected override async Task OnInitializedAsync()
