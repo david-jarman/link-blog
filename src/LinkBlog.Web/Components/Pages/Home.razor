@@ -22,6 +22,7 @@
 
 @code {
     private const string BlogTitle = "David Jarman's Blog";
+    private const int TopN = 10; // Retrieve the latest 10 posts for the home page
 
     private Post[]? posts;
 
@@ -29,7 +30,7 @@
     {
         // REVIEW: Is there a way to get a cancellation token?
         List<Post> posts = new List<Post>();
-        await foreach (var post in PostStore.GetPosts())
+        await foreach (var post in PostStore.GetPosts(TopN))
         {
             posts.Add(post);
         }

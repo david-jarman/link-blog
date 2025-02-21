@@ -6,7 +6,7 @@ namespace LinkBlog.Web.Services;
 
 public interface IPostStore
 {
-    IAsyncEnumerable<Post> GetPosts(CancellationToken cancellationToken = default);
+    IAsyncEnumerable<Post> GetPosts(int topN, CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken cancellationToken = default);
 
@@ -46,11 +46,12 @@ public class PostStoreDb : IPostStore
         return true;
     }
 
-    public async IAsyncEnumerable<Post> GetPosts([EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Post> GetPosts(int topN, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var posts = this.postDbContext.Posts
             .Include(p => p.Tags)
             .OrderByDescending(p => p.Date)
+            .Take(topN)
             .AsAsyncEnumerable();
 
          await foreach (var post in posts)
