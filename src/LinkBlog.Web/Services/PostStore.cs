@@ -17,6 +17,8 @@ public interface IPostStore
     Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, CancellationToken cancellationToken = default);
+
+    Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default);
 }
 
 public class PostStoreDb : IPostStore
@@ -98,5 +100,12 @@ public class PostStoreDb : IPostStore
     {
         return this.postDbContext.Tags
             .FirstOrDefaultAsync(t => t.Name == tag, cancellationToken);
+    }
+
+    public async Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default)
+    {
+        return await this.postDbContext.Posts
+            .Include(p => p.Tags)
+            .SingleOrDefaultAsync(p => p.Date >= start && p.Date <= end && p.ShortTitle == shortTitle);
     }
 }

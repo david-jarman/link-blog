@@ -23,6 +23,16 @@
                 <a href="/tags/@tag.Name" class="tag">@tag.Name</a>@(tag != DisplayPost.Tags.Last() ? ", " : "")
             }
         </div>
+        <div class="selfLinks">
+            Links:
+            <a href="/archive/@Year/@Month/@Day/@ShortTitle">#</a>
+            /
+            <a href="/archive/@Year">@Year</a>
+            /
+            <a href="/archive/@Year/@Month">@Month</a>
+            /
+            <a href="/archive/@Year/@Month/@Day">@Day</a>
+        </div>
     </article>
 }
 
@@ -32,6 +42,11 @@
 
     public DateTimeOffset DisplayDate;
     public string? DisplayDateTime;
+
+    public string? Year;
+    public string? Month;
+    public string? Day;
+    public string? ShortTitle;
 
     protected override void OnInitialized()
     {
@@ -43,6 +58,11 @@
         // Convert to the target time zone
         DisplayDate = TimeZoneInfo.ConvertTime(utcDateTime, pacificZone);
         DisplayDateTime = $"{DisplayDate:MMMM d}{GetDaySuffix(DisplayDate.Day)}, {DisplayDate:yyyy 'at' h:mmtt} PST";
+
+        Year = DisplayDate.Year.ToString();
+        Month = DisplayDate.Month.ToString();
+        Day = DisplayDate.Day.ToString();
+        ShortTitle = DisplayPost.ShortTitle;
     }
 
     private static string GetDaySuffix(int day)
