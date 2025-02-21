@@ -4,27 +4,28 @@
 @if (DisplayPost != null)
 {
     <article class="post">
-        <h2>@DisplayPost.Title</h2>
-        <div class="meta">
-            Posted on <time datetime="@DisplayDate.ToString("yyyy-MM-dd")">@DisplayDateTime</time>
-        </div>
-        <div>
-            @if (DisplayPost.Link != null)
+        <header>
+            <h2>@DisplayPost.Title</h2>
+            <div class="post-meta">
+                Posted on <time datetime="@DisplayDate.ToString("yyyy-MM-dd")">@DisplayDateTime</time>
+            </div>
+        </header>
+        <div class="post-content">
+            @if (!string.IsNullOrWhiteSpace(DisplayPost.Link))
             {
-                <a href="@DisplayPost.Link" target="_blank" rel="noopener noreferrer">@DisplayPost.LinkTitle</a>
-                <br /><br />
+                <p><a href="@DisplayPost.Link" target="_blank" rel="noopener noreferrer">@DisplayPost.LinkTitle</a></p>
             }
+
             <!-- The post contents can contain HTML tags for formatting. -->
             @((MarkupString)DisplayPost.Contents!)
         </div>
-        <div class="tags">
+        <div class="post-tags">
             Tags: @foreach (var tag in DisplayPost.Tags)
             {
                 <a href="/tags/@tag.Name" class="tag">@tag.Name</a>@(tag != DisplayPost.Tags.Last() ? ", " : "")
             }
         </div>
-        <div class="selfLinks">
-            Links:
+        <div class="post-links">
             <a href="/archive/@Year/@Month/@Day/@ShortTitle">#</a>
             /
             <a href="/archive/@Year">@Year</a>

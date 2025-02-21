@@ -11,3 +11,13 @@
     /* Colors */
     background-color: orange;
 }
+
+.post-meta {
+    font-size: .9rem;
+}
+
+.post-content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
