@@ -25,6 +25,9 @@ public class AtomFeed : ISyndicationFeed
         sb.Append($"<id>{blogUrl}/</id>");
         sb.Append("<author><name>David Jarman</name></author>");
 
+        var latestPost = posts.First();
+        sb.Append($"<updated>{latestPost.Date.ToString("o")}</updated>");
+
         foreach (var post in posts)
         {
             sb.Append(CreateEntryForPost(post));
@@ -39,7 +42,7 @@ public class AtomFeed : ISyndicationFeed
     {
         StringBuilder sb = new();
         DateTimeOffset postDate = TimeZoneInfo.ConvertTime(post.Date, pacificZone);
-        string postUrl = $"{blogUrl}/{postDate.Year}/{postDate.Month}/{postDate.Day}/{post.ShortTitle}/";
+        string postUrl = $"{blogUrl}/archive/{postDate.Year}/{postDate.Month}/{postDate.Day}/{post.ShortTitle}/";
 
         sb.Append("<entry>");
 

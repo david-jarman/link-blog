@@ -122,12 +122,9 @@ app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, Http
 
     httpContext.Response.Headers["Content-Type"] = "application/xml; charset=utf-8";
 
-    if (app.Environment.IsDevelopment())
-    {
-        // Prevent browsers from trying to automatically open the feed in an RSS reader
-        // Useful for debugging the feed locally.
-        httpContext.Response.Headers["X-Content-Type-Options"] = "nosniff";
-    }
+    // Prevent browsers from trying to automatically open the feed in an RSS reader
+    // Useful for debugging the feed locally.
+    httpContext.Response.Headers["X-Content-Type-Options"] = "nosniff";
 
     return feed.GetXmlForPosts(posts);
 });
