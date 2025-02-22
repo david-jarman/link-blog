@@ -7,6 +7,12 @@
 @inject IPostStore PostStore
 @inject ILogger<AdminHome> Logger
 
+@* Add trix WYSIWYG editor *@
+<HeadContent>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+    <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+</HeadContent>
+
 <PageTitle>Admin</PageTitle>
 
 <h1>Admin page</h1>
@@ -30,7 +36,8 @@
         <InputText id="ShortTitle" @bind-Value="Post!.ShortTitle" />
         <br/><br/>
         <label for="PostContent">Post content: </label>
-        <InputTextArea id="PostContent" @bind-Value="Post!.Contents" class="post-editor" />
+        <InputText id="PostContent" type="hidden" @bind-Value="Post!.Contents" />
+        <trix-editor input="PostContent" class="post-editor"></trix-editor>
         <br/><br/>
         <label for="PostLink">Link: </label>
         <InputText id="PostLink" @bind-Value="Post!.Link" />
