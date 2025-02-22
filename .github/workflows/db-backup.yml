@@ -25,7 +25,7 @@ jobs:
         run: |
           BACKUP_FILE="backups/db_backup.sql"
           mkdir -p backups
-          pg_dump > "$BACKUP_FILE"
+          pg_dump --data-only > "$BACKUP_FILE"
           echo "Database backup saved to $BACKUP_FILE"
 
       - name: Commit and Push Backup
