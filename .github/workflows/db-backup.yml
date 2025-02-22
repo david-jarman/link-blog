@@ -1,0 +1,36 @@
+name: Daily Database Backup
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Runs daily at 8 AM UTC
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install PostgreSQL Client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Run pg_dump
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: |
+          BACKUP_FILE="backups/db_backup.sql"
+          mkdir -p backups
+          pg_dump > "$BACKUP_FILE"
+          echo "Database backup saved to $BACKUP_FILE"
+
+      - name: Commit and Push Backup
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add backups/
+          git commit -m "Database backup: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push
