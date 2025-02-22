@@ -5,24 +5,15 @@ namespace LinkBlog.Feed;
 
 public interface ISyndicationFeed
 {
-    string XmlContents { get; }
+    string GetXmlForPosts(IEnumerable<Post> posts);
 }
 
 public class AtomFeed : ISyndicationFeed
 {
-    private readonly IEnumerable<Post> posts;
-
     private readonly TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
     private readonly string blogUrl = "https://davidjarman.net";
 
-    public AtomFeed(IEnumerable<Post> posts)
-    {
-        this.posts = posts;
-    }
-
-    public string XmlContents => this.CreateFeed();
-
-    private string CreateFeed()
+    public string GetXmlForPosts(IEnumerable<Post> posts)
     {
         StringBuilder sb = new();
 
@@ -34,7 +25,7 @@ public class AtomFeed : ISyndicationFeed
         sb.Append($"<id>{blogUrl}/</id>");
         sb.Append("<author><name>David Jarman</name></author>");
 
-        foreach (var post in this.posts)
+        foreach (var post in posts)
         {
             sb.Append(CreateEntryForPost(post));
         }
