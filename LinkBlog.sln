@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AE0024C3-CB3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Contracts", "src\LinkBlog.Contracts\LinkBlog.Contracts.csproj", "{C0EDC700-D716-4F04-BF9B-711AFA6D354E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Feed", "src\LinkBlog.Feed\LinkBlog.Feed.csproj", "{58A3A27B-A105-4571-A0F9-C53C62E5F861}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{C0EDC700-D716-4F04-BF9B-711AFA6D354E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0EDC700-D716-4F04-BF9B-711AFA6D354E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0EDC700-D716-4F04-BF9B-711AFA6D354E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58A3A27B-A105-4571-A0F9-C53C62E5F861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58A3A27B-A105-4571-A0F9-C53C62E5F861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58A3A27B-A105-4571-A0F9-C53C62E5F861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58A3A27B-A105-4571-A0F9-C53C62E5F861}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,5 +49,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C0EDC700-D716-4F04-BF9B-711AFA6D354E} = {AE0024C3-CB33-487B-940F-4BEE5453BD5B}
+		{58A3A27B-A105-4571-A0F9-C53C62E5F861} = {AE0024C3-CB33-487B-940F-4BEE5453BD5B}
 	EndGlobalSection
 EndGlobal
