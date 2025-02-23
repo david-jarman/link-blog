@@ -1,8 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
-using LinkBlog.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace LinkBlog.Web.Services;
+namespace LinkBlog.Data;
 
 public interface IPostStore
 {
