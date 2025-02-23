@@ -1,4 +1,6 @@
 @page "/admin"
+@page "/admin/{id}"
+
 @using LinkBlog.Abstractions
 @using LinkBlog.Data
 @using Microsoft.AspNetCore.Authorization
@@ -55,6 +57,9 @@
 </EditForm>
 
 @code {
+    [Parameter]
+    public string? Id { get; set; }
+
     [SupplyParameterFromForm]
     private Post? Post { get; set; }
     [SupplyParameterFromForm]
@@ -62,7 +67,17 @@
     private string? ErrorMessage { get; set; }
     private string? SuccessMessage { get; set; }
 
-    protected override void OnInitialized() => Post ??= new();
+    protected override async Task OnInitializedAsync()
+    {
+        if (Post == null && !string.IsNullOrWhiteSpace(Id))
+        {
+            Post ??= new();
+            Console.WriteLine($"Loading post with id {Id}");
+            Post = await PostStore.GetPostById(Id) ?? new Post();
+        }
+
+        Post ??= new();
+    }
 
     private async Task HandleSubmitAsync()
     {
@@ -71,43 +86,35 @@
             return;
         }
 
+        if (!string.IsNullOrWhiteSpace(Id))
+        {
+            Console.WriteLine($"Updating post with id {Id}");
+            if (await PostStore.UpdatePostAsync(Id, Post))
+            {
+                OnSuccess("Post updated successfully");
+            }
+            else
+            {
+                OnError("Failed to update post");
+            }
+
+            return;
+        }
+
         // TODO: Add validation
 
         this.Post.Id = Guid.NewGuid().ToString();
         this.Post.CreatedDate = DateTimeOffset.UtcNow;
 
-        // Split tags and get from database
-        if (Tags != null)
-        {
-            List<string> tagNames = Tags.Split(',').Select(t => t.Trim()).ToList();
-            List<Tag> tags = new List<Tag>();
-            foreach (var tagName in tagNames.Where(t => !string.IsNullOrWhiteSpace(t)))
-            {
-                Tag? tag = await PostStore.GetTagAsync(tagName);
-                if (tag == null)
-                {
-                    tag = new Tag { Name = tagName, Id = Guid.NewGuid().ToString() };
-                    var success = await PostStore.CreateTagAsync(tag);
-                    if (!success)
-                    {
-                        OnError($"Failed to create tag {tagName}");
-                        return;
-                    }
-                }
-
-                tags.Add(tag);
-            }
-
-            this.Post.Tags = tags;
-        }
+        List<string> tagNames = Tags?.Split(',').Select(t => t.Trim()).ToList() ?? new();
 
         try
         {
-            bool success = await PostStore.CreatePostAsync(this.Post);
+            bool success = await PostStore.CreatePostAsync(this.Post, tagNames);
 
             if (success)
             {
-                OnSuccess();
+                OnSuccess("Post created successfully");
             }
             else
             {
@@ -128,9 +135,9 @@
         StateHasChanged();
     }
 
-    private void OnSuccess()
+    private void OnSuccess(string message)
     {
-        SuccessMessage = "Post created successfully";
+        SuccessMessage = message;
         Logger.LogInformation(SuccessMessage);
         ClearForm();
     }

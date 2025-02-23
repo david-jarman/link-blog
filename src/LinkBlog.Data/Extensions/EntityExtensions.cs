@@ -40,7 +40,7 @@ internal static class EntityExtensions
             Link = post.Link,
             LinkTitle = post.LinkTitle,
             Contents = post.Contents,
-            Tags = post.Tags.Select(t => t.ToTagEntity()).ToList()
+            Tags = post.Tags?.Select(t => t.ToTagEntity()).ToList() ?? new()
         };
     }
 
