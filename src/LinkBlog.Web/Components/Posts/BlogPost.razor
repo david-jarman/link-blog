@@ -1,4 +1,4 @@
-@using LinkBlog.Data
+@using LinkBlog.Abstractions
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Authorization
 
@@ -58,7 +58,7 @@
 
 @code {
     [Parameter]
-    public PostEntity? DisplayPost { get; set; }
+    public Post? DisplayPost { get; set; }
 
     public DateTimeOffset DisplayDate;
     public string? DisplayDateTime;
@@ -70,7 +70,7 @@
 
     protected override void OnInitialized()
     {
-        DateTimeOffset utcDateTime = DisplayPost!.Date;
+        DateTimeOffset utcDateTime = DisplayPost!.CreatedDate;
         
         // Specify the target time zone (Pacific Standard Time)
         TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");

@@ -1,4 +1,5 @@
 @page "/admin"
+@using LinkBlog.Abstractions
 @using LinkBlog.Data
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Policy = "Admin")]
@@ -26,23 +27,23 @@
     <p style="color: green;">@SuccessMessage</p>
 }
 
-<EditForm Model="PostEntity" FormName="postForm" OnValidSubmit="HandleSubmitAsync" Enhance="true">
+<EditForm Model="Post" FormName="postForm" OnValidSubmit="HandleSubmitAsync" Enhance="true">
     <div>
         <label for="PostTitle">Title: </label>
-        <InputText id="PostTitle" @bind-Value="PostEntity!.Title" />
+        <InputText id="PostTitle" @bind-Value="Post!.Title" />
         <br/><br/>
         <label for="ShortTitle">Short Title: </label>
-        <InputText id="ShortTitle" @bind-Value="PostEntity!.ShortTitle" />
+        <InputText id="ShortTitle" @bind-Value="Post!.ShortTitle" />
         <br/><br/>
-        <label for="PostContent">PostEntity content: </label>
-        <InputText id="PostContent" type="hidden" @bind-Value="PostEntity!.Contents" />
+        <label for="PostContent">Post content: </label>
+        <InputText id="PostContent" type="hidden" @bind-Value="Post!.Contents" />
         <trix-editor input="PostContent" class="post-editor"></trix-editor>
         <br/><br/>
         <label for="PostLink">Link: </label>
-        <InputText id="PostLink" @bind-Value="PostEntity!.Link" />
+        <InputText id="PostLink" @bind-Value="Post!.Link" />
         <br/><br/>
         <label for="LinkTitle">Link Title:</label>
-        <InputText id="LinkTitle" @bind-Value="PostEntity!.LinkTitle" />
+        <InputText id="LinkTitle" @bind-Value="Post!.LinkTitle" />
         <br/><br/>
         <label for="PostTags">Tags (comma separated):</label>
         <InputText id="PostTags" @bind-Value="Tags" />
@@ -55,37 +56,37 @@
 
 @code {
     [SupplyParameterFromForm]
-    private PostEntity? PostEntity { get; set; }
+    private Post? Post { get; set; }
     [SupplyParameterFromForm]
     private string? Tags { get; set; }
     private string? ErrorMessage { get; set; }
     private string? SuccessMessage { get; set; }
 
-    protected override void OnInitialized() => PostEntity ??= new();
+    protected override void OnInitialized() => Post ??= new();
 
     private async Task HandleSubmitAsync()
     {
-        if (PostEntity == null)
+        if (Post == null)
         {
             return;
         }
 
         // TODO: Add validation
 
-        this.PostEntity.Id = Guid.NewGuid().ToString();
-        this.PostEntity.Date = DateTimeOffset.UtcNow;
+        this.Post.Id = Guid.NewGuid().ToString();
+        this.Post.CreatedDate = DateTimeOffset.UtcNow;
 
         // Split tags and get from database
         if (Tags != null)
         {
             List<string> tagNames = Tags.Split(',').Select(t => t.Trim()).ToList();
-            List<TagEntity> tags = new List<TagEntity>();
+            List<Tag> tags = new List<Tag>();
             foreach (var tagName in tagNames.Where(t => !string.IsNullOrWhiteSpace(t)))
             {
-                TagEntity? tag = await PostStore.GetTagAsync(tagName);
+                Tag? tag = await PostStore.GetTagAsync(tagName);
                 if (tag == null)
                 {
-                    tag = new TagEntity { Name = tagName, Id = Guid.NewGuid().ToString() };
+                    tag = new Tag { Name = tagName, Id = Guid.NewGuid().ToString() };
                     var success = await PostStore.CreateTagAsync(tag);
                     if (!success)
                     {
@@ -97,12 +98,12 @@
                 tags.Add(tag);
             }
 
-            this.PostEntity.Tags = tags;
+            this.Post.Tags = tags;
         }
 
         try
         {
-            bool success = await PostStore.CreatePostAsync(this.PostEntity);
+            bool success = await PostStore.CreatePostAsync(this.Post);
 
             if (success)
             {
@@ -121,7 +122,7 @@
 
     private void ClearForm()
     {
-        PostEntity = new();
+        Post = new();
         Tags = string.Empty;
         ErrorMessage = null;
         StateHasChanged();
@@ -129,7 +130,7 @@
 
     private void OnSuccess()
     {
-        SuccessMessage = "PostEntity created successfully";
+        SuccessMessage = "Post created successfully";
         Logger.LogInformation(SuccessMessage);
         ClearForm();
     }

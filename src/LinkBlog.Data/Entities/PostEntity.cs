@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LinkBlog.Data;
 
 [Table("Posts")]
-public sealed class PostEntity
+internal sealed class PostEntity
 {
     [Required]
     public string Id { get; set; }

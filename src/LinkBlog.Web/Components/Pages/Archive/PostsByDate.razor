@@ -3,12 +3,13 @@
 @page "/archive/{year:int}/{month:int}/{day:int}"
 @page "/archive/{year:int}/{month:int}/{day:int}/{shortTitle}"
 
+@using LinkBlog.Abstractions
 @using LinkBlog.Data
 @using LinkBlog.Web.Components.Posts
 @attribute [OutputCache(Duration = 5)]
 
 @inject IPostStore PostStore
-@inject ILogger<PostsForTag> Logger
+@inject ILogger<PostsByDate> Logger
 
 <PageTitle>@Caption</PageTitle>
 
@@ -39,7 +40,7 @@ else
     [Parameter]
     public string? ShortTitle { get; set; }
 
-    private PostEntity[]? posts;
+    private Post[]? posts;
 
     private string? Caption;
     private string? HeaderTitle;
@@ -68,12 +69,12 @@ else
             }
             else
             {
-                PostEntity? post = await this.PostStore.GetPostForDateRangeAndShortTitleAsync(startDate.ToUniversalTime(), endDate.ToUniversalTime(), ShortTitle);
+                Post? post = await this.PostStore.GetPostForDateRangeAndShortTitleAsync(startDate.ToUniversalTime(), endDate.ToUniversalTime(), ShortTitle);
                 if (post != null)
                 {
                     Caption = post.Title;
                     HeaderTitle = null; // Don't display a header for a single post.
-                    this.posts = new PostEntity[] { post };
+                    this.posts = new Post[] { post };
                     return;
                 }
             }
@@ -95,8 +96,8 @@ else
             HeaderTitle = $"{startDate:yyyy}";
         }
 
-        IAsyncEnumerable<PostEntity> asyncPosts = PostStore.GetPostsForDateRange(startDate.ToUniversalTime(), endDate.ToUniversalTime());
-        List<PostEntity> posts = new List<PostEntity>();
+        IAsyncEnumerable<Post> asyncPosts = PostStore.GetPostsForDateRange(startDate.ToUniversalTime(), endDate.ToUniversalTime());
+        List<Post> posts = new List<Post>();
         await foreach (var post in asyncPosts)
         {
             if (post != null)

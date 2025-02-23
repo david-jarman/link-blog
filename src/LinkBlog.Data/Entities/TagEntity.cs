@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LinkBlog.Data;
 
 [Table("Tags")]
-public sealed class TagEntity
+internal sealed class TagEntity
 {
     [Required]
     public string Id { get; set; } = string.Empty;

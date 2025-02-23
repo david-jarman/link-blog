@@ -13,8 +13,4 @@
     <ProjectReference Include="..\LinkBlog.Feed\LinkBlog.Feed.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
-  </ItemGroup>
-
 </Project>

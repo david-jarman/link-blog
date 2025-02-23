@@ -1,11 +1,11 @@
 ﻿using System.Text;
-using LinkBlog.Data;
+using LinkBlog.Abstractions;
 
 namespace LinkBlog.Feed;
 
 public interface ISyndicationFeed
 {
-    string GetXmlForPosts(IEnumerable<PostEntity> posts);
+    string GetXmlForPosts(IEnumerable<Post> posts);
 }
 
 public class AtomFeed : ISyndicationFeed
@@ -13,7 +13,7 @@ public class AtomFeed : ISyndicationFeed
     private readonly TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
     private readonly string blogUrl = "https://davidjarman.net";
 
-    public string GetXmlForPosts(IEnumerable<PostEntity> posts)
+    public string GetXmlForPosts(IEnumerable<Post> posts)
     {
         StringBuilder sb = new();
 
@@ -26,7 +26,7 @@ public class AtomFeed : ISyndicationFeed
         sb.Append("<author><name>David Jarman</name></author>");
 
         var latestPost = posts.First();
-        sb.Append($"<updated>{latestPost.Date.ToString("o")}</updated>");
+        sb.Append($"<updated>{latestPost.CreatedDate.ToString("o")}</updated>");
 
         foreach (var post in posts)
         {
@@ -38,10 +38,10 @@ public class AtomFeed : ISyndicationFeed
         return sb.ToString();
     }
 
-    private StringBuilder CreateEntryForPost(PostEntity post)
+    private StringBuilder CreateEntryForPost(Post post)
     {
         StringBuilder sb = new();
-        DateTimeOffset postDate = TimeZoneInfo.ConvertTime(post.Date, pacificZone);
+        DateTimeOffset postDate = TimeZoneInfo.ConvertTime(post.CreatedDate, pacificZone);
         string postUrl = $"{blogUrl}/archive/{postDate.Year}/{postDate.Month}/{postDate.Day}/{post.ShortTitle}/";
 
         sb.Append("<entry>");
@@ -49,15 +49,15 @@ public class AtomFeed : ISyndicationFeed
         // Required elements
         sb.Append($"<id>{postUrl}</id>");
         sb.Append($"<title>{post.Title}</title>");
-        sb.Append($"<updated>{post.Date.ToString("o")}</updated>");
+        sb.Append($"<updated>{post.CreatedDate.ToString("o")}</updated>");
 
         // Recommended elements
         sb.Append($"<content type=\"html\">{System.Net.WebUtility.HtmlEncode(post.Contents)}</content>");
         sb.Append($"<link href=\"{postUrl}\" rel=\"alternate\"/>");
 
         // Optional elements
-        sb.Append($"<published>{post.Date.ToString("o")}</published>");
-        foreach (TagEntity tag in post.Tags)
+        sb.Append($"<published>{post.CreatedDate.ToString("o")}</published>");
+        foreach (Tag tag in post.Tags)
         {
             sb.Append($"<category term=\"{tag.Name}\" />");
         }

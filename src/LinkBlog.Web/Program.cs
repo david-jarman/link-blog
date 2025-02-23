@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using LinkBlog.Abstractions;
 using LinkBlog.Data;
+using LinkBlog.Data.Extensions;
 using LinkBlog.Feed;
 using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
@@ -40,7 +42,7 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 
 var isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
-builder.AddNpgsqlDbContext<PostDbContext>(connectionName: "postgresdb", options =>
+builder.AddPostStore("postgresdb", options =>
 {
     if (isHeroku)
     {
@@ -67,7 +69,6 @@ builder.Services.AddHttpsRedirection(options =>
     };
 });
 
-builder.Services.AddScoped<IPostStore, PostStoreDb>();
 builder.Services.AddSingleton<ISyndicationFeed, AtomFeed>();
 
 var app = builder.Build();
@@ -112,7 +113,7 @@ app.MapDefaultEndpoints();
 
 app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, HttpContext httpContext, CancellationToken ct) =>
 {
-    List<PostEntity> posts = new();
+    List<Post> posts = new();
     var postsFromDb = postStore.GetPosts(20, ct);
     await foreach (var post in postsFromDb)
     {

@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using LinkBlog.Abstractions
 @using LinkBlog.Data
 @using LinkBlog.Web.Components.Posts
 @attribute [OutputCache(Duration = 5)]
@@ -23,12 +24,12 @@
     private const string BlogTitle = "David Jarman's Blog";
     private const int TopN = 10; // Retrieve the latest 10 posts for the home page
 
-    private PostEntity[]? posts;
+    private Post[]? posts;
 
     protected override async Task OnInitializedAsync()
     {
         // REVIEW: Is there a way to get a cancellation token?
-        List<PostEntity> posts = new List<PostEntity>();
+        List<Post> posts = new List<Post>();
         await foreach (var post in PostStore.GetPosts(TopN))
         {
             posts.Add(post);

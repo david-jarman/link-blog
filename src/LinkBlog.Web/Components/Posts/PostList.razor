@@ -1,4 +1,4 @@
-@using LinkBlog.Data
+@using LinkBlog.Abstractions
 @using Microsoft.AspNetCore.Components
 
 @if (Posts == null || Posts.Length == 0)
@@ -12,10 +12,10 @@ else
         {
             <BlogPost DisplayPost="@post" />
         }
-    </main> 
+    </main>
 }
 
 @code {
     [Parameter]
-    public PostEntity[]? Posts { get; set; }
+    public Post[]? Posts { get; set; }
 }

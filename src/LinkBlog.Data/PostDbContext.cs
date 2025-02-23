@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LinkBlog.Data;
 
-public class PostDbContext : DbContext
+internal class PostDbContext : DbContext
 {
     public PostDbContext(DbContextOptions<PostDbContext> options)
         : base(options)

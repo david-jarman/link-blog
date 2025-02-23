@@ -1,4 +1,5 @@
 ﻿@page "/tags/{tag}"
+@using LinkBlog.Abstractions
 @using LinkBlog.Data
 @using LinkBlog.Web.Components.Posts
 @attribute [OutputCache(Duration = 5)]
@@ -23,7 +24,7 @@ else
     [Parameter]
     public string? Tag { get; set; }
 
-    private PostEntity[]? posts;
+    private Post[]? posts;
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,7 +34,7 @@ else
             return;
         }
 
-        List<PostEntity> posts = new List<PostEntity>();
+        List<Post> posts = new List<Post>();
         // REVIEW: Is there a way to get a cancellation token?
         await foreach (var post in PostStore.GetPostsForTag(Tag))
         {
