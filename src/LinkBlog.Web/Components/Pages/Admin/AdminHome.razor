@@ -74,6 +74,7 @@
             Post ??= new();
             Console.WriteLine($"Loading post with id {Id}");
             Post = await PostStore.GetPostById(Id) ?? new Post();
+            Tags = string.Join(",", Post.Tags.Select(t => t.Name));
         }
 
         Post ??= new();
@@ -86,10 +87,11 @@
             return;
         }
 
+        List<string> tagNames = Tags?.Split(',').Select(t => t.Trim()).ToList() ?? new();
+
         if (!string.IsNullOrWhiteSpace(Id))
         {
-            Console.WriteLine($"Updating post with id {Id}");
-            if (await PostStore.UpdatePostAsync(Id, Post))
+            if (await PostStore.UpdatePostAsync(Id, Post, tagNames))
             {
                 OnSuccess("Post updated successfully");
             }
@@ -105,8 +107,6 @@
 
         this.Post.Id = Guid.NewGuid().ToString();
         this.Post.CreatedDate = DateTimeOffset.UtcNow;
-
-        List<string> tagNames = Tags?.Split(',').Select(t => t.Trim()).ToList() ?? new();
 
         try
         {

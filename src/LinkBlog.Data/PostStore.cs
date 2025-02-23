@@ -18,7 +18,7 @@ public interface IPostStore
 
     Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default);
 
-    Task<bool> UpdatePostAsync(string id, Post post, CancellationToken cancellationToken = default);
+    Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default);
 }
 
 internal class PostStoreDb : IPostStore
@@ -34,25 +34,8 @@ internal class PostStoreDb : IPostStore
     {
         // Find or create tags first
         PostEntity entity = post.ToPostEntity();
-        foreach (var tag in tags)
-        {
-            TagEntity? tagEntity = await this.postDbContext.Tags
-                .FirstOrDefaultAsync(t => t.Name == tag, cancellationToken);
-            if (tagEntity == null)
-            {
-                tagEntity = new TagEntity()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = tag
-                };
-                this.postDbContext.Tags.Add(tagEntity);
-                entity.Tags.Add(tagEntity);
-            }
-            else
-            {
-                entity.Tags.Add(tagEntity);
-            }
-        }
+        var tagEntities = await GetOrCreateTagsAsync(tags, cancellationToken);
+        entity.Tags = tagEntities;
 
         this.postDbContext.Posts.Add(entity);
         await this.postDbContext.SaveChangesAsync(cancellationToken);
@@ -127,10 +110,12 @@ internal class PostStoreDb : IPostStore
             .ContinueWith(t => t.Result?.ToPost());
     }
 
-    public async Task<bool> UpdatePostAsync(string id, Post post, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default)
     {
-        // Get the post by id from the context
-        var postEntity = await this.postDbContext.Posts.FindAsync(id);
+        var postEntity = await this.postDbContext.Posts
+            .Include(p => p.Tags)
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+
         if (postEntity == null)
         {
             return false;
@@ -142,9 +127,55 @@ internal class PostStoreDb : IPostStore
         postEntity.LinkTitle = post.LinkTitle;
         postEntity.Contents = post.Contents;
 
+        // Compare tags and add or remove as necessary
+        var currentTags = postEntity.Tags.Select(t => t.Name).ToList();
+        var newTags = tags.Except(currentTags).ToList();
+        var removedTags = currentTags.Except(tags).ToList();
+
+        // Remove tags
+        foreach (var removedTag in removedTags)
+        {
+            var tagEntityToRemove = postEntity.Tags.First(t => t.Name == removedTag);
+            postEntity.Tags.Remove(tagEntityToRemove);
+        }
+
+        // Add new tags
+        foreach (var newTag in newTags)
+        {
+            var tagEntityToAdd = new TagEntity()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = newTag
+            };
+            postEntity.Tags.Add(tagEntityToAdd);
+        }
+
         // Save changes
         await this.postDbContext.SaveChangesAsync(cancellationToken);
 
         return true;
+    }
+
+    private async Task<List<TagEntity>> GetOrCreateTagsAsync(List<string> tags, CancellationToken cancellationToken)
+    {
+        List<TagEntity> tagEntities = new();
+        foreach (var tag in tags)
+        {
+            TagEntity? tagEntity = await this.postDbContext.Tags
+                .FirstOrDefaultAsync(t => t.Name == tag, cancellationToken);
+            if (tagEntity == null)
+            {
+                tagEntity = new TagEntity()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = tag
+                };
+                this.postDbContext.Tags.Add(tagEntity);
+            }
+
+            tagEntities.Add(tagEntity);
+        }
+
+        return tagEntities;
     }
 }
