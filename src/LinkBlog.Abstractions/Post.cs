@@ -21,7 +21,7 @@ public sealed class Post
     // Chose IEnumerable over List because otherwise we can get into
     // an infinite loop resolving tags -> posts -> tags etc when calling
     // ToList() in the extensions to convert between contracts.
-    public IEnumerable<Tag> Tags { get; set; } = Enumerable.Empty<Tag>();
+    public IEnumerable<Tag> Tags { get; init; } = Enumerable.Empty<Tag>();
 
     public DateTimeOffset LocalCreatedTime => TimeZoneInfo.ConvertTime(CreatedDate, pacificZone);
 

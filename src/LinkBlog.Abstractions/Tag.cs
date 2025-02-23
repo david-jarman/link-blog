@@ -6,5 +6,5 @@ public sealed class Tag
 
     public string Name { get; set; } = string.Empty;
 
-    public IEnumerable<Post> Posts { get; set; } = Enumerable.Empty<Post>();
+    public IEnumerable<Post> Posts { get; init; } = Enumerable.Empty<Post>();
 }
