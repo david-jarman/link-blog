@@ -22,3 +22,24 @@
     padding-bottom: 1rem;
 }
 
+/* Title container */
+.post-title {
+    display: flex; /* Makes the header and edit button get rendered in a row together */
+    justify-content: space-between; /* space-between pushes the title to the left and the button to the right. */
+}
+
+/* Edit button style */
+button.edit-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+button.edit-btn svg {
+    transition: transform 0.2s ease-in-out;
+}
+
+button.edit-btn:hover svg {
+    transform: scale(1.1);
+}
