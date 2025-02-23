@@ -14,10 +14,6 @@ public interface IPostStore
 
     Task<bool> CreatePostAsync(Post post, List<string> tags, CancellationToken cancellationToken = default);
 
-    Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default);
-
-    Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default);
-
     IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, CancellationToken cancellationToken = default);
 
     Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default);
@@ -60,15 +56,6 @@ internal class PostStoreDb : IPostStore
 
         this.postDbContext.Posts.Add(entity);
         await this.postDbContext.SaveChangesAsync(cancellationToken);
-        return true;
-    }
-
-    public async Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default)
-    {
-        this.postDbContext.Tags.Add(tag.ToTagEntity());
-
-        await this.postDbContext.SaveChangesAsync(cancellationToken);
-
         return true;
     }
 
@@ -121,14 +108,6 @@ internal class PostStoreDb : IPostStore
 
             yield return post.ToPost();
         }
-    }
-
-    public async Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default)
-    {
-        var tagEntity = await this.postDbContext.Tags
-            .FirstOrDefaultAsync(t => t.Name == tag, cancellationToken);
-
-        return tagEntity?.ToTag();
     }
 
     public async Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default)
