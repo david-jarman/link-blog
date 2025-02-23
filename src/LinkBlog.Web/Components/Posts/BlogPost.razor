@@ -70,18 +70,13 @@
 
     protected override void OnInitialized()
     {
-        DateTimeOffset utcDateTime = DisplayPost!.CreatedDate;
-        
-        // Specify the target time zone (Pacific Standard Time)
-        TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-        
         // Convert to the target time zone
-        DisplayDate = TimeZoneInfo.ConvertTime(utcDateTime, pacificZone);
+        DisplayDate = DisplayPost!.LocalCreatedTime;
         DisplayDateTime = $"{DisplayDate:MMMM d}{GetDaySuffix(DisplayDate.Day)}, {DisplayDate:yyyy 'at' h:mmtt} PST";
 
-        Year = DisplayDate.Year.ToString();
-        Month = DisplayDate.Month.ToString();
-        Day = DisplayDate.Day.ToString();
+        Year = $"{DisplayDate:yyyy}";
+        Month = $"{DisplayDate:MM}";
+        Day = $"{DisplayDate:dd}";
         ShortTitle = DisplayPost.ShortTitle;
     }
 

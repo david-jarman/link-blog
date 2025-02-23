@@ -10,7 +10,6 @@ public interface ISyndicationFeed
 
 public class AtomFeed : ISyndicationFeed
 {
-    private readonly TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
     private readonly string blogUrl = "https://davidjarman.net";
 
     public string GetXmlForPosts(IEnumerable<Post> posts)
@@ -41,8 +40,7 @@ public class AtomFeed : ISyndicationFeed
     private StringBuilder CreateEntryForPost(Post post)
     {
         StringBuilder sb = new();
-        DateTimeOffset postDate = TimeZoneInfo.ConvertTime(post.CreatedDate, pacificZone);
-        string postUrl = $"{blogUrl}/archive/{postDate.Year}/{postDate.Month}/{postDate.Day}/{post.ShortTitle}/";
+        string postUrl = $"{blogUrl}{post.UrlPath}";
 
         sb.Append("<entry>");
 
