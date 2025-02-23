@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LinkBlog.Data;
 
-public sealed class Tag
+public sealed class TagEntity
 {
     [Required]
     public string Id { get; set; } = string.Empty;

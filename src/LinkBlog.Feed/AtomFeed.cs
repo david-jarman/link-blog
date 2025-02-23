@@ -57,7 +57,7 @@ public class AtomFeed : ISyndicationFeed
 
         // Optional elements
         sb.Append($"<published>{post.Date.ToString("o")}</published>");
-        foreach (Tag tag in post.Tags)
+        foreach (TagEntity tag in post.Tags)
         {
             sb.Append($"<category term=\"{tag.Name}\" />");
         }

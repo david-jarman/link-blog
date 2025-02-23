@@ -12,9 +12,9 @@ public interface IPostStore
 
     Task<bool> CreatePostAsync(PostEntity post, CancellationToken cancellationToken = default);
 
-    Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default);
+    Task<TagEntity?> GetTagAsync(string tag, CancellationToken cancellationToken = default);
 
-    Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default);
+    Task<bool> CreateTagAsync(TagEntity tag, CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<PostEntity> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, CancellationToken cancellationToken = default);
 
@@ -37,7 +37,7 @@ public class PostStoreDb : IPostStore
         return true;
     }
 
-    public async Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default)
+    public async Task<bool> CreateTagAsync(TagEntity tag, CancellationToken cancellationToken = default)
     {
         this.postDbContext.Tags.Add(tag);
 
@@ -64,7 +64,7 @@ public class PostStoreDb : IPostStore
 
     public async IAsyncEnumerable<PostEntity> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        Tag? tagFromDb = await this.postDbContext.Tags
+        TagEntity? tagFromDb = await this.postDbContext.Tags
             .Include(t => t.Posts)
             .ThenInclude(p => p.Tags)
             .FirstAsync(t => t.Name == tag, cancellationToken);
@@ -97,7 +97,7 @@ public class PostStoreDb : IPostStore
         }
     }
 
-    public Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default)
+    public Task<TagEntity?> GetTagAsync(string tag, CancellationToken cancellationToken = default)
     {
         return this.postDbContext.Tags
             .FirstOrDefaultAsync(t => t.Name == tag, cancellationToken);

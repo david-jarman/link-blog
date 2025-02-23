@@ -23,7 +23,7 @@ public sealed class PostEntity
     [Required]
     public string Contents { get; set; }
 
-    public List<Tag> Tags { get; set; } = new();
+    public List<TagEntity> Tags { get; set; } = new();
 
     public PostEntity()
     {

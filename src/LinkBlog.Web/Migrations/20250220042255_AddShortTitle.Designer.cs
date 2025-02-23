@@ -56,7 +56,7 @@ namespace LinkBlog.Web.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("LinkBlog.Data.Tag", b =>
+            modelBuilder.Entity("LinkBlog.Data.TagEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -93,7 +93,7 @@ namespace LinkBlog.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LinkBlog.Data.Tag", null)
+                    b.HasOne("LinkBlog.Data.TagEntity", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)

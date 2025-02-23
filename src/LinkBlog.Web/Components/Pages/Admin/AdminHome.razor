@@ -80,13 +80,13 @@
         if (Tags != null)
         {
             List<string> tagNames = Tags.Split(',').Select(t => t.Trim()).ToList();
-            List<Tag> tags = new List<Tag>();
+            List<TagEntity> tags = new List<TagEntity>();
             foreach (var tagName in tagNames.Where(t => !string.IsNullOrWhiteSpace(t)))
             {
-                Tag? tag = await PostStore.GetTagAsync(tagName);
+                TagEntity? tag = await PostStore.GetTagAsync(tagName);
                 if (tag == null)
                 {
-                    tag = new Tag { Name = tagName, Id = Guid.NewGuid().ToString() };
+                    tag = new TagEntity { Name = tagName, Id = Guid.NewGuid().ToString() };
                     var success = await PostStore.CreateTagAsync(tag);
                     if (!success)
                     {
