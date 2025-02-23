@@ -113,7 +113,7 @@ app.MapDefaultEndpoints();
 
 app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, HttpContext httpContext, CancellationToken ct) =>
 {
-    List<Post> posts = new();
+    List<PostEntity> posts = new();
     var postsFromDb = postStore.GetPosts(20, ct);
     await foreach (var post in postsFromDb)
     {

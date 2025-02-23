@@ -15,7 +15,7 @@ The MVP of the link blog will be the set of features that should be shipped duri
 - No logging backend for now, just log to console.
 - Don't worry about https for now, http (port 80) is fine.
 
-## Post metadata
+## PostEntity metadata
 
 What data should a post contain?
 

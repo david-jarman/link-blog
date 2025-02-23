@@ -2,7 +2,7 @@
 
 namespace LinkBlog.Data;
 
-public sealed class Post
+public sealed class PostEntity
 {
     [Required]
     public string Id { get; set; }
@@ -25,7 +25,7 @@ public sealed class Post
 
     public List<Tag> Tags { get; set; } = new();
 
-    public Post()
+    public PostEntity()
     {
         Id = Guid.NewGuid().ToString();
         Title = string.Empty;

@@ -22,7 +22,7 @@ namespace LinkBlog.Web.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("LinkBlog.Data.Post", b =>
+            modelBuilder.Entity("LinkBlog.Data.PostEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -84,7 +84,7 @@ namespace LinkBlog.Web.Migrations
 
             modelBuilder.Entity("PostTag", b =>
                 {
-                    b.HasOne("LinkBlog.Data.Post", null)
+                    b.HasOne("LinkBlog.Data.PostEntity", null)
                         .WithMany()
                         .HasForeignKey("PostsId")
                         .OnDelete(DeleteBehavior.Cascade)

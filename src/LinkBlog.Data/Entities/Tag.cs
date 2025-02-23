@@ -10,5 +10,5 @@ public sealed class Tag
     [Required]
     public string Name { get; set; } = string.Empty;
 
-    public List<Post> Posts { get; set; } = new();
+    public List<PostEntity> Posts { get; set; } = new();
 }

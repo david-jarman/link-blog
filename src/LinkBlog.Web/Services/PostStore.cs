@@ -6,19 +6,19 @@ namespace LinkBlog.Web.Services;
 
 public interface IPostStore
 {
-    IAsyncEnumerable<Post> GetPosts(int topN, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<PostEntity> GetPosts(int topN, CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<PostEntity> GetPostsForTag(string tag, CancellationToken cancellationToken = default);
 
-    Task<bool> CreatePostAsync(Post post, CancellationToken cancellationToken = default);
+    Task<bool> CreatePostAsync(PostEntity post, CancellationToken cancellationToken = default);
 
     Task<Tag?> GetTagAsync(string tag, CancellationToken cancellationToken = default);
 
     Task<bool> CreateTagAsync(Tag tag, CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<PostEntity> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, CancellationToken cancellationToken = default);
 
-    Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default);
+    Task<PostEntity?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default);
 }
 
 public class PostStoreDb : IPostStore
@@ -30,7 +30,7 @@ public class PostStoreDb : IPostStore
         this.postDbContext = postDbContext;
     }
 
-    public async Task<bool> CreatePostAsync(Post post, CancellationToken cancellationToken = default)
+    public async Task<bool> CreatePostAsync(PostEntity post, CancellationToken cancellationToken = default)
     {
         this.postDbContext.Posts.Add(post);
         await this.postDbContext.SaveChangesAsync(cancellationToken);
@@ -46,7 +46,7 @@ public class PostStoreDb : IPostStore
         return true;
     }
 
-    public async IAsyncEnumerable<Post> GetPosts(int topN, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<PostEntity> GetPosts(int topN, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var posts = this.postDbContext.Posts
             .Include(p => p.Tags)
@@ -62,7 +62,7 @@ public class PostStoreDb : IPostStore
          }
     }
 
-    public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<PostEntity> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         Tag? tagFromDb = await this.postDbContext.Tags
             .Include(t => t.Posts)
@@ -81,7 +81,7 @@ public class PostStoreDb : IPostStore
         }
     }
 
-    public async IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<PostEntity> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var posts = this.postDbContext.Posts
             .Include(p => p.Tags)
@@ -103,7 +103,7 @@ public class PostStoreDb : IPostStore
             .FirstOrDefaultAsync(t => t.Name == tag, cancellationToken);
     }
 
-    public async Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default)
+    public async Task<PostEntity?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default)
     {
         return await this.postDbContext.Posts
             .Include(p => p.Tags)

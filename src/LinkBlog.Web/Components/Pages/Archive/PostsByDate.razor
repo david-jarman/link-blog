@@ -40,7 +40,7 @@ else
     [Parameter]
     public string? ShortTitle { get; set; }
 
-    private Post[]? posts;
+    private PostEntity[]? posts;
 
     private string? Caption;
     private string? HeaderTitle;
@@ -69,12 +69,12 @@ else
             }
             else
             {
-                Post? post = await this.PostStore.GetPostForDateRangeAndShortTitleAsync(startDate.ToUniversalTime(), endDate.ToUniversalTime(), ShortTitle);
+                PostEntity? post = await this.PostStore.GetPostForDateRangeAndShortTitleAsync(startDate.ToUniversalTime(), endDate.ToUniversalTime(), ShortTitle);
                 if (post != null)
                 {
                     Caption = post.Title;
                     HeaderTitle = null; // Don't display a header for a single post.
-                    this.posts = new Post[] { post };
+                    this.posts = new PostEntity[] { post };
                     return;
                 }
             }
@@ -96,8 +96,8 @@ else
             HeaderTitle = $"{startDate:yyyy}";
         }
 
-        IAsyncEnumerable<Post> asyncPosts = PostStore.GetPostsForDateRange(startDate.ToUniversalTime(), endDate.ToUniversalTime());
-        List<Post> posts = new List<Post>();
+        IAsyncEnumerable<PostEntity> asyncPosts = PostStore.GetPostsForDateRange(startDate.ToUniversalTime(), endDate.ToUniversalTime());
+        List<PostEntity> posts = new List<PostEntity>();
         await foreach (var post in asyncPosts)
         {
             if (post != null)

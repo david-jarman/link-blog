@@ -5,7 +5,7 @@ namespace LinkBlog.Feed;
 
 public interface ISyndicationFeed
 {
-    string GetXmlForPosts(IEnumerable<Post> posts);
+    string GetXmlForPosts(IEnumerable<PostEntity> posts);
 }
 
 public class AtomFeed : ISyndicationFeed
@@ -13,7 +13,7 @@ public class AtomFeed : ISyndicationFeed
     private readonly TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
     private readonly string blogUrl = "https://davidjarman.net";
 
-    public string GetXmlForPosts(IEnumerable<Post> posts)
+    public string GetXmlForPosts(IEnumerable<PostEntity> posts)
     {
         StringBuilder sb = new();
 
@@ -38,7 +38,7 @@ public class AtomFeed : ISyndicationFeed
         return sb.ToString();
     }
 
-    private StringBuilder CreateEntryForPost(Post post)
+    private StringBuilder CreateEntryForPost(PostEntity post)
     {
         StringBuilder sb = new();
         DateTimeOffset postDate = TimeZoneInfo.ConvertTime(post.Date, pacificZone);

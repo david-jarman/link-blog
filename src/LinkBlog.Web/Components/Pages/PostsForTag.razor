@@ -24,7 +24,7 @@ else
     [Parameter]
     public string? Tag { get; set; }
 
-    private Post[]? posts;
+    private PostEntity[]? posts;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,7 +34,7 @@ else
             return;
         }
 
-        List<Post> posts = new List<Post>();
+        List<PostEntity> posts = new List<PostEntity>();
         // REVIEW: Is there a way to get a cancellation token?
         await foreach (var post in PostStore.GetPostsForTag(Tag))
         {
