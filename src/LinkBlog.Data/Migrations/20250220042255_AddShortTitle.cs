@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace LinkBlog.Web.Migrations
+namespace LinkBlog.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddShortTitle : Migration

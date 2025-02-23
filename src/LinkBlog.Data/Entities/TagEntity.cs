@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LinkBlog.Data;
 
+[Table("Tags")]
 public sealed class TagEntity
 {
     [Required]

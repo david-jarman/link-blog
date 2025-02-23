@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LinkBlog.Data;
 
+[Table("Posts")]
 public sealed class PostEntity
 {
     [Required]
