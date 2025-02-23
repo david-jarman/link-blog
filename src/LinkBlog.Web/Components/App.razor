@@ -16,7 +16,13 @@
 
 <body>
     <Routes  />
-    <script src="_framework/blazor.server.js"></script>
+    @* Disable enhanced navigation, which causes issues when writing javascript to react to page load events *@
+    <script src="_framework/blazor.web.js" autostart="false"></script>
+    <script>
+        Blazor.start({
+            ssr: { disableDomPreservation: true }
+        });
+    </script>
 </body>
 
 </html>
