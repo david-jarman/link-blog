@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using LinkBlog.Contracts;
+using LinkBlog.Data;
 
 namespace LinkBlog.Feed;
 

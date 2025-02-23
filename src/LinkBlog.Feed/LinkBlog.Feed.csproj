@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\LinkBlog.Contracts\LinkBlog.Contracts.csproj" />
+    <ProjectReference Include="..\LinkBlog.Data\LinkBlog.Data.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

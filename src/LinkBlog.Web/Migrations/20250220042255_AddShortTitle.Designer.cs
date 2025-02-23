@@ -25,7 +25,7 @@ namespace LinkBlog.Web.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("LinkBlog.Contracts.Post", b =>
+            modelBuilder.Entity("LinkBlog.Data.Post", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -56,7 +56,7 @@ namespace LinkBlog.Web.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("LinkBlog.Contracts.Tag", b =>
+            modelBuilder.Entity("LinkBlog.Data.Tag", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -87,13 +87,13 @@ namespace LinkBlog.Web.Migrations
 
             modelBuilder.Entity("PostTag", b =>
                 {
-                    b.HasOne("LinkBlog.Contracts.Post", null)
+                    b.HasOne("LinkBlog.Data.Post", null)
                         .WithMany()
                         .HasForeignKey("PostsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LinkBlog.Contracts.Tag", null)
+                    b.HasOne("LinkBlog.Data.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)

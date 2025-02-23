@@ -12,9 +12,9 @@ LinkBlog is a multi-project solution for building a comprehensive blogging platf
   Hosts the application services.  
   [LinkBlog.AppHost.csproj](src/LinkBlog.AppHost/LinkBlog.AppHost.csproj)
 
-- **LinkBlog.Contracts**  
-  Contains shared contracts and data transfer objects.  
-  [LinkBlog.Contracts.csproj](src/LinkBlog.Contracts/LinkBlog.Contracts.csproj)
+- **LinkBlog.Data**  
+  Contains entities and classes for saving and retrieving data.
+  [LinkBlog.Data.csproj](src/LinkBlog.Data/LinkBlog.Data.csproj)
 
 - **LinkBlog.ServiceDefaults**  
   Provides default implementations for various services.  

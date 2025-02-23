@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkBlog.Web", "src\LinkBlo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AE0024C3-CB33-487B-940F-4BEE5453BD5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Contracts", "src\LinkBlog.Contracts\LinkBlog.Contracts.csproj", "{C0EDC700-D716-4F04-BF9B-711AFA6D354E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Data", "src\LinkBlog.Data\LinkBlog.Data.csproj", "{C0EDC700-D716-4F04-BF9B-711AFA6D354E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Feed", "src\LinkBlog.Feed\LinkBlog.Feed.csproj", "{58A3A27B-A105-4571-A0F9-C53C62E5F861}"
 EndProject

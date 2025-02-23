@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LinkBlog.ServiceDefaults\LinkBlog.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\LinkBlog.Contracts\LinkBlog.Contracts.csproj" />
+    <ProjectReference Include="..\LinkBlog.Data\LinkBlog.Data.csproj" />
     <ProjectReference Include="..\LinkBlog.Feed\LinkBlog.Feed.csproj" />
   </ItemGroup>
 

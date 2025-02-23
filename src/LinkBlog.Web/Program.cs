@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using LinkBlog.Contracts;
+using LinkBlog.Data;
 using LinkBlog.Feed;
 using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;

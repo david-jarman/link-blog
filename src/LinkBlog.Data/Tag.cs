@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace LinkBlog.Contracts;
+namespace LinkBlog.Data;
 
 public sealed class Tag
 {

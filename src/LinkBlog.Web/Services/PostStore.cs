@@ -1,5 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-using LinkBlog.Contracts;
+using LinkBlog.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkBlog.Web.Services;
