@@ -50,6 +50,11 @@ namespace LinkBlog.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Date");
+
+                    b.HasIndex("ShortTitle")
+                        .IsUnique();
+
                     b.ToTable("Posts");
                 });
 
@@ -63,6 +68,9 @@ namespace LinkBlog.Data.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Tags");
                 });
