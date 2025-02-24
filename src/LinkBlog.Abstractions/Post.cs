@@ -12,6 +12,8 @@ public sealed class Post
 
     public DateTimeOffset CreatedDate { get; set; }
 
+    public DateTimeOffset LastUpdatedDate { get; set; }
+
     public string? Link { get; set; }
 
     public string? LinkTitle { get; set; }

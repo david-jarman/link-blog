@@ -112,6 +112,29 @@ BEGIN
     VALUES ('20250224000450_AddPostIndexesAndTagNameIndex', '9.0.2');
     END IF;
 END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250224051317_AddUpdatedDate') THEN
+    ALTER TABLE "Posts" ADD "UpdatedDate" timestamp with time zone NOT NULL DEFAULT TIMESTAMPTZ '-infinity';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250224051317_AddUpdatedDate') THEN
+
+        UPDATE "Posts"
+        SET "UpdatedDate" = "Date";
+
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250224051317_AddUpdatedDate') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20250224051317_AddUpdatedDate', '9.0.2');
+    END IF;
+END $EF$;
 COMMIT;
-
-

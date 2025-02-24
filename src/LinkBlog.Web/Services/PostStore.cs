@@ -126,6 +126,7 @@ internal class PostStoreDb : IPostStore
         postEntity.Link = post.Link;
         postEntity.LinkTitle = post.LinkTitle;
         postEntity.Contents = post.Contents;
+        postEntity.UpdatedDate = DateTimeOffset.UtcNow;
 
         // Compare tags and add or remove as necessary
         var currentTags = postEntity.Tags.Select(t => t.Name).ToList();

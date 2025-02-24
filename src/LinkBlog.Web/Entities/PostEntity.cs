@@ -21,6 +21,9 @@ internal sealed class PostEntity
     [Required]
     public DateTimeOffset Date { get; set; }
 
+    [Required]
+    public DateTimeOffset UpdatedDate { get; set; }
+
     public string? Link { get; set; }
 
     public string? LinkTitle { get; set; }
@@ -36,6 +39,7 @@ internal sealed class PostEntity
         Title = string.Empty;
         ShortTitle = string.Empty;
         Date = DateTimeOffset.UtcNow;
+        UpdatedDate = DateTimeOffset.UtcNow;
         Link = null;
         LinkTitle = null;
         Contents = string.Empty;

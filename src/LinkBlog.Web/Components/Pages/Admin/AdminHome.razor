@@ -107,6 +107,7 @@
 
         this.Post.Id = Guid.NewGuid().ToString();
         this.Post.CreatedDate = DateTimeOffset.UtcNow;
+        this.Post.LastUpdatedDate = this.Post.CreatedDate;
 
         try
         {

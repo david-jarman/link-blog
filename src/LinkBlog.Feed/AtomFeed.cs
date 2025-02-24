@@ -47,7 +47,7 @@ public class AtomFeed : ISyndicationFeed
         // Required elements
         sb.Append($"<id>{postUrl}</id>");
         sb.Append($"<title>{post.Title}</title>");
-        sb.Append($"<updated>{post.CreatedDate.ToString("o")}</updated>");
+        sb.Append($"<updated>{post.LastUpdatedDate.ToString("o")}</updated>");
 
         // Recommended elements
         sb.Append($"<content type=\"html\">{System.Net.WebUtility.HtmlEncode(post.Contents)}</content>");
