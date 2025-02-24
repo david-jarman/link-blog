@@ -142,12 +142,23 @@ internal class PostStoreDb : IPostStore
         // Add new tags
         foreach (var newTag in newTags)
         {
-            var tagEntityToAdd = new TagEntity()
+            // Check for existing tag first
+            var existingTag = await this.postDbContext.Tags
+                .FirstOrDefaultAsync(t => t.Name == newTag, cancellationToken);
+            if (existingTag != null)
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = newTag
-            };
-            postEntity.Tags.Add(tagEntityToAdd);
+                postEntity.Tags.Add(existingTag);
+            }
+            else
+            {
+                // Create tag and add
+                var tagEntityToAdd = new TagEntity()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = newTag
+                };
+                postEntity.Tags.Add(tagEntityToAdd);
+            }
         }
 
         // Save changes
