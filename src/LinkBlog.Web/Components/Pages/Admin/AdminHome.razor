@@ -37,7 +37,7 @@
 
 <EditForm Model="PostForm" FormName="postForm" OnValidSubmit="HandleSubmitAsync" Enhance="true">
     <DataAnnotationsValidator />
-    
+
     <div class="form-group">
         <label for="PostTitle" class="form-label">Title: </label>
         <InputText id="PostTitle" @bind-Value="PostForm.Title" class="form-control" />
@@ -84,7 +84,7 @@
     [Parameter]
     public string? Id { get; set; }
 
-    private PostFormModel PostForm { get; set; } = new();
+    private PostFormModel? PostForm { get; set; }
     private string? Tags { get; set; }
     private string? ErrorMessage { get; set; }
     private string? SuccessMessage { get; set; }
@@ -113,6 +113,9 @@
         public DateTimeOffset LastUpdatedDate { get; set; } = DateTimeOffset.UtcNow;
         public string Id { get; set; } = string.Empty;
     }
+
+    protected override void OnInitialized() => 
+        PostForm ??= new();
 
     protected override async Task OnInitializedAsync()
     {
