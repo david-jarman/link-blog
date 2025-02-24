@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinkBlog.Data;
 
 [Table("Tags")]
+[Index(nameof(Name), IsUnique = true)]
 internal sealed class TagEntity
 {
     [Required]

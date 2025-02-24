@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinkBlog.Data;
 
 [Table("Posts")]
+[Index(nameof(ShortTitle), IsUnique = true)]
+[Index(nameof(Date))]
 internal sealed class PostEntity
 {
     [Required]

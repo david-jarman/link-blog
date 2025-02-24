@@ -69,12 +69,18 @@ else
             }
             else
             {
-                Post? post = await this.PostStore.GetPostForDateRangeAndShortTitleAsync(startDate.ToUniversalTime(), endDate.ToUniversalTime(), ShortTitle);
+                Post? post = await this.PostStore.GetPostForShortTitleAsync(ShortTitle);
                 if (post != null)
                 {
                     Caption = post.Title;
                     HeaderTitle = null; // Don't display a header for a single post.
                     this.posts = new Post[] { post };
+                    return;
+                }
+                else
+                {
+                    Caption = "Post not found";
+                    HeaderTitle = null;
                     return;
                 }
             }

@@ -16,7 +16,7 @@ public interface IPostStore
 
     IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, CancellationToken cancellationToken = default);
 
-    Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default);
+    Task<Post?> GetPostForShortTitleAsync(string shortTitle, CancellationToken cancellationToken = default);
 
     Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default);
 }
@@ -93,11 +93,11 @@ internal class PostStoreDb : IPostStore
         }
     }
 
-    public async Task<Post?> GetPostForDateRangeAndShortTitleAsync(DateTimeOffset start, DateTimeOffset end, string shortTitle, CancellationToken cancellationToken = default)
+    public async Task<Post?> GetPostForShortTitleAsync(string shortTitle, CancellationToken cancellationToken = default)
     {
         var post = await this.postDbContext.Posts
             .Include(p => p.Tags)
-            .SingleOrDefaultAsync(p => p.Date >= start && p.Date <= end && p.ShortTitle == shortTitle);
+            .SingleOrDefaultAsync(p => p.ShortTitle == shortTitle);
 
         return post?.ToPost();
     }
