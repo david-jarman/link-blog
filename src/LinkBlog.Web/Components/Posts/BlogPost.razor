@@ -39,9 +39,9 @@
             @((MarkupString)DisplayPost.Contents!)
         </div>
         <div class="post-tags">
-            Tags: @foreach (var tag in DisplayPost.Tags)
+            Tags: @foreach (var tag in DisplayPost.Tags.Select(t => t.Name))
             {
-                <a href="/tags/@tag.Name" class="tag">@tag.Name</a>@(tag != DisplayPost.Tags.Last() ? ", " : "")
+                <a href="/tags/@tag" class="tag">@tag</a>@(tag != DisplayPost.Tags.Last().Name ? ", " : string.Empty)
             }
         </div>
         <div class="post-links">
