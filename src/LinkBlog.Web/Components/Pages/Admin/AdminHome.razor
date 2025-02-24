@@ -15,38 +15,6 @@
 <HeadContent>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
-    <style>
-        .validation-message {
-            color: red;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        .form-control {
-            display: block;
-            width: 100%;
-            padding: 0.375rem 0.75rem;
-            border: 1px solid #ced4da;
-            border-radius: 0.25rem;
-        }
-        .form-control.invalid {
-            border-color: #dc3545;
-        }
-        .btn-primary {
-            color: #fff;
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.25rem;
-        }
-    </style>
 </HeadContent>
 
 <PageTitle>Admin</PageTitle>
@@ -55,14 +23,14 @@
 
 @if (!string.IsNullOrWhiteSpace(ErrorMessage))
 {
-    <div class="alert alert-danger" role="alert" style="color: red; padding: 10px; border: 1px solid #dc3545; border-radius: 4px; margin-bottom: 15px;">
+    <div class="alert alert-danger" role="alert">
         Error: @ErrorMessage
     </div>
 }
 
 @if (!string.IsNullOrWhiteSpace(SuccessMessage))
 {
-    <div class="alert alert-success" role="alert" style="color: green; padding: 10px; border: 1px solid #28a745; border-radius: 4px; margin-bottom: 15px;">
+    <div class="alert alert-success" role="alert">
         @SuccessMessage
     </div>
 }
@@ -80,7 +48,7 @@
         <label for="ShortTitle" class="form-label">Short Title: </label>
         <InputText id="ShortTitle" @bind-Value="PostForm.ShortTitle" class="form-control" />
         <ValidationMessage For="@(() => PostForm.ShortTitle)" class="validation-message" />
-        <small style="color: #6c757d; font-size: 0.875rem;">Must be unique, URL-friendly identifier for the post.</small>
+        <small class="hint">Must be unique, URL-friendly identifier for the post.</small>
     </div>
     
     <div class="form-group">
