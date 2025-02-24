@@ -28,3 +28,7 @@ psql -f src/LinkBlog.Web/Scripts/create.sql
 psql -f src/LinkBlog.Web/Scripts/seed.sql
 psql -f src/LinkBlog.Web/Scripts/dev-deleteall.sql
 ```
+
+# Best practices
+
+CSS style for forms should NEVER be inline or defined in the actual razor component file (.razor). Use CSS isolation by adding CSS style to the associated .razor.css file instead. The web app should adhere to the principal that HTML should define content and not style.
