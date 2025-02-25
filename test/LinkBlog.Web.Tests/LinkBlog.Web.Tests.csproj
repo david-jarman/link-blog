@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinkBlog.Web\LinkBlog.Web.csproj" />
-    <ProjectReference Include="..\LinkBlog.Abstractions\LinkBlog.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\LinkBlog.Web\LinkBlog.Web.csproj" />
+    <ProjectReference Include="..\..\src\LinkBlog.Abstractions\LinkBlog.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

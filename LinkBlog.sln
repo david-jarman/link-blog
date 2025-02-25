@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Feed", "src\LinkBl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Abstractions", "src\LinkBlog.Abstractions\LinkBlog.Abstractions.csproj", "{0E558D32-2A03-4397-BD7D-06915E957DCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Tests", "src\LinkBlog.Tests\LinkBlog.Tests.csproj", "{C8C9EDE9-465E-4F0F-931E-079E19D299E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkBlog.Web.Tests", "test\LinkBlog.Web.Tests\LinkBlog.Web.Tests.csproj", "{C8C9EDE9-465E-4F0F-931E-079E19D299E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
