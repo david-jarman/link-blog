@@ -107,7 +107,6 @@
         [Required(ErrorMessage = "Content is required")]
         public string Contents { get; set; } = string.Empty;
 
-        [Url(ErrorMessage = "Link must be a valid URL")]
         public string? Link { get; set; }
 
         public string? LinkTitle { get; set; }
@@ -117,13 +116,14 @@
         public string Tags { get; set; } = string.Empty;
     }
 
-    protected override void OnInitialized() => 
-        PostForm ??= new();
-
     protected override async Task OnInitializedAsync()
     {
-        if (!string.IsNullOrWhiteSpace(Id))
+        if (PostForm == null && !string.IsNullOrWhiteSpace(Id))
         {
+            // This is the "edit post" case on first load (not on submit).
+            // Create a new PostFormModel if it doesn't exist before the async call
+            // Otherwise, EditForm will complain that PostForm is null.
+            PostForm ??= new();
             var post = await PostStore.GetPostById(Id);
             if (post != null)
             {
@@ -135,6 +135,9 @@
                 PostForm!.Tags = string.Join(",", post.Tags.Select(t => t.Name));
             }
         }
+
+        // In all other cases, create a new PostFormModel if it doesn't exist
+        PostForm ??= new();
     }
 
     private async Task HandleSubmitAsync()
