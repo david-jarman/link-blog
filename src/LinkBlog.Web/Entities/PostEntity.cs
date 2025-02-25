@@ -7,7 +7,7 @@ namespace LinkBlog.Data;
 [Table("Posts")]
 [Index(nameof(ShortTitle), IsUnique = true)]
 [Index(nameof(Date))]
-internal sealed class PostEntity
+public sealed class PostEntity
 {
     [Required]
     public string Id { get; set; }
