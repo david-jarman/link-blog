@@ -29,6 +29,8 @@ f25dd03e-2770-41db-a9e6-cd904f6ea935	Adding the Trix editor to my Blazor SSR sit
 3c17de3b-5afe-4b71-955b-06ddd6442ff1	Brown Rice	2025-02-23 06:53:42.549141+00			<div>Fell in love with brown rice today.. It tastes so good, is much healthier.. Why have I avoided it my whole life? Going forward I think it will become my main driver.<br><br>Only con I can think of is it does take a while longer to cook.&nbsp;</div>	brown-rice	2025-02-23 06:53:42.549141+00
 604ba90e-3f17-4fa1-8851-89a7746f0255	Mastodon Comments on Blog?	2025-02-24 00:41:52.254658+00	https://beej.us/blog/data/mastodon-comments/	Mastodon Comments	<div>I don't actually use Mastodon anymore, but am tempted to try this out. It would be cool to have comments on the blog, even if just for the process of going through the motions and gaining a bit deeper understanding of <a href="https://en.wikipedia.org/wiki/ActivityPub">ActivityPub</a>.&nbsp;<br><br>This has the potential to become a rabbit hole for me though, as I'm sure I'll have to set up my own server and all that entails. I've been enjoying Heroku as a hosting platform so I bet it won't be&nbsp;<em>too&nbsp;</em>bad to set up (famous last words).</div>	mastodon-comments-on-blog	2025-02-24 00:41:52.254658+00
 4f4ee22a-ebd8-412d-b38f-4a9513c8d649	Now on Bluesky @davidjarman.net	2025-02-24 05:34:25.51439+00	https://bsky.app/profile/davidjarman.net	David Jarman (@davidjarman.net) - Bluesky	<div>You can now find me on Bluesky with an updated handle. My interest in social media has been pretty low in the last few months, but I do find it fun linking myself all over the internet.&nbsp;</div>	now-on-bsky	2025-02-24 05:34:25.51439+00
+56dbc42f-7aeb-4f29-988b-30c61d1ac485	"Vendoring"	2025-02-24 20:11:38.50574+00	https://htmx.org/essays/vendoring/	Vendoring	<blockquote>“Vendoring” software is a technique where you copy the source of another project directly into your own project.</blockquote><div>I love this idea, so many times you need to debug into your dependencies to figure out an issue or why things aren't working as you expected.<br><br>I mainly develop in C# and .NET and am fortunate to work at Microsoft, so I've done this many times in the past where I grab the source for a dependency, copy it into my code, update the references, and start debugging. This is always a temporary step. I don't actually check in the dependent code. I don't do it that often anymore, as you can enable debug options to disable "just my code" and if your dependencies publish symbols (most do in my experience), you can just F11 and step into library code from Nuget packages.<br><br>In the future, I may take up the vendoring approach for web frontends, where licenses allow. If nothing else, it gives me peace of mind that the dependency won't just disappear from the CDN.</div>	vendoring-essay	2025-02-24 20:11:38.50574+00
+69b16f23-94d6-486d-b2d4-3f4c6696ccf1	Claude Code Initial Impressions	2025-02-24 21:36:53.288455+00	https://www.anthropic.com/news/claude-3-7-sonnet	Claude Code Announcement	<div>Claude announced a new hybrid reasoning model today. That's a great idea to have a singular model for both reasoning and quick responses. <br><br>What I'm more interested in is their new Claude Code tool. It's an interactive CLI that is similar to GitHub Copilot or Cursor, but only runs in your terminal as of now. Here is the link for setting it up: <a href="https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview">https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview</a><br><br></div><div>I was hoping that this tool would just use my existing Claude plan, but no, of course you actually pay for the tokens it uses. I'm sure this was a very conscious decision, as this tool uses A LOT of tokens right now. I mean, it's breathtaking. The first thing I did was load it up on my link blog codebase, and ran the /init command to generate a readme file for the codebase. I immediately ran the /cost command to see how much that operation costed. Thirty cents. That may not sound like much, but for as small as my codebase is, I was expecting that to only be a few cents. I then gave it a very specific task to add validation to my admin post authoring form. I gave it a fair bit of instruction, as the docs recommends treating the tool like a software engineer that you would delegate a task to. So I gave it hints as to how to find validation rules and all that. I then sent it off. It ran for something like 2 minutes making the change. It prompted me for permission to perform tool actions (e.g. run some bash commands, run build, etc). After a total of 10 minutes of use, I was up to $1.50 in spend, the code did not build, and I realized that the <a href="https://github.com/anthropics/claude-code/issues/26">tool call to build the code was broken</a>. <strong><em>Edit: It turns out powershell is not officially supported yet. You must use bash or zsh to launch claude.</em></strong><br><br>I'm still excited about this tool and will keep playing around with it. I'll probably have to reload my anthropic wallet with more credits soon as it is expensive, but so far it seems like a really cool concept, and I hope they keep improving it and driving down the cost.</div>	claude-code-initial-impressions	2025-02-24 22:23:53.411161+00
 \.
 
 
@@ -50,6 +52,11 @@ bdb4ced0-2a92-4a01-a77c-c16c47f45b64	trix
 947e7358-7a30-451b-a0c8-71019a7f6441	food
 339fda86-1858-4d77-b54d-0a471a3d5a88	mastodon
 d7bae5f1-f76f-434b-904c-e30765dea1ee	bluesky
+42c6d80f-5cae-4c09-99f3-bf1867ac556d	programming
+b65176f2-4961-494c-83ad-81bfbf60c78f	dependencies
+1bf414eb-395b-4c63-ba62-34e7c95e2018	llms
+a0fc6cfc-7636-4eb7-b816-5798e2682f19	claude
+aa217264-5d70-4208-b4b2-adbeb9a8c890	ai
 \.
 
 
@@ -71,6 +78,11 @@ f25dd03e-2770-41db-a9e6-cd904f6ea935	bdb4ced0-2a92-4a01-a77c-c16c47f45b64
 3c17de3b-5afe-4b71-955b-06ddd6442ff1	947e7358-7a30-451b-a0c8-71019a7f6441
 604ba90e-3f17-4fa1-8851-89a7746f0255	339fda86-1858-4d77-b54d-0a471a3d5a88
 4f4ee22a-ebd8-412d-b38f-4a9513c8d649	d7bae5f1-f76f-434b-904c-e30765dea1ee
+56dbc42f-7aeb-4f29-988b-30c61d1ac485	42c6d80f-5cae-4c09-99f3-bf1867ac556d
+56dbc42f-7aeb-4f29-988b-30c61d1ac485	b65176f2-4961-494c-83ad-81bfbf60c78f
+69b16f23-94d6-486d-b2d4-3f4c6696ccf1	1bf414eb-395b-4c63-ba62-34e7c95e2018
+69b16f23-94d6-486d-b2d4-3f4c6696ccf1	a0fc6cfc-7636-4eb7-b816-5798e2682f19
+69b16f23-94d6-486d-b2d4-3f4c6696ccf1	aa217264-5d70-4208-b4b2-adbeb9a8c890
 \.
 
 
