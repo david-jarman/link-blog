@@ -6,7 +6,7 @@ namespace LinkBlog.Data;
 
 [Table("Tags")]
 [Index(nameof(Name), IsUnique = true)]
-internal sealed class TagEntity
+public sealed class TagEntity
 {
     [Required]
     public string Id { get; set; } = string.Empty;

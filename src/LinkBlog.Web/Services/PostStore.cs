@@ -21,7 +21,7 @@ public interface IPostStore
     Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default);
 }
 
-internal class PostStoreDb : IPostStore
+public class PostStoreDb : IPostStore
 {
     private readonly PostDbContext postDbContext;
 
