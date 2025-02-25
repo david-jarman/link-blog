@@ -1,3 +1,5 @@
+[![.NET CI](https://github.com/david-jarman/link-blog/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/david-jarman/link-blog/actions/workflows/ci.yml)
+
 # LinkBlog
 
 LinkBlog is a multi-project solution for building a comprehensive blogging platform.
