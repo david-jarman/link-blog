@@ -35,7 +35,7 @@
     </div>
 }
 
-<EditForm Model="PostForm" FormName="postForm" OnValidSubmit="HandleSubmitAsync" Enhance="true">
+<EditForm Model="PostForm" FormName="postForm" OnValidSubmit="HandleSubmitAsync">
     <DataAnnotationsValidator />
 
     <div class="form-group">
@@ -72,9 +72,10 @@
     
     <div class="form-group">
         <label for="PostTags" class="form-label">Tags (comma separated):</label>
-        <InputText id="PostTags" @bind-Value="Tags" class="form-control" />
+        <InputText id="PostTags" @bind-Value="PostForm.Tags" class="form-control" />
+        <ValidationMessage For="@(() => PostForm.Tags)" class="validation-message" />
     </div>
-    
+
     <div class="form-group">
         <button type="submit" class="btn-primary">Submit</button>
     </div>
@@ -84,9 +85,11 @@
     [Parameter]
     public string? Id { get; set; }
 
+    [SupplyParameterFromForm]
     private PostFormModel? PostForm { get; set; }
-    private string? Tags { get; set; }
+
     private string? ErrorMessage { get; set; }
+
     private string? SuccessMessage { get; set; }
     
     // Helper class for form validation
@@ -109,9 +112,9 @@
 
         public string? LinkTitle { get; set; }
 
-        public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.UtcNow;
-        public DateTimeOffset LastUpdatedDate { get; set; } = DateTimeOffset.UtcNow;
-        public string Id { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Tags are required")]
+        [RegularExpression(@"^([a-z0-9\-]+)(,[a-z0-9\-]+)*$", ErrorMessage = "Tags must be a comma-separated list and only contain lowercase letters, numbers, and hyphens")]
+        public string Tags { get; set; } = string.Empty;
     }
 
     protected override void OnInitialized() => 
@@ -124,15 +127,12 @@
             var post = await PostStore.GetPostById(Id);
             if (post != null)
             {
-                PostForm.Id = post.Id;
-                PostForm.Title = post.Title;
-                PostForm.ShortTitle = post.ShortTitle;
-                PostForm.Contents = post.Contents;
-                PostForm.Link = post.Link;
-                PostForm.LinkTitle = post.LinkTitle;
-                PostForm.CreatedDate = post.CreatedDate;
-                PostForm.LastUpdatedDate = post.LastUpdatedDate;
-                Tags = string.Join(",", post.Tags.Select(t => t.Name));
+                PostForm!.Title = post.Title;
+                PostForm!.ShortTitle = post.ShortTitle;
+                PostForm!.Contents = post.Contents;
+                PostForm!.Link = post.Link;
+                PostForm!.LinkTitle = post.LinkTitle;
+                PostForm!.Tags = string.Join(",", post.Tags.Select(t => t.Name));
             }
         }
     }
@@ -142,17 +142,14 @@
         // Convert form model to Post
         var post = new Post
         {
-            Id = PostForm.Id,
-            Title = PostForm.Title,
-            ShortTitle = PostForm.ShortTitle,
-            Contents = PostForm.Contents,
-            Link = PostForm.Link,
-            LinkTitle = PostForm.LinkTitle,
-            CreatedDate = PostForm.CreatedDate,
-            LastUpdatedDate = PostForm.LastUpdatedDate
+            Title = PostForm!.Title,
+            ShortTitle = PostForm!.ShortTitle,
+            Contents = PostForm!.Contents,
+            Link = PostForm!.Link,
+            LinkTitle = PostForm!.LinkTitle,
         };
 
-        List<string> tagNames = Tags?.Split(',')
+        List<string> tagNames = PostForm?.Tags?.Split(',')
             .Select(t => t.Trim())
             .Where(t => !string.IsNullOrWhiteSpace(t))
             .ToList() ?? new();
@@ -218,9 +215,7 @@
     private void ClearForm()
     {
         PostForm = new();
-        Tags = string.Empty;
         ErrorMessage = null;
-        SuccessMessage = null;
         StateHasChanged();
     }
 
