@@ -83,24 +83,31 @@ public class FormValidationTests : TestContext
     }
 
     [Fact]
-    public void ValidationErrors_DisplayedForInvalidUrl()
+    public void SubmitForm_AcceptsNonValidatedUrl()
     {
         // Arrange
+        _mockPostStore
+            .Setup(store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.FromResult(true));
+            
         var component = RenderComponent<AdminHome>();
         
         // Fill in required fields
         component.Find("#PostTitle").Change("Test Title");
         component.Find("#ShortTitle").Change("test-title");
         component.Find("#PostContent").Change("Test content");
+        component.Find("#PostTags").Change("test-tag");
         
-        // Add invalid URL
+        // Add non-URL text - should still work since we're not validating URLs
         component.Find("#PostLink").Change("not-a-valid-url");
         
         // Act - Submit the form
         component.Find("form").Submit();
 
-        // Assert - Check for validation message about URL format
-        Assert.Contains("Link must be a valid URL", component.Markup);
+        // Verify the creation was attempted
+        _mockPostStore.Verify(
+            store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Fact]
@@ -117,6 +124,7 @@ public class FormValidationTests : TestContext
         component.Find("#PostTitle").Change("Test Title");
         component.Find("#ShortTitle").Change("test-title");
         component.Find("#PostContent").Change("Test content");
+        component.Find("#PostTags").Change("test-tag");
         
         // Act - Submit the form
         component.Find("form").Submit();
@@ -141,6 +149,7 @@ public class FormValidationTests : TestContext
         component.Find("#PostTitle").Change("Test Title");
         component.Find("#ShortTitle").Change("test-title");
         component.Find("#PostContent").Change("Test content");
+        component.Find("#PostTags").Change("test-tag");
         
         // Act - Submit the form
         component.Find("form").Submit();
