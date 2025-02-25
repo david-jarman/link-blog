@@ -12,3 +12,62 @@
     border: 1px solid #ccc; /* Adds a subtle border */
     border-radius: 5px; /* Rounds the corners */
 }
+
+/* Form Styles */
+.validation-message {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.form-control.invalid {
+    border-color: #dc3545;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+}
+
+/* Alert Styles */
+.alert {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.alert-danger {
+    color: red;
+    border: 1px solid #dc3545;
+}
+
+.alert-success {
+    color: green;
+    border: 1px solid #28a745;
+}
+
+small.hint {
+    color: #6c757d;
+    font-size: 0.875rem;
+}

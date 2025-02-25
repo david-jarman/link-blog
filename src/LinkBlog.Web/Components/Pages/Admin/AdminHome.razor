@@ -4,6 +4,8 @@
 @using LinkBlog.Abstractions
 @using LinkBlog.Data
 @using Microsoft.AspNetCore.Authorization
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IPostStore PostStore
@@ -21,38 +23,61 @@
 
 @if (!string.IsNullOrWhiteSpace(ErrorMessage))
 {
-    <p style="color: red;">Error creating post: @ErrorMessage</p>
+    <div class="alert alert-danger" role="alert">
+        Error: @ErrorMessage
+    </div>
 }
 
 @if (!string.IsNullOrWhiteSpace(SuccessMessage))
 {
-    <p style="color: green;">@SuccessMessage</p>
+    <div class="alert alert-success" role="alert">
+        @SuccessMessage
+    </div>
 }
 
-<EditForm Model="Post" FormName="postForm" OnValidSubmit="HandleSubmitAsync" Enhance="true">
-    <div>
-        <label for="PostTitle">Title: </label>
-        <InputText id="PostTitle" @bind-Value="Post!.Title" />
-        <br/><br/>
-        <label for="ShortTitle">Short Title: </label>
-        <InputText id="ShortTitle" @bind-Value="Post!.ShortTitle" />
-        <br/><br/>
-        <label for="PostContent">Post content: </label>
-        <InputText id="PostContent" type="hidden" @bind-Value="Post!.Contents" />
-        <trix-editor input="PostContent" class="post-editor"></trix-editor>
-        <br/><br/>
-        <label for="PostLink">Link: </label>
-        <InputText id="PostLink" @bind-Value="Post!.Link" />
-        <br/><br/>
-        <label for="LinkTitle">Link Title:</label>
-        <InputText id="LinkTitle" @bind-Value="Post!.LinkTitle" />
-        <br/><br/>
-        <label for="PostTags">Tags (comma separated):</label>
-        <InputText id="PostTags" @bind-Value="Tags" />
-        <br/><br/>
+<EditForm Model="PostForm" FormName="postForm" OnValidSubmit="HandleSubmitAsync">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="PostTitle" class="form-label">Title: </label>
+        <InputText id="PostTitle" @bind-Value="PostForm.Title" class="form-control" />
+        <ValidationMessage For="@(() => PostForm.Title)" class="validation-message" />
     </div>
-    <div>
-        <button type="submit">Submit</button>
+    
+    <div class="form-group">
+        <label for="ShortTitle" class="form-label">Short Title: </label>
+        <InputText id="ShortTitle" @bind-Value="PostForm.ShortTitle" class="form-control" />
+        <ValidationMessage For="@(() => PostForm.ShortTitle)" class="validation-message" />
+        <small class="hint">Must be unique, URL-friendly identifier for the post.</small>
+    </div>
+    
+    <div class="form-group">
+        <label for="PostContent" class="form-label">Post content: </label>
+        <InputText id="PostContent" type="hidden" @bind-Value="PostForm.Contents" />
+        <trix-editor input="PostContent" class="post-editor"></trix-editor>
+        <ValidationMessage For="@(() => PostForm.Contents)" class="validation-message" />
+    </div>
+    
+    <div class="form-group">
+        <label for="PostLink" class="form-label">Link: </label>
+        <InputText id="PostLink" @bind-Value="PostForm.Link" class="form-control" />
+        <ValidationMessage For="@(() => PostForm.Link)" class="validation-message" />
+    </div>
+    
+    <div class="form-group">
+        <label for="LinkTitle" class="form-label">Link Title:</label>
+        <InputText id="LinkTitle" @bind-Value="PostForm.LinkTitle" class="form-control" />
+        <ValidationMessage For="@(() => PostForm.LinkTitle)" class="validation-message" />
+    </div>
+    
+    <div class="form-group">
+        <label for="PostTags" class="form-label">Tags (comma separated):</label>
+        <InputText id="PostTags" @bind-Value="PostForm.Tags" class="form-control" />
+        <ValidationMessage For="@(() => PostForm.Tags)" class="validation-message" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn-primary">Submit</button>
     </div>
 </EditForm>
 
@@ -61,57 +86,112 @@
     public string? Id { get; set; }
 
     [SupplyParameterFromForm]
-    private Post? Post { get; set; }
-    [SupplyParameterFromForm]
-    private string? Tags { get; set; }
+    private PostFormModel? PostForm { get; set; }
+
     private string? ErrorMessage { get; set; }
+
     private string? SuccessMessage { get; set; }
+    
+    // Helper class for form validation
+    public class PostFormModel
+    {
+        [Required(ErrorMessage = "Title is required")]
+        [StringLength(200, ErrorMessage = "Title must be less than 200 characters")]
+        public string Title { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Short title is required")]
+        [StringLength(100, ErrorMessage = "Short title must be less than 100 characters")]
+        [RegularExpression(@"^[a-z0-9\-]+$", ErrorMessage = "Short title must contain only lowercase letters, numbers, and hyphens")]
+        public string ShortTitle { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Content is required")]
+        public string Contents { get; set; } = string.Empty;
+
+        public string? Link { get; set; }
+
+        public string? LinkTitle { get; set; }
+
+        [Required(ErrorMessage = "Tags are required")]
+        [RegularExpression(@"^([a-z0-9\-]+)(,[a-z0-9\-]+)*$", ErrorMessage = "Tags must be a comma-separated list and only contain lowercase letters, numbers, and hyphens")]
+        public string Tags { get; set; } = string.Empty;
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        if (Post == null && !string.IsNullOrWhiteSpace(Id))
+        if (PostForm == null && !string.IsNullOrWhiteSpace(Id))
         {
-            Post ??= new();
-            Console.WriteLine($"Loading post with id {Id}");
-            Post = await PostStore.GetPostById(Id) ?? new Post();
-            Tags = string.Join(",", Post.Tags.Select(t => t.Name));
+            // This is the "edit post" case on first load (not on submit).
+            // Create a new PostFormModel if it doesn't exist before the async call
+            // Otherwise, EditForm will complain that PostForm is null.
+            PostForm ??= new();
+            var post = await PostStore.GetPostById(Id);
+            if (post != null)
+            {
+                PostForm!.Title = post.Title;
+                PostForm!.ShortTitle = post.ShortTitle;
+                PostForm!.Contents = post.Contents;
+                PostForm!.Link = post.Link;
+                PostForm!.LinkTitle = post.LinkTitle;
+                PostForm!.Tags = string.Join(",", post.Tags.Select(t => t.Name));
+            }
         }
 
-        Post ??= new();
+        // In all other cases, create a new PostFormModel if it doesn't exist
+        PostForm ??= new();
     }
 
     private async Task HandleSubmitAsync()
     {
-        if (Post == null)
+        // Convert form model to Post
+        var post = new Post
         {
-            return;
-        }
+            Title = PostForm!.Title,
+            ShortTitle = PostForm!.ShortTitle,
+            Contents = PostForm!.Contents,
+            Link = PostForm!.Link,
+            LinkTitle = PostForm!.LinkTitle,
+        };
 
-        List<string> tagNames = Tags?.Split(',').Select(t => t.Trim()).ToList() ?? new();
+        List<string> tagNames = PostForm?.Tags?.Split(',')
+            .Select(t => t.Trim())
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .ToList() ?? new();
 
         if (!string.IsNullOrWhiteSpace(Id))
         {
-            if (await PostStore.UpdatePostAsync(Id, Post, tagNames))
+            try
             {
-                OnSuccess("Post updated successfully");
+                if (await PostStore.UpdatePostAsync(Id, post, tagNames))
+                {
+                    OnSuccess("Post updated successfully");
+                }
+                else
+                {
+                    OnError("Failed to update post");
+                }
             }
-            else
+            catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key") == true)
             {
-                OnError("Failed to update post");
+                OnError("A post with this short title already exists. Please choose a different short title.", ex);
+                ErrorMessage = "A post with this short title already exists. Please choose a different short title.";
+                // Don't clear the form here so the user can fix the issue
+                SuccessMessage = null;
+            }
+            catch (Exception ex)
+            {
+                OnError($"Failed to update post: {ex.Message}", ex);
             }
 
             return;
         }
 
-        // TODO: Add validation
-
-        this.Post.Id = Guid.NewGuid().ToString();
-        this.Post.CreatedDate = DateTimeOffset.UtcNow;
-        this.Post.LastUpdatedDate = this.Post.CreatedDate;
+        post.Id = Guid.NewGuid().ToString();
+        post.CreatedDate = DateTimeOffset.UtcNow;
+        post.LastUpdatedDate = post.CreatedDate;
 
         try
         {
-            bool success = await PostStore.CreatePostAsync(this.Post, tagNames);
+            bool success = await PostStore.CreatePostAsync(post, tagNames);
 
             if (success)
             {
@@ -122,6 +202,13 @@
                 OnError("Failed to create post");
             }
         }
+        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key") == true)
+        {
+            OnError("A post with this short title already exists. Please choose a different short title.", ex);
+            // Don't clear the form here so the user can fix the issue
+            ErrorMessage = "A post with this short title already exists. Please choose a different short title.";
+            SuccessMessage = null;
+        }
         catch (Exception ex)
         {
             OnError($"Failed to create post: {ex.Message}", ex);
@@ -130,8 +217,7 @@
 
     private void ClearForm()
     {
-        Post = new();
-        Tags = string.Empty;
+        PostForm = new();
         ErrorMessage = null;
         StateHasChanged();
     }
@@ -139,6 +225,7 @@
     private void OnSuccess(string message)
     {
         SuccessMessage = message;
+        ErrorMessage = null;
         Logger.LogInformation(SuccessMessage);
         ClearForm();
     }
@@ -146,6 +233,7 @@
     private void OnError(string message, Exception? exception = null)
     {
         ErrorMessage = message;
+        SuccessMessage = null;
 
         if (exception != null)
         {
