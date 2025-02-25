@@ -13,7 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace LinkBlog.Tests;
+namespace LinkBlog.Web.Tests;
 
 public class FormValidationTests : TestContext
 {
