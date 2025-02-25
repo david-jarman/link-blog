@@ -8,6 +8,9 @@ dotnet build LinkBlog.sln
 # Run the application
 dotnet run --project src/LinkBlog.AppHost/LinkBlog.AppHost.csproj
 
+# Run tests
+dotnet test LinkBlog.sln
+
 # Database migrations
 dotnet ef migrations add [MigrationName] --project src/LinkBlog.Web/LinkBlog.Web.csproj
 dotnet ef database update --project src/LinkBlog.Web/LinkBlog.Web.csproj
@@ -20,14 +23,6 @@ dotnet ef database update --project src/LinkBlog.Web/LinkBlog.Web.csproj
 - **Async**: Use async/await consistently with methods suffixed with 'Async'
 - **Error Handling**: Use exceptions for exceptional cases; return values for expected failures
 - **Formatting**: 4-space indentation; opening braces on same line
-
-## Database Scripts
-```bash
-# Database management
-psql -f src/LinkBlog.Web/Scripts/create.sql
-psql -f src/LinkBlog.Web/Scripts/seed.sql
-psql -f src/LinkBlog.Web/Scripts/dev-deleteall.sql
-```
 
 # Best practices
 
