@@ -1,0 +1,42 @@
+.header {
+    border-bottom-width: 5px;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Push the items in toward the center */
+    max-width: 50rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+
+.title-link {
+    text-decoration: none;
+    color: black;
+}
+
+.logo {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.social-links {
+    display: flex;
+    align-items: center;
+}
+
+.social-link {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    text-decoration: none;
+    color: black;
+    font-size: 1.5rem;
+}
