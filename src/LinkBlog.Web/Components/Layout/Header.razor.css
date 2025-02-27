@@ -5,10 +5,14 @@
     border-bottom: 5px solid black;
 }
 
+h1 {
+    margin: 0;
+}
+
 .nav-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-between; /* Pushes the title and social links all the way to the edges of the title */
     align-items: center;
 
     /* Push the items in toward the center */
@@ -21,11 +25,11 @@
 }
 
 .title {
-    margin-left: 0.5rem;
+    margin-left: 0.5rem; /* Push the title to the right slightly */
 }
 
 .title-link {
-    text-decoration: none;
+    text-decoration: none; /* Remove underline from link */
     color: black;
 }
 
@@ -34,9 +38,16 @@
     height: 1.5rem;
 }
 
+.link-container {
+    display: flex; /* Make the items display horizontally */
+    align-items: center; /* Vertically align the items */
+    gap: .4rem; /* Space between logo and text of link */
+}
+
 .social-links {
     display: flex;
     align-items: center;
+    margin-right: 0.5rem; /* Push the social links to the left slightly */
 }
 
 .social-link {
