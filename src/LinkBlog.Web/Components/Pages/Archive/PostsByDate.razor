@@ -65,7 +65,7 @@ else
             if (ShortTitle == null)
             {
                 Caption = $"Posts for {startDate:MMMM d, yyyy}";
-                HeaderTitle = $"{startDate:MMMM d, yyyy}";
+                HeaderTitle = Caption;
             }
             else
             {
@@ -91,7 +91,7 @@ else
             endDate = startDate.AddMonths(1);
 
             Caption = $"Posts for {startDate:MMMM yyyy}";
-            HeaderTitle = $"{startDate:MMMM yyyy}";
+            HeaderTitle = Caption;
         }
         else
         {
@@ -99,7 +99,7 @@ else
             endDate = startDate.AddYears(1);
 
             Caption = $"Posts for {startDate:yyyy}";
-            HeaderTitle = $"{startDate:yyyy}";
+            HeaderTitle = Caption;
         }
 
         IAsyncEnumerable<Post> asyncPosts = PostStore.GetPostsForDateRange(startDate.ToUniversalTime(), endDate.ToUniversalTime());
