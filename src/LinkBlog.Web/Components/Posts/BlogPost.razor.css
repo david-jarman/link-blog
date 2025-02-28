@@ -43,3 +43,14 @@ button.edit-btn svg {
 button.edit-btn:hover svg {
     transform: scale(1.1);
 }
+
+/* Style block quotes to look more like markdown-style quotes */
+::deep blockquote {
+    padding: 10px 20px;
+    margin: 10px 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-left: 4px solid black;
+    color: #555;
+    font-style: italic;
+    border-radius: 4px;
+}
