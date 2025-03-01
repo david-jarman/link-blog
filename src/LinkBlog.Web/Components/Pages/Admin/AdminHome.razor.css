@@ -3,6 +3,7 @@
    style would only apply to the AdminHome page and not child components. */
 .post-editor {
     min-height: 150px; /* Adjust height for multiple lines */
+    background-color: white; /* White background */
 }
 
 ::deep input {
