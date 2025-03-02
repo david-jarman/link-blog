@@ -14,9 +14,14 @@
 @* Add trix WYSIWYG editor and drafts functionality *@
 <HeadContent>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
-    <link rel="stylesheet" type="text/css" href="/css/draft-manager.css">
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
-    <script type="text/javascript" src="/js/draft-manager.js"></script>
+
+    @if (EnableDrafts)
+    {
+        <link rel="stylesheet" type="text/css" href="/css/draft-manager.css">
+        <script type="text/javascript" src="/js/draft-manager.js"></script>
+    }
+
 </HeadContent>
 
 <PageTitle>Admin</PageTitle>
@@ -37,23 +42,26 @@
     </div>
 }
 
-@* Draft Manager UI *@
-<div class="draft-manager">
-    <div id="draft-toggle">► Draft Manager</div>
-    <div id="draft-container" class="hidden">
-        <div class="draft-actions">
-            <input type="text" id="draft-name" class="form-control" placeholder="Enter draft name" />
-            <button id="save-draft-btn" class="btn btn-success">Save Draft</button>
-        </div>
-        <div id="draft-message" class="alert" style="display: none;"></div>
-        <div class="draft-list">
-            <h4>Saved Drafts</h4>
-            <div id="draft-list">
-                <p>No drafts saved yet.</p>
+@if (EnableDrafts)
+{
+    @* Draft Manager UI *@
+    <div class="draft-manager">
+        <div id="draft-toggle">► Draft Manager</div>
+        <div id="draft-container" class="hidden">
+            <div class="draft-actions">
+                <input type="text" id="draft-name" class="form-control" placeholder="Enter draft name" />
+                <button id="save-draft-btn" class="btn btn-success">Save Draft</button>
+            </div>
+            <div id="draft-message" class="alert" style="display: none;"></div>
+            <div class="draft-list">
+                <h4>Saved Drafts</h4>
+                <div id="draft-list">
+                    <p>No drafts saved yet.</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
 
 <EditForm Model="PostForm" FormName="postForm" OnValidSubmit="HandleSubmitAsync">
     <DataAnnotationsValidator />
@@ -108,6 +116,8 @@
     [SupplyParameterFromForm]
     private PostFormModel? PostForm { get; set; }
 
+    private bool EnableDrafts { get; set; }
+
     private string? ErrorMessage { get; set; }
 
     private string? SuccessMessage { get; set; }
@@ -138,6 +148,9 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Enable drafts only if the post is new
+        EnableDrafts = string.IsNullOrWhiteSpace(Id);
+
         if (PostForm == null && !string.IsNullOrWhiteSpace(Id))
         {
             // This is the "edit post" case on first load (not on submit).
