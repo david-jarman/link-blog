@@ -67,6 +67,6 @@ h1:focus {
 which makes them look terrible in the post view.
 Set the max width and override the height to make them look better. */
 img {
-    max-width: 45rem;
+    max-width: 100%;
     height: auto;
 }
