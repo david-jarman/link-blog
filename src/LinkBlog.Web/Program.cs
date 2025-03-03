@@ -183,6 +183,6 @@ app.MapPost("/api/upload", async (BlobServiceClient blobServiceClient, IFormFile
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
     }
 }).DisableAntiforgery()
-.RequireAuthorization("Admin"); // TODO: Uncomment after testing.
+.RequireAuthorization("Admin");
 
 app.Run();
