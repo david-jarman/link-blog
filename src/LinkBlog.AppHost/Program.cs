@@ -6,8 +6,20 @@ var postgres = builder.AddPostgres("postgres")
 
 var postgresdb = postgres.AddDatabase("postgresdb", "postgres");
 
+var storage = builder.AddAzureStorage("storage")
+    .RunAsEmulator(azurite =>
+    {
+        azurite.WithDataVolume()
+            .WithLifetime(ContainerLifetime.Persistent)
+            .WithBlobPort(34553);
+    });
+
+
+var blobStore = storage.AddBlobs("blobstore");
+
 builder.AddProject<Projects.LinkBlog_Web>("webfrontend")
     .WithExternalHttpEndpoints()
-    .WithReference(postgresdb);
+    .WithReference(postgresdb)
+    .WithReference(blobStore);
 
 builder.Build().Run();
