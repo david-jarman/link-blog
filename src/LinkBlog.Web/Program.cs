@@ -10,6 +10,7 @@ using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
+using ImageMagick;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -155,9 +156,11 @@ app.MapPost("/api/upload", async (BlobServiceClient blobServiceClient, IFormFile
     var containerClient = blobServiceClient.GetBlobContainerClient("images");
     await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob, cancellationToken: ct);
 
+    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
+
     // Blob path should be prefixed with the current datetime to ensure uniqueness.
-    // Example: "2025/08/01/12/00/00/imagename.jpg"
-    string blobPath = $"{DateTimeOffset.UtcNow:yyyy/MM/dd/HH/mm/ss}/{file.FileName}";
+    // Example: "2025/08/01/12/00/00/imagename.png"
+    string blobPath = $"{DateTimeOffset.UtcNow:yyyy/MM/dd/HH/mm/ss}/{fileNameWithoutExtension}.png";
 
     var blobClient = containerClient.GetBlobClient(blobPath);
 
@@ -168,8 +171,37 @@ app.MapPost("/api/upload", async (BlobServiceClient blobServiceClient, IFormFile
         return;
     }
 
-    // Upload the image to the blob store.
-    var response = await blobClient.UploadAsync(file.OpenReadStream(), true, ct);
+    // Load the image from the stream.
+    using Stream stream = file.OpenReadStream();
+    using MagickImage image = new(stream);
+
+    // Store the ICC profile for later use.
+    var icc = image.GetProfile("icc");
+
+    // Remove all metadata from the image.
+    image.Strip();
+    if (icc != null)
+    {
+        // Add the ICC profile back to the image.
+        image.SetProfile(icc);
+    }
+
+    // If the image width is greater than 2000px, resize it
+    if (image.Width > 2000)
+    {
+        // Resizing with height set to 0 preserves the aspect ratio.
+        image.Resize(2000, 0);
+    }
+
+    // Set the output format to PNG.
+    image.Format = MagickFormat.Png;
+
+    // Write the result to a memory stream.
+    using MemoryStream processedImage = new MemoryStream();
+    image.Write(processedImage);
+    processedImage.Position = 0;
+
+    var response = await blobClient.UploadAsync(processedImage, true, ct);
 
     // Check if the response was successful. If it was, return the permanent url to the blob.
     if (response.GetRawResponse().Status == StatusCodes.Status201Created)
