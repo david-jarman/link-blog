@@ -12,10 +12,12 @@ namespace LinkBlog.Web.Controllers
     public class UploadImageController : Controller
     {
         private readonly BlobServiceClient blobServiceClient;
+        private readonly ILogger<UploadImageController> logger;
 
-        public UploadImageController(BlobServiceClient blobServiceClient)
+        public UploadImageController(BlobServiceClient blobServiceClient, ILogger<UploadImageController> logger)
         {
             this.blobServiceClient = blobServiceClient;
+            this.logger = logger;
         }
 
         [HttpPost("upload")]
@@ -24,6 +26,7 @@ namespace LinkBlog.Web.Controllers
         {
             if (file is null)
             {
+                logger.LogWarning("No file was uploaded.");
                 return BadRequest();
             }
 
@@ -42,6 +45,7 @@ namespace LinkBlog.Web.Controllers
             // Check if the blob already exists. If it does, return a 409 Conflict.
             if (await blobClient.ExistsAsync(ct))
             {
+                logger.LogWarning("Blob {blobPath} already exists.", blobPath);
                 return Conflict();
             }
 
@@ -80,6 +84,7 @@ namespace LinkBlog.Web.Controllers
             // Check if the response was successful. If it was, return the permanent url to the blob.
             if (response.GetRawResponse().Status == StatusCodes.Status201Created)
             {
+                logger.LogInformation("Blob {blobPath} successfully created", blobPath);
                 return Created(blobClient.Uri.AbsoluteUri, null);
             }
             else
