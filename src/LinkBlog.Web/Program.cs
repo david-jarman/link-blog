@@ -1,7 +1,5 @@
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using LinkBlog.Abstractions;
 using LinkBlog.Data;
 using LinkBlog.Data.Extensions;
@@ -10,7 +8,6 @@ using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
-using ImageMagick;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +22,8 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddRazorComponents();
+
+builder.Services.AddControllers();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -119,6 +118,8 @@ app.MapStaticAssets();
 
 app.MapRazorComponents<App>();
 
+app.MapControllers();
+
 app.MapDefaultEndpoints();
 
 app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, HttpContext httpContext, CancellationToken ct) =>
@@ -138,83 +139,5 @@ app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, Http
 
     return feed.GetXmlForPosts(posts);
 });
-
-// Create a POST endpoint that will be used to upload an image to the blog.
-// The endpoint will be authenticated so only admins can upload.
-// Use BlobClientService to upload the image to the blob store.
-// Return the permanent url to the blob upon completion with a 200 ok.
-// Return other status codes based on potential issues, such as unsupported file types, or transient issues uploading to blob storage.
-app.MapPost("/api/upload", async (BlobServiceClient blobServiceClient, IFormFile file, HttpContext httpContext, CancellationToken ct) =>
-{
-    if (file is null)
-    {
-        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-        return;
-    }
-
-    // Get or create the container first. Container name is "images".
-    var containerClient = blobServiceClient.GetBlobContainerClient("images");
-    await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob, cancellationToken: ct);
-
-    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
-
-    // Blob path should be prefixed with the current datetime to ensure uniqueness.
-    // Example: "2025/08/01/12/00/00/imagename.png"
-    string blobPath = $"{DateTimeOffset.UtcNow:yyyy/MM/dd/HH/mm/ss}/{fileNameWithoutExtension}.png";
-
-    var blobClient = containerClient.GetBlobClient(blobPath);
-
-    // Check if the blob already exists. If it does, return a 409 Conflict.
-    if (await blobClient.ExistsAsync(ct))
-    {
-        httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-        return;
-    }
-
-    // Load the image from the stream.
-    using Stream stream = file.OpenReadStream();
-    using MagickImage image = new(stream);
-
-    // Store the ICC profile for later use.
-    var icc = image.GetProfile("icc");
-
-    // Remove all metadata from the image.
-    image.Strip();
-    if (icc != null)
-    {
-        // Add the ICC profile back to the image.
-        image.SetProfile(icc);
-    }
-
-    // If the image width is greater than 2000px, resize it
-    if (image.Width > 2000)
-    {
-        // Resizing with height set to 0 preserves the aspect ratio.
-        image.Resize(2000, 0);
-    }
-
-    // Set the output format to PNG.
-    image.Format = MagickFormat.Png;
-
-    // Write the result to a memory stream.
-    using MemoryStream processedImage = new MemoryStream();
-    image.Write(processedImage);
-    processedImage.Position = 0;
-
-    var response = await blobClient.UploadAsync(processedImage, true, ct);
-
-    // Check if the response was successful. If it was, return the permanent url to the blob.
-    if (response.GetRawResponse().Status == StatusCodes.Status201Created)
-    {
-        httpContext.Response.StatusCode = StatusCodes.Status201Created;
-        httpContext.Response.Headers["Location"] = blobClient.Uri.AbsoluteUri;
-    }
-    else
-    {
-        // If the response was not successful, return a 500 Internal Server Error.
-        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-    }
-}).DisableAntiforgery()
-.RequireAuthorization("Admin");
 
 app.Run();
