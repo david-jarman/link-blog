@@ -1,6 +1,6 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using ImageMagick;
+using LinkBlog.Images;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +12,13 @@ namespace LinkBlog.Web.Controllers
     public class UploadImageController : Controller
     {
         private readonly BlobServiceClient blobServiceClient;
+        private readonly IImageConverter imageConverter;
         private readonly ILogger<UploadImageController> logger;
 
-        public UploadImageController(BlobServiceClient blobServiceClient, ILogger<UploadImageController> logger)
+        public UploadImageController(BlobServiceClient blobServiceClient, IImageConverter imageConverter, ILogger<UploadImageController> logger)
         {
             this.blobServiceClient = blobServiceClient;
+            this.imageConverter = imageConverter;
             this.logger = logger;
         }
 
@@ -50,34 +52,8 @@ namespace LinkBlog.Web.Controllers
             }
 
             // Load the image from the stream.
-            using Stream stream = file.OpenReadStream();
-            using MagickImage image = new(stream);
-
-            // Store the ICC profile for later use.
-            var icc = image.GetProfile("icc");
-
-            // Remove all metadata from the image.
-            image.Strip();
-            if (icc != null)
-            {
-                // Add the ICC profile back to the image.
-                image.SetProfile(icc);
-            }
-
-            // If the image width is greater than 2000px, resize it
-            if (image.Width > 2000)
-            {
-                // Resizing with height set to 0 preserves the aspect ratio.
-                image.Resize(2000, 0);
-            }
-
-            // Set the output format to PNG.
-            image.Format = MagickFormat.Png;
-
-            // Write the result to a memory stream.
-            using MemoryStream processedImage = new MemoryStream();
-            image.Write(processedImage);
-            processedImage.Position = 0;
+            using Stream originalImage = file.OpenReadStream();
+            using Stream processedImage = await imageConverter.ConvertToPngAsync(originalImage, ct);
 
             var response = await blobClient.UploadAsync(processedImage, true, ct);
 

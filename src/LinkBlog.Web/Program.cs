@@ -4,6 +4,7 @@ using LinkBlog.Abstractions;
 using LinkBlog.Data;
 using LinkBlog.Data.Extensions;
 using LinkBlog.Feed;
+using LinkBlog.Images;
 using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -74,6 +75,7 @@ builder.Services.AddHttpsRedirection(options =>
 });
 
 builder.Services.AddSingleton<ISyndicationFeed, AtomFeed>();
+builder.Services.AddSingleton<IImageConverter, ImageConverter>();
 
 var app = builder.Build();
 
