@@ -53,7 +53,7 @@ namespace LinkBlog.Web.Controllers
 
             // Load the image from the stream.
             using Stream originalImage = file.OpenReadStream();
-            using Stream processedImage = await imageConverter.ConvertToPngAsync(originalImage, ct);
+            using Stream processedImage = await imageConverter.ConvertToPngAsync(originalImage, file.Length, ct);
 
             var response = await blobClient.UploadAsync(processedImage, true, ct);
 

@@ -1,13 +1,24 @@
 ﻿
+using System.Diagnostics;
 using ImageMagick;
 
 namespace LinkBlog.Images;
 
 public class ImageConverter : IImageConverter
 {
-    public async Task<Stream> ConvertToPngAsync(Stream originalImage, CancellationToken ct)
+    public const string ActivitySourceName = "LinkBlog.Images.ImageConversion";
+
+    private static readonly ActivitySource ActivitySource = new ActivitySource(ActivitySourceName);
+
+    public async Task<Stream> ConvertToPngAsync(Stream originalImage, long originalImageSize, CancellationToken ct)
     {
+        using var activity = ActivitySource.StartActivity("ConvertImage", ActivityKind.Internal);
+        activity?.SetTag("operation", "convert");
+        activity?.SetTag("original-image-size", originalImageSize);
+        activity?.AddEvent(new ActivityEvent("ImageConversionStarted"));
+
         using MagickImage image = new(originalImage);
+        activity?.AddEvent(new ActivityEvent("ImageConversionMagickImageLoaded"));
 
         // Store the ICC profile for later use.
         var icc = image.GetProfile("icc");
@@ -25,6 +36,7 @@ public class ImageConverter : IImageConverter
         {
             // Resizing with height set to 0 preserves the aspect ratio.
             image.Resize(2000, 0);
+            activity?.AddEvent(new ActivityEvent("ImageConversionResized"));
         }
 
         // Set the output format to PNG.
@@ -36,6 +48,9 @@ public class ImageConverter : IImageConverter
 
         // Set the stream position back to 0
         processedImage.Position = 0;
+
+        activity?.SetTag("processed-image-size", processedImage.Length);
+        activity?.AddEvent(new ActivityEvent("ImageConversionFinished"));
 
         return processedImage;
     }
