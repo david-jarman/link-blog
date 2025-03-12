@@ -6,7 +6,7 @@
     })
 
     function uploadFileAttachment(attachment) {
-        uploadFile(attachment.file, setProgress, setAttributes)
+        uploadFile(attachment, setProgress, setAttributes)
 
         function setProgress(progress) {
             attachment.setUploadProgress(progress)
@@ -17,7 +17,8 @@
         }
     }
 
-    function uploadFile(file, progressCallback, successCallback) {
+    function uploadFile(attachment, progressCallback, successCallback) {
+        var file = attachment.file
         var formData = createFormData(file)
         var xhr = new XMLHttpRequest()
 
@@ -39,7 +40,14 @@
                 }
                 successCallback(attributes)
             }
+            else {
+                removeAttachment(attachment, xhr.status);
+            }
         })
+
+        xhr.onerror = function() {
+            removeAttachment(attachment, xhr.status);
+        };
 
         xhr.send(formData)
     }
@@ -50,5 +58,12 @@
         data.append("Content-Type", file.type)
         data.append("file", file)
         return data
+    }
+
+    function removeAttachment(attachment, status) {
+        var element = document.querySelector("trix-editor")
+        element.editorController.removeAttachment(attachment);
+
+        alert("Upload failed with status: " + status);
     }
 })();
