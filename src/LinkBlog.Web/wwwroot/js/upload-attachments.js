@@ -1,9 +1,17 @@
 (function () {
-    addEventListener("trix-attachment-add", function (event) {
+    document.addEventListener("trix-attachment-add", function (event) {
         if (event.attachment.file) {
             uploadFileAttachment(event.attachment)
         }
     })
+
+    document.addEventListener("trix-file-accept", function(event) {
+        const acceptedTypes = ["image/jpeg", "image/png", "image/gif"];
+        if (!acceptedTypes.includes(event.file.type)) {
+          event.preventDefault();
+          alert("Only image files are allowed!");
+        }
+      });
 
     function uploadFileAttachment(attachment) {
         uploadFile(attachment, setProgress, setAttributes)
