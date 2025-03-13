@@ -9,6 +9,7 @@ using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,7 @@ builder.Services.AddHttpsRedirection(options =>
     };
 });
 
+builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection("Feed"));
 builder.Services.AddSingleton<ISyndicationFeed, AtomFeed>();
 builder.Services.AddSingleton<IImageConverter, ImageConverter>();
 
@@ -124,10 +126,10 @@ app.MapControllers();
 
 app.MapDefaultEndpoints();
 
-app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, HttpContext httpContext, CancellationToken ct) =>
+app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, IOptions<FeedOptions> options, HttpContext httpContext, CancellationToken ct) =>
 {
     List<Post> posts = new();
-    var postsFromDb = postStore.GetPosts(20, ct);
+    var postsFromDb = postStore.GetPosts(options.Value.MaxPostCount, ct);
     await foreach (var post in postsFromDb)
     {
         posts.Add(post);

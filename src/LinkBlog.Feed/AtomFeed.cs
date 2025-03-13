@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using LinkBlog.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace LinkBlog.Feed;
 
@@ -11,6 +12,12 @@ public interface ISyndicationFeed
 public class AtomFeed : ISyndicationFeed
 {
     private readonly string blogUrl = "https://davidjarman.net";
+    private readonly FeedOptions _options;
+
+    public AtomFeed(IOptions<FeedOptions> options)
+    {
+        _options = options.Value;
+    }
 
     public string GetXmlForPosts(IEnumerable<Post> posts)
     {
