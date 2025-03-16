@@ -1,0 +1,32 @@
+.footer {
+    background-color: black;
+    color: orange;
+
+    border-top: 5px solid orange;
+    border-bottom: 5px solid orange;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+
+    max-width: 50rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-content {
+    border-style: solid;
+    border-radius: 0.5rem;
+    box-shadow: 0.2rem 0.2rem;
+
+    padding: 0.25rem;
+    margin: 0.5rem 0;
+
+    font-size: large;
+}
