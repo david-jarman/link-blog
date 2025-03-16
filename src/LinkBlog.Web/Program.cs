@@ -5,6 +5,7 @@ using LinkBlog.Data;
 using LinkBlog.Data.Extensions;
 using LinkBlog.Feed;
 using LinkBlog.Images;
+using LinkBlog.Web;
 using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -75,6 +76,8 @@ builder.Services.AddHttpsRedirection(options =>
     };
 });
 
+
+builder.Services.Configure<DisplayOptions>(builder.Configuration.GetSection("Display"));
 builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection("Feed"));
 builder.Services.AddSingleton<ISyndicationFeed, AtomFeed>();
 builder.Services.AddSingleton<IImageConverter, ImageConverter>();

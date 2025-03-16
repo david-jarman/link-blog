@@ -1,0 +1,39 @@
+@page "/archive"
+@using LinkBlog.Abstractions
+@using LinkBlog.Data
+@using LinkBlog.Web.Components.Posts
+@using Microsoft.Extensions.Options
+
+@inject IPostStore PostStore
+@inject ILogger<PostsByDate> Logger
+@inject IOptions<DisplayOptions> DisplayOptions
+
+<PageTitle>Archive</PageTitle>
+
+@if (HeaderTitle != null)
+{
+    <h1>@HeaderTitle</h1>
+}
+
+<PostList Posts="posts" />
+
+@code {
+    [SupplyParameterFromQuery(Name = "page")] public int Page { get; set; } = 0;
+
+    private string? HeaderTitle;
+
+    private Post[]? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IAsyncEnumerable<Post> asyncPosts = PostStore.GetPostsByPage(Page, DisplayOptions.Value.PostsPerPage);
+
+        List<Post> posts = new List<Post>();
+        await foreach (var post in asyncPosts)
+        {
+            posts.Add(post);
+        }
+
+        this.posts = posts.ToArray();
+    }
+}

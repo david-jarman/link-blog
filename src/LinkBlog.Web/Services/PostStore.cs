@@ -8,6 +8,8 @@ public interface IPostStore
 {
     IAsyncEnumerable<Post> GetPosts(int topN, CancellationToken cancellationToken = default);
 
+    IAsyncEnumerable<Post> GetPostsByPage(int page, int count, CancellationToken cancellationToken = default);
+
     Task<Post?> GetPostById(string id, CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken cancellationToken = default);
@@ -56,6 +58,23 @@ public class PostStoreDb : IPostStore
 
             yield return post.ToPost();
          }
+    }
+
+    public async IAsyncEnumerable<Post> GetPostsByPage(int page, int count, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var posts = this.postDbContext.Posts
+            .Include(p => p.Tags)
+            .OrderByDescending(p => p.Date)
+            .Skip(page * count)
+            .Take(count)
+            .AsAsyncEnumerable();
+
+        await foreach (var post in posts)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            yield return post.ToPost();
+        }
     }
 
     public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)
