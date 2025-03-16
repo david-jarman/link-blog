@@ -35,5 +35,14 @@
         }
 
         this.posts = posts.ToArray();
+
+        if (Page == 0)
+        {
+            HeaderTitle = "Archive";
+        }
+        else
+        {
+            HeaderTitle = $"Archive - Page {Page}";
+        }
     }
 }
