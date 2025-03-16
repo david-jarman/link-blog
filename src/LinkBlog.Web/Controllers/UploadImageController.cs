@@ -54,8 +54,15 @@ namespace LinkBlog.Web.Controllers
             // Load the image from the stream.
             using Stream originalImage = file.OpenReadStream();
             using Stream processedImage = await imageConverter.ConvertToPngAsync(originalImage, file.Length, ct);
+            var blobUploadOptions = new BlobUploadOptions
+            {
+                HttpHeaders = new BlobHttpHeaders
+                {
+                    ContentType = "image/png"
+                }
+            };
 
-            var response = await blobClient.UploadAsync(processedImage, true, ct);
+            var response = await blobClient.UploadAsync(processedImage, blobUploadOptions, ct);
 
             // Check if the response was successful. If it was, return the permanent url to the blob.
             if (response.GetRawResponse().Status == StatusCodes.Status201Created)
