@@ -1,7 +1,12 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder.AddPostgres("postgres")
-    .WithPgAdmin(config => config.WithVolume("data", "/var/lib/pgadmin/data"))
+    .WithPgAdmin(resource =>
+    {
+        resource
+            .WithVolume("data", "/var/lib/pgadmin/data")
+            .WithUrlForEndpoint("http", u => u.DisplayText = "PG Admin");
+    })
     .WithDataVolume(isReadOnly: false);
 
 var postgresdb = postgres.AddDatabase("postgresdb", "postgres");
