@@ -50,12 +50,12 @@ public class PostStoreDb : IPostStore
             .Take(topN)
             .AsAsyncEnumerable();
 
-         await foreach (var post in posts)
-         {
+        await foreach (var post in posts)
+        {
             cancellationToken.ThrowIfCancellationRequested();
 
             yield return post.ToPost();
-         }
+        }
     }
 
     public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)

@@ -1,8 +1,6 @@
 using LinkBlog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using Xunit;
 
 namespace LinkBlog.Web.Tests;
 
@@ -13,16 +11,16 @@ public class PendingDatabaseMigrationTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddDbContext<PostDbContext>(options => 
+            .AddDbContext<PostDbContext>(options =>
                 options.UseNpgsql())
             .BuildServiceProvider();
 
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<PostDbContext>();
-        
+
         // Act
         bool hasPendingModelChanges = context.Database.HasPendingModelChanges();
-        
+
         // Assert
         Assert.False(hasPendingModelChanges, "Database has pending model changes that require a new migration");
     }

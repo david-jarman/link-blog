@@ -6,12 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace LinkBlog.Web.Tests;
 
@@ -27,7 +21,7 @@ public class FormValidationTests : TestContext
 
         Services.AddSingleton(_mockPostStore.Object);
         Services.AddSingleton(_mockLogger.Object);
-        
+
         // Setup authorization (since the component has [Authorize] attribute)
         Services.AddAuthorization(options =>
         {
@@ -48,7 +42,7 @@ public class FormValidationTests : TestContext
         // Assert - Check for validation messages
         var validationMessages = component.FindAll(".validation-message");
         Assert.NotEmpty(validationMessages);
-        
+
         // Verify specific validation messages
         var messages = component.Markup;
         Assert.Contains("Title is required", messages);
@@ -61,7 +55,7 @@ public class FormValidationTests : TestContext
     {
         // Arrange
         var component = RenderComponent<AdminHome>();
-        
+
         // Find inputs
         var titleInput = component.Find("#PostTitle");
         var shortTitleInput = component.Find("#ShortTitle");
@@ -71,14 +65,14 @@ public class FormValidationTests : TestContext
         titleInput.Change("Test Title");
         shortTitleInput.Change("Invalid Short Title With Spaces");
         contentsInput.Change("Test content");
-        
+
         // Submit the form
         component.Find("form").Submit();
 
         // Assert - Check for validation message about short title format
         var validationMessages = component.FindAll(".validation-message");
         Assert.NotEmpty(validationMessages);
-        
+
         Assert.Contains("Short title must contain only lowercase letters, numbers, and hyphens", component.Markup);
     }
 
@@ -89,18 +83,18 @@ public class FormValidationTests : TestContext
         _mockPostStore
             .Setup(store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(true));
-            
+
         var component = RenderComponent<AdminHome>();
-        
+
         // Fill in required fields
         component.Find("#PostTitle").Change("Test Title");
         component.Find("#ShortTitle").Change("test-title");
         component.Find("#PostContent").Change("Test content");
         component.Find("#PostTags").Change("test-tag");
-        
+
         // Add non-URL text - should still work since we're not validating URLs
         component.Find("#PostLink").Change("not-a-valid-url");
-        
+
         // Act - Submit the form
         component.Find("form").Submit();
 
@@ -119,16 +113,16 @@ public class FormValidationTests : TestContext
             .Throws(new DbUpdateException("Duplicate key", new Exception("duplicate key value violates unique constraint")));
 
         var component = RenderComponent<AdminHome>();
-        
+
         // Fill in all required fields
         component.Find("#PostTitle").Change("Test Title");
         component.Find("#ShortTitle").Change("test-title");
         component.Find("#PostContent").Change("Test content");
         component.Find("#PostTags").Change("test-tag");
-        
+
         // Act - Submit the form
         component.Find("form").Submit();
-        
+
         // Verify the PostStore was called
         _mockPostStore.Verify(
             store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()),
@@ -144,16 +138,16 @@ public class FormValidationTests : TestContext
             .Returns(Task.FromResult(true));
 
         var component = RenderComponent<AdminHome>();
-        
+
         // Fill in all required fields
         component.Find("#PostTitle").Change("Test Title");
         component.Find("#ShortTitle").Change("test-title");
         component.Find("#PostContent").Change("Test content");
         component.Find("#PostTags").Change("test-tag");
-        
+
         // Act - Submit the form
         component.Find("form").Submit();
-        
+
         // Verify the CreatePostAsync method was called
         _mockPostStore.Verify(
             store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()),

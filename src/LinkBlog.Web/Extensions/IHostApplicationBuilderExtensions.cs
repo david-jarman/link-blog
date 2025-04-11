@@ -1,6 +1,4 @@
 using Aspire.Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace LinkBlog.Data.Extensions;
 
