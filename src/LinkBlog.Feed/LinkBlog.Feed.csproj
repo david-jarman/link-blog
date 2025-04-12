@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <Description>Atom Feed for syndicating blog posts.</Description>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LinkBlog.Abstractions\LinkBlog.Abstractions.csproj" />
   </ItemGroup>
@@ -7,11 +11,5 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
 
 </Project>

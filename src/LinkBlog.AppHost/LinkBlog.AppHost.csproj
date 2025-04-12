@@ -3,10 +3,8 @@
   <Sdk Name="Aspire.AppHost.Sdk" Version="$(AspireVersion)" />
 
   <PropertyGroup>
+    <Description>Entrypoint for local development.</Description>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <UserSecretsId>dd48d512-4144-4234-897b-a2df95788389</UserSecretsId>
   </PropertyGroup>
 
