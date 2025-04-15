@@ -8,6 +8,13 @@
         "upgrade-assistant"
       ],
       "rollForward": false
+    },
+    "dotnet-ef": {
+      "version": "9.0.4",
+      "commands": [
+        "dotnet-ef"
+      ],
+      "rollForward": false
     }
   }
 }
