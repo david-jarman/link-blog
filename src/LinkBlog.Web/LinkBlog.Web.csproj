@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
     <Description>Blazor SSR that serves the link blog website.</Description>
     <UserSecretsId>6acfaab6-53be-4e80-a2f0-ef9b0a7688d6</UserSecretsId>
   </PropertyGroup>

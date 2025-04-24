@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <Description>Abstractions for entity definitions that are shared across the project.</Description>
+    <TargetFramework>net9.0</TargetFramework>
+    <Description>Abstractions for entity definitions that are shared across the project.</Description>
   </PropertyGroup>
 
 </Project>
