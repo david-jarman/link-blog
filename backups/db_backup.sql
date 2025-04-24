@@ -47,6 +47,7 @@ a0c08830-b04a-4869-a618-869f1b974f5e	LLM templates	2025-04-18 17:48:08.050037+00
 8c24301a-7686-4abd-97b5-c54201a581f1	FYI: Tracking down transitive dependencies in .NET	2025-04-18 18:55:09.789354+00	https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-nuget-why	dotnet nuget why - command reference	<div>I just found that there is a new(ish) command for figuring out where a transitive dependency comes from in your dotnet project (starting with dotnet 8.0.4xx)<br><br></div><pre>dotnet nuget why &lt;PROJECT|SOLUTION&gt; &lt;PACKAGE&gt;</pre><div>If you have a dependency in your project that has a vulnerability, you can use this to figure out which package is bringing it in. For example, <a href="https://github.com/advisories/GHSA-7jgj-8wvc-jh57">System.Net.Http 4.3.0 has a high severity vulnerability</a>. I've found instances where this package is brought into my projects by other packages. It's very handy to be able to trace it with a built-in tool. Before this was available, I would use the d<a href="https://github.com/bjorkstromm/depends">otnet-depends tool</a>, which is a great tool, but a little clunkier than I'd like, and doesn't seem to <a href="https://github.com/bjorkstromm/depends/issues/32">support central package management</a>.&nbsp;</div>	dotnet-nuget-why	2025-04-18 18:55:09.789354+00
 95b92313-8bac-40a8-8b82-b55b9f2f66f9	Update all llm plugins	2025-04-21 16:50:29.167718+00			<div>Quick one-liner to update all <a href="https://github.com/simonw/llm">llm</a> plugins using <a href="https://github.com/PowerShell/PowerShell">PowerShell</a>:<br><br></div><pre>llm plugins | ConvertFrom-Json | % { llm install -U $_.name }</pre>	update-llm-plugins	2025-04-21 16:50:29.167718+00
 3f961fdc-a975-4346-a835-0a3df36115d4	Set default pipe/redirect encoding in Python	2025-04-21 18:11:59.042104+00	https://stackoverflow.com/a/27066059	[via] Changing default encoding of Python? - StackOverflow	<div>I ran into an issue using <a href="https://github.com/simonw/llm">llm</a> today where I was unable to save a response to a file using a pipe<br><br></div><pre>llm llm logs -n 1 | Out-File response.txt</pre><div>This would give me the error "UnicodeEncodeError: 'charmap' codec can't encode character '\\u2192' in position 2831: character maps to &lt;undefined&gt;"<br><br>If you set the "PYTHONIOENCODING" environment variable to "utf8", it will fix the issue. This is because Python's default encoding is ASCII. Since the last response I got back from the model contained a non-ASCII character, this error was thrown.<br><br>So now, in my <a href="https://gist.github.com/david-jarman/bca0fe36ba699885c4156e8aeed8bbac#file-microsoft-powershell_profile-ps1-L43">PowerShell profile</a>, I've added a line to set the default to utf8, which fixes the issue.<br><br></div><pre>$env:PYTHONIOENCODING = 'utf8'</pre>	python-io-encoding-default	2025-04-21 18:12:42.660918+00
+09a1f143-ce68-400f-a505-f9e802b77814	Big ride plans for 2025	2025-04-24 05:22:42.960748+00	https://ridewithgps.com/routes/50461412	Cle Elum OAB ride	<div>I have some lofty cycling goals for this summer, including riding the Michelson Trail in it's entirety. Before I take it on, I need to do build up some endurance. One ride I plan to do which has been on my list for a while is riding to Cle Elum and back, along the SVT and Palouse to Cascades trails.<br><br><em>Edit: This post was supposed to be an excuse for me to try to embed an iframe of the route directly in the post, but I was hamstrung by </em><a href="https://github.com/basecamp/trix/issues/1178"><em>Trix and DOMPurify</em></a><em>. I'm giving up for now!</em></div>	big-ride-plans	2025-04-24 06:13:47.148852+00
 \.
 
 
@@ -99,6 +100,7 @@ b590a431-2504-4960-b32f-0397cb7e48df	jeremy-warner
 fa515a6e-4896-45de-9cda-4f3cb1e4a908	blogs
 2ffe5765-86cc-4550-a05b-d3d1b675afa7	fyi
 63f97221-23f4-4592-a534-23573fec678d	powershell
+0e0169d0-28a5-401e-8370-5d41174d7961	rwgps
 \.
 
 
@@ -173,6 +175,8 @@ b38bf387-bf08-498c-9e65-8e66d3823fa3	fa515a6e-4896-45de-9cda-4f3cb1e4a908
 3f961fdc-a975-4346-a835-0a3df36115d4	63f97221-23f4-4592-a534-23573fec678d
 3f961fdc-a975-4346-a835-0a3df36115d4	aa217264-5d70-4208-b4b2-adbeb9a8c890
 3f961fdc-a975-4346-a835-0a3df36115d4	be51fd1c-d2c6-4261-ba72-abb5fc4ff687
+09a1f143-ce68-400f-a505-f9e802b77814	0e0169d0-28a5-401e-8370-5d41174d7961
+09a1f143-ce68-400f-a505-f9e802b77814	cfc50bc0-3c43-4e18-a685-8ed4a5ea206f
 \.
 
 
