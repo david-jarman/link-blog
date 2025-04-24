@@ -8,7 +8,7 @@ module.exports = {
   // Define the output configuration
   output: {
     // Name of the bundled file
-    filename: 'bundle.js',
+    filename: 'trix.js',
 
     // Absolute path to the output directory (wwwroot/js)
     path: path.resolve(__dirname, 'wwwroot/js')
