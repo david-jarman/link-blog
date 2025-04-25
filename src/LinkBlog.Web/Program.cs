@@ -144,4 +144,16 @@ app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, IOpt
     return feed.GetXmlForPosts(posts);
 });
 
+// Archive post endpoint
+app.MapPost("/admin/{id}/archive", async (string id, IPostStore postStore, HttpContext httpContext, CancellationToken ct) =>
+{
+    bool success = await postStore.ArchivePostAsync(id, ct);
+    if (!success)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Redirect("/admin?message=Post%20archived%20successfully");
+}).RequireAuthorization("Admin");
+
 app.Run();

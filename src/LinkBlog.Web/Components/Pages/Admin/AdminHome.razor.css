@@ -51,6 +51,14 @@
     border-radius: 0.25rem;
 }
 
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+}
+
 /* Alert Styles */
 .alert {
     padding: 10px;

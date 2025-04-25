@@ -107,12 +107,26 @@
 
     <div class="form-group">
         <button type="submit" class="btn-primary">Submit</button>
+        @if (!string.IsNullOrWhiteSpace(Id))
+        {
+            <button type="submit" 
+                    class="btn-danger mt-2" 
+                    formaction="/admin/@Id/archive" 
+                    formmethod="post" 
+                    onclick="return confirm('Are you sure you want to archive this post? It will no longer appear on the site.')">
+                Archive Post
+            </button>
+        }
     </div>
 </EditForm>
 
 @code {
     [Parameter]
     public string? Id { get; set; }
+    
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Message { get; set; }
 
     [SupplyParameterFromForm]
     private PostFormModel? PostForm { get; set; }
@@ -149,6 +163,12 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Check if we have a message from redirect
+        if (!string.IsNullOrWhiteSpace(Message))
+        {
+            SuccessMessage = Message;
+        }
+        
         // Enable drafts only if the post is new
         EnableDrafts = string.IsNullOrWhiteSpace(Id);
 
