@@ -19,6 +19,8 @@ public interface IPostStore
     Task<Post?> GetPostForShortTitleAsync(string shortTitle, CancellationToken cancellationToken = default);
 
     Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default);
+    
+    Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default);
 }
 
 public class PostStoreDb : IPostStore
@@ -46,6 +48,7 @@ public class PostStoreDb : IPostStore
     {
         var posts = this.postDbContext.Posts
             .Include(p => p.Tags)
+            .Where(p => !p.IsArchived)
             .OrderByDescending(p => p.Date)
             .Take(topN)
             .AsAsyncEnumerable();
@@ -69,7 +72,7 @@ public class PostStoreDb : IPostStore
             yield break;
         }
 
-        foreach (var post in tagFromDb.Posts.OrderByDescending(p => p.Date))
+        foreach (var post in tagFromDb.Posts.Where(p => !p.IsArchived).OrderByDescending(p => p.Date))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -81,7 +84,7 @@ public class PostStoreDb : IPostStore
     {
         var posts = this.postDbContext.Posts
             .Include(p => p.Tags)
-            .Where(p => p.Date >= start && p.Date <= end)
+            .Where(p => p.Date >= start && p.Date <= end && !p.IsArchived)
             .OrderByDescending(p => p.Date)
             .AsAsyncEnumerable();
 
@@ -97,7 +100,7 @@ public class PostStoreDb : IPostStore
     {
         var post = await this.postDbContext.Posts
             .Include(p => p.Tags)
-            .SingleOrDefaultAsync(p => p.ShortTitle == shortTitle);
+            .SingleOrDefaultAsync(p => p.ShortTitle == shortTitle && !p.IsArchived);
 
         return post?.ToPost();
     }
@@ -165,6 +168,23 @@ public class PostStoreDb : IPostStore
         // Save changes
         await this.postDbContext.SaveChangesAsync(cancellationToken);
 
+        return true;
+    }
+    
+    public async Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var postEntity = await this.postDbContext.Posts
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            
+        if (postEntity == null)
+        {
+            return false;
+        }
+        
+        postEntity.IsArchived = true;
+        postEntity.UpdatedDate = DateTimeOffset.UtcNow;
+        
+        await this.postDbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
 

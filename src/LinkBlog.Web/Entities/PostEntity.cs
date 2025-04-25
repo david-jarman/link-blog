@@ -31,6 +31,8 @@ public sealed class PostEntity
     [Required]
     public string Contents { get; set; }
 
+    public bool IsArchived { get; set; }
+
     public List<TagEntity> Tags { get; set; } = new();
 
     public PostEntity()
@@ -43,5 +45,6 @@ public sealed class PostEntity
         Link = null;
         LinkTitle = null;
         Contents = string.Empty;
+        IsArchived = false;
     }
 }
