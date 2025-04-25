@@ -35,3 +35,9 @@ Then, to run tests
 ```sh
 dotnet test LinkBlog.sln
 ```
+
+Connect to database
+
+```sh
+heroku config:get DATABASE_URL | xargs pgweb --url
+```
