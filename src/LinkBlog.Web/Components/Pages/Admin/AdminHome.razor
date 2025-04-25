@@ -73,33 +73,33 @@
         <InputText id="PostTitle" @bind-Value="PostForm!.Title" class="form-control" />
         <ValidationMessage For="@(() => PostForm.Title)" class="validation-message" />
     </div>
-    
+
     <div class="form-group">
         <label for="ShortTitle" class="form-label">Short Title: </label>
         <InputText id="ShortTitle" @bind-Value="PostForm.ShortTitle" class="form-control" />
         <ValidationMessage For="@(() => PostForm.ShortTitle)" class="validation-message" />
         <small class="hint">Must be unique, URL-friendly identifier for the post.</small>
     </div>
-    
+
     <div class="form-group">
         <label for="PostContent" class="form-label">Post content: </label>
         <InputText id="PostContent" type="hidden" @bind-Value="PostForm.Contents" />
         <trix-editor input="PostContent" class="post-editor"></trix-editor>
         <ValidationMessage For="@(() => PostForm.Contents)" class="validation-message" />
     </div>
-    
+
     <div class="form-group">
         <label for="PostLink" class="form-label">Link: </label>
         <InputText id="PostLink" @bind-Value="PostForm.Link" class="form-control" />
         <ValidationMessage For="@(() => PostForm.Link)" class="validation-message" />
     </div>
-    
+
     <div class="form-group">
         <label for="LinkTitle" class="form-label">Link Title:</label>
         <InputText id="LinkTitle" @bind-Value="PostForm.LinkTitle" class="form-control" />
         <ValidationMessage For="@(() => PostForm.LinkTitle)" class="validation-message" />
     </div>
-    
+
     <div class="form-group">
         <label for="PostTags" class="form-label">Tags (comma separated):</label>
         <InputText id="PostTags" @bind-Value="PostForm.Tags" class="form-control" />
@@ -124,7 +124,7 @@
 @code {
     [Parameter]
     public string? Id { get; set; }
-    
+
     [Parameter]
     [SupplyParameterFromQuery]
     public string? Message { get; set; }
@@ -137,7 +137,7 @@
     private string? ErrorMessage { get; set; }
 
     private string? SuccessMessage { get; set; }
-    
+
     // Helper class for form validation
     public class PostFormModel
     {
@@ -169,7 +169,7 @@
         {
             SuccessMessage = Message;
         }
-        
+
         // Enable drafts only if the post is new
         EnableDrafts = string.IsNullOrWhiteSpace(Id);
 

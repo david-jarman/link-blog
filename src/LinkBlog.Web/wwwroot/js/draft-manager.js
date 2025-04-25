@@ -12,12 +12,12 @@ function initDraftManager() {
     const draftNameInput = document.getElementById('draft-name');
     const draftContainer = document.getElementById('draft-container');
     const draftList = document.getElementById('draft-list');
-    
+
     if (!draftToggle || !saveDraftBtn || !draftNameInput || !draftContainer || !draftList) {
         console.warn('Draft manager elements not found in the DOM');
         return;
     }
-    
+
     // Toggle draft manager visibility
     draftToggle.addEventListener('click', function() {
         const isExpanded = draftContainer.classList.contains('expanded');
@@ -33,7 +33,7 @@ function initDraftManager() {
             refreshDraftList();
         }
     });
-    
+
     // Save draft button
     saveDraftBtn.addEventListener('click', function() {
         const draftName = draftNameInput.value.trim();
@@ -41,7 +41,7 @@ function initDraftManager() {
             showDraftMessage('Draft name cannot be empty', 'error');
             return;
         }
-        
+
         const formData = getCurrentFormData();
         if (saveDraft(draftName, formData)) {
             showDraftMessage(`Draft "${draftName}" saved successfully`, 'success');
@@ -51,7 +51,7 @@ function initDraftManager() {
             showDraftMessage('Failed to save draft', 'error');
         }
     });
-    
+
     // Register form submit handler to clear drafts
     const postForm = document.querySelector('form[name="postForm"]');
     if (postForm) {
@@ -64,7 +64,7 @@ function initDraftManager() {
             }
         });
     }
-    
+
     // Initial draft list
     refreshDraftList();
 }
@@ -78,17 +78,17 @@ function saveDraft(draftName, postData) {
     try {
         // Create a unique key for this draft
         const draftKey = DRAFT_PREFIX + draftName;
-        
+
         // Store the draft data
         localStorage.setItem(draftKey, JSON.stringify(postData));
-        
+
         // Update the draft list
         const draftList = getDraftList();
         if (!draftList.includes(draftName)) {
             draftList.push(draftName);
             localStorage.setItem(DRAFT_LIST_KEY, JSON.stringify(draftList));
         }
-        
+
         return true;
     } catch (error) {
         console.error('Error saving draft:', error);
@@ -101,7 +101,7 @@ function loadDraft(draftName) {
     try {
         const draftKey = DRAFT_PREFIX + draftName;
         const draftData = localStorage.getItem(draftKey);
-        
+
         if (draftData) {
             const data = JSON.parse(draftData);
             fillFormWithData(data);
@@ -132,15 +132,15 @@ function getDraftList() {
 function deleteDraft(draftName) {
     try {
         const draftKey = DRAFT_PREFIX + draftName;
-        
+
         // Remove the draft
         localStorage.removeItem(draftKey);
-        
+
         // Update the draft list
         const draftList = getDraftList();
         const updatedList = draftList.filter(name => name !== draftName);
         localStorage.setItem(DRAFT_LIST_KEY, JSON.stringify(updatedList));
-        
+
         showDraftMessage(`Draft "${draftName}" deleted successfully`, 'success');
         refreshDraftList();
         return true;
@@ -159,7 +159,7 @@ function fillFormWithData(data) {
     document.getElementById('PostLink').value = data.link || '';
     document.getElementById('LinkTitle').value = data.linkTitle || '';
     document.getElementById('PostTags').value = data.tags || '';
-    
+
     // For Trix editor, we need to set both the hidden input and the editor content
     const contentInput = document.getElementById('PostContent');
     if (contentInput) {
@@ -248,11 +248,11 @@ function refreshDraftList() {
 function showDraftMessage(message, type) {
     const messageDiv = document.getElementById('draft-message');
     if (!messageDiv) return;
-    
+
     messageDiv.textContent = message;
     messageDiv.className = type === 'error' ? 'alert alert-danger' : 'alert alert-success';
     messageDiv.style.display = 'block';
-    
+
     // Auto hide after 3 seconds
     setTimeout(() => {
         messageDiv.style.display = 'none';

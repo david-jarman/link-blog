@@ -19,7 +19,7 @@ public interface IPostStore
     Task<Post?> GetPostForShortTitleAsync(string shortTitle, CancellationToken cancellationToken = default);
 
     Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default);
-    
+
     Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default);
 }
 
@@ -170,20 +170,20 @@ public class PostStoreDb : IPostStore
 
         return true;
     }
-    
+
     public async Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default)
     {
         var postEntity = await this.postDbContext.Posts
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-            
+
         if (postEntity == null)
         {
             return false;
         }
-        
+
         postEntity.IsArchived = true;
         postEntity.UpdatedDate = DateTimeOffset.UtcNow;
-        
+
         await this.postDbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
