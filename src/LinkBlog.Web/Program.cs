@@ -55,7 +55,7 @@ builder.AddPostStore("postgresdb", options =>
     }
 });
 
-builder.AddAzureBlobClient("blobstore");
+builder.AddAzureBlobServiceClient("blobstore");
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
