@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using LinkBlog.Abstractions;
 using Microsoft.Extensions.Options;
 
@@ -27,12 +28,12 @@ public class AtomFeed : ISyndicationFeed
         sb.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         sb.Append("<feed xmlns=\"http://www.w3.org/2005/Atom\">");
         sb.Append("<title>David Jarman's Blog</title>");
-        sb.Append($"<link href=\"{blogUrl}/\" rel=\"alternate\"/>");
-        sb.Append($"<id>{blogUrl}/</id>");
+        sb.Append(string.Create(CultureInfo.InvariantCulture, $"<link href=\"{blogUrl}/\" rel=\"alternate\"/>"));
+        sb.Append(string.Create(CultureInfo.InvariantCulture, $"<id>{blogUrl}/</id>"));
         sb.Append("<author><name>David Jarman</name></author>");
 
         var latestPost = posts.First();
-        sb.Append($"<updated>{latestPost.CreatedDate.ToString("o")}</updated>");
+        sb.Append(CultureInfo.InvariantCulture, $"<updated>{latestPost.CreatedDate.ToString("o")}</updated>");
 
         foreach (var post in posts)
         {
@@ -52,19 +53,19 @@ public class AtomFeed : ISyndicationFeed
         sb.Append("<entry>");
 
         // Required elements
-        sb.Append($"<id>{postUrl}</id>");
-        sb.Append($"<title>{post.Title}</title>");
-        sb.Append($"<updated>{post.LastUpdatedDate.ToString("o")}</updated>");
+        sb.Append(CultureInfo.InvariantCulture, $"<id>{postUrl}</id>");
+        sb.Append(CultureInfo.InvariantCulture, $"<title>{post.Title}</title>");
+        sb.Append(CultureInfo.InvariantCulture, $"<updated>{post.LastUpdatedDate.ToString("o")}</updated>");
 
         // Recommended elements
-        sb.Append($"<content type=\"html\">{System.Net.WebUtility.HtmlEncode(post.Contents)}</content>");
-        sb.Append($"<link href=\"{postUrl}\" rel=\"alternate\"/>");
+        sb.Append(CultureInfo.InvariantCulture, $"<content type=\"html\">{System.Net.WebUtility.HtmlEncode(post.Contents)}</content>");
+        sb.Append(CultureInfo.InvariantCulture, $"<link href=\"{postUrl}\" rel=\"alternate\"/>");
 
         // Optional elements
-        sb.Append($"<published>{post.CreatedDate.ToString("o")}</published>");
+        sb.Append(CultureInfo.InvariantCulture, $"<published>{post.CreatedDate.ToString("o")}</published>");
         foreach (Tag tag in post.Tags)
         {
-            sb.Append($"<category term=\"{tag.Name}\" />");
+            sb.Append(CultureInfo.InvariantCulture, $"<category term=\"{tag.Name}\" />");
         }
 
         sb.Append("</entry>");

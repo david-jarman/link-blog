@@ -14,7 +14,7 @@ public interface IPostStore
 
     Task<bool> CreatePostAsync(Post post, List<string> tags, CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset startDateTime, DateTimeOffset endDateTime, CancellationToken cancellationToken = default);
 
     Task<Post?> GetPostForShortTitleAsync(string shortTitle, CancellationToken cancellationToken = default);
 
@@ -80,11 +80,11 @@ public class PostStoreDb : IPostStore
         }
     }
 
-    public async IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset start, DateTimeOffset end, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset startDateTime, DateTimeOffset endDateTime, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var posts = this.postDbContext.Posts
             .Include(p => p.Tags)
-            .Where(p => p.Date >= start && p.Date <= end && !p.IsArchived)
+            .Where(p => p.Date >= startDateTime && p.Date <= endDateTime && !p.IsArchived)
             .OrderByDescending(p => p.Date)
             .AsAsyncEnumerable();
 
@@ -100,7 +100,7 @@ public class PostStoreDb : IPostStore
     {
         var post = await this.postDbContext.Posts
             .Include(p => p.Tags)
-            .SingleOrDefaultAsync(p => p.ShortTitle == shortTitle && !p.IsArchived);
+            .SingleOrDefaultAsync(p => p.ShortTitle == shortTitle && !p.IsArchived, cancellationToken: cancellationToken);
 
         return post?.ToPost();
     }

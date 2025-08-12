@@ -7,5 +7,9 @@
 
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisMode>Recommended</AnalysisMode>
+
+    <NoWarn>$(NoWarn);CA1848</NoWarn>
   </PropertyGroup>
 </Project>
