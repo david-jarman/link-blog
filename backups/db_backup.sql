@@ -2,8 +2,10 @@
 -- PostgreSQL database dump
 --
 
+\restrict HEGHm0LZkzjpowOIbRXThTv7Isz2lfuD6DvDccPKvKgPwJqaLgiYcwQbDihn92A
+
 -- Dumped from database version 16.8
--- Dumped by pg_dump version 16.9 (Ubuntu 16.9-1.pgdg24.04+1)
+-- Dumped by pg_dump version 16.10 (Ubuntu 16.10-1.pgdg24.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -223,4 +225,6 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 --
 -- PostgreSQL database dump complete
 --
+
+\unrestrict HEGHm0LZkzjpowOIbRXThTv7Isz2lfuD6DvDccPKvKgPwJqaLgiYcwQbDihn92A
 
