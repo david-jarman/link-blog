@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict ED7Zo2g0j8RjNoUYHY5RHebf03XsB5naF1a6AzCi8dReQInrWrTjMV50p6EXe1y
+\restrict 6mRmlBf0LqxdP0KsfdepICZfW3pJJhoCWTvWVBQJjZ9EsBohdLdIVMS5f1r1nNt
 
 -- Dumped from database version 16.8
 -- Dumped by pg_dump version 16.10 (Ubuntu 16.10-1.pgdg24.04+1)
@@ -24,6 +24,7 @@ SET row_security = off;
 
 COPY public."Posts" ("Id", "Title", "Date", "Link", "LinkTitle", "Contents", "ShortTitle", "UpdatedDate", "IsArchived") FROM stdin;
 61ea7c42-73bd-4bbf-9b46-55b5e6a91fec	New subdomain for vibe-coded hacks	2025-07-18 16:56:45.074439+00	https://hacks.davidjarman.net/	https://hacks.davidjarman.net/	<div>I've created a subdomain for this blog to host tools that I vibe code so I can access them anywhere and share them with others. It's built using <a href="https://docs.github.com/en/pages">GitHub Pages</a> and <a href="https://jekyllrb.com/">Jekyll</a>.</div>	vibe-coded-hacks	2025-07-18 16:56:45.074439+00	f
+4b9f7414-49a2-405c-8953-aed7751b0e0d	Dealing with developers block	2025-08-23 17:39:29.304643+00	https://underlap.org/developers-block/	Developers block	<div>This post contains stories I can very much relate with. I use a lot of the mentioned strategies like prototyping as a learning mechanism, but still haven’t totally cracked the code on how to get unstuck other than time and random inspiration.<br><br>I think getting randomized is a huge source of demotivation for me and that’s not something you can always control. Best thing to do is block off your calendar and mute messages and emails from popping up, and checking those on an hourly basis. But also getting a random task to go learn about something might mean I lose all motivation for the current task and will slow down its completion by 10x or more.&nbsp;</div>	developers-block	2025-08-23 17:39:29.304643+00	f
 b38bf387-bf08-498c-9e65-8e66d3823fa3	New blog just dropped	2025-04-18 18:13:35.814757+00	https://jeremywarner.net/	Jeremy Warner’s Blog	<div>Blogs are popping off in 2025! Jeremy Warner runs <a href="https://slatecreeksolutions.com/">Slate Creek Solutions</a> in the Black Hills and is a great personal friend of mine. I’m excited to see more people start up their own blogs and own their words.</div>	jeremy-warner-blog	2025-04-18 18:13:35.814757+00	f
 59d63a46-4048-494b-b12e-907c89423d86	My week in music	2025-02-22 07:24:30.673298+00	https://open.spotify.com/album/3cusZESjkIDnDXyQwbpSsT	Moanin’ The Blues	<p>I reached a major life milestone this week: I fell in love with Hank Williams. This is how I know I’m getting old. The music is timeless though. </p>\n\n<p>Other notable artists this week: Ethel Cain and Kendrick Lamar. I need to find some new music asap. </p>	music-of-the-week	2025-02-22 07:24:30.673298+00	f
 fa95bade-60c0-42ff-9859-f0cbb4a9fff2	Show me the source	2025-02-21 06:24:15.744546+00	https://github.com/david-jarman/link-blog	Website source code	I made the repo for this website public. I’ll share more details about the build process once the site is further along, but dropping the link here as I didn’t have anything else to post for the day 🤦‍♂️	website-source-code	2025-02-21 06:24:15.744546+00	f
@@ -206,6 +207,7 @@ ac171c34-84b3-41b6-a071-20025fa49230	ce57c7a9-5ac0-48ef-b722-e63051efd4b2
 e20f7bb4-7533-47c0-8c3d-e6b110e3df9a	62cd5d58-679d-4f0b-b8f8-d4835c1e9f3f
 61ea7c42-73bd-4bbf-9b46-55b5e6a91fec	62cd5d58-679d-4f0b-b8f8-d4835c1e9f3f
 61ea7c42-73bd-4bbf-9b46-55b5e6a91fec	9e06719a-e987-4d74-89ea-107910486a6e
+4b9f7414-49a2-405c-8953-aed7751b0e0d	fcc4655a-4313-413b-a8fb-c338a417f1a5
 \.
 
 
@@ -226,5 +228,5 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ED7Zo2g0j8RjNoUYHY5RHebf03XsB5naF1a6AzCi8dReQInrWrTjMV50p6EXe1y
+\unrestrict 6mRmlBf0LqxdP0KsfdepICZfW3pJJhoCWTvWVBQJjZ9EsBohdLdIVMS5f1r1nNt
 
