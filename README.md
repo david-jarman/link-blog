@@ -20,7 +20,7 @@ LinkBlog is a multi-project solution for building a comprehensive blogging platf
 
 ## Prerequisites
 
-- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 
 ## Build and Test
 

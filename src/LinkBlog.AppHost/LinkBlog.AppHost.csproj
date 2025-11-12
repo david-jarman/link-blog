@@ -3,7 +3,7 @@
   <Sdk Name="Aspire.AppHost.Sdk" Version="$(AspireVersion)" />
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Entrypoint for local development.</Description>
     <OutputType>Exe</OutputType>
     <UserSecretsId>dd48d512-4144-4234-897b-a2df95788389</UserSecretsId>

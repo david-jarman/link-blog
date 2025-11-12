@@ -62,7 +62,6 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
     if (isHeroku)
     {
-        options.KnownNetworks.Clear();
         options.KnownProxies.Clear();
     }
 });
@@ -72,7 +71,7 @@ builder.Services.AddHttpsRedirection(options =>
     {
         options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
         options.HttpsPort = 443;
-    };
+    }
 });
 
 builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection("Feed"));

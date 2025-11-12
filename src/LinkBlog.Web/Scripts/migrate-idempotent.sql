@@ -56,7 +56,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250215004115_InitialCreate') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20250215004115_InitialCreate', '9.0.2');
+    VALUES ('20250215004115_InitialCreate', '9.0.9');
     END IF;
 END $EF$;
 
@@ -80,7 +80,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250220042255_AddShortTitle') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20250220042255_AddShortTitle', '9.0.2');
+    VALUES ('20250220042255_AddShortTitle', '9.0.9');
     END IF;
 END $EF$;
 
@@ -109,7 +109,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250224000450_AddPostIndexesAndTagNameIndex') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20250224000450_AddPostIndexesAndTagNameIndex', '9.0.2');
+    VALUES ('20250224000450_AddPostIndexesAndTagNameIndex', '9.0.9');
     END IF;
 END $EF$;
 
@@ -134,7 +134,22 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250224051317_AddUpdatedDate') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20250224051317_AddUpdatedDate', '9.0.2');
+    VALUES ('20250224051317_AddUpdatedDate', '9.0.9');
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250425033914_AddIsArchivedColumn') THEN
+    ALTER TABLE "Posts" ADD "IsArchived" boolean NOT NULL DEFAULT FALSE;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250425033914_AddIsArchivedColumn') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20250425033914_AddIsArchivedColumn', '9.0.9');
     END IF;
 END $EF$;
 COMMIT;

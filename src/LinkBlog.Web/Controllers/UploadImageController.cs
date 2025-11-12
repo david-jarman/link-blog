@@ -48,7 +48,10 @@ namespace LinkBlog.Web.Controllers
             // Check if the blob already exists. If it does, return a 409 Conflict.
             if (await blobClient.ExistsAsync(ct))
             {
-                logger.LogWarning("Blob {BlobPath} already exists.", blobPath);
+                if (logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("Blob {BlobPath} already exists.", blobPath);
+                }
                 return Conflict();
             }
 
@@ -68,7 +71,10 @@ namespace LinkBlog.Web.Controllers
             // Check if the response was successful. If it was, return the permanent url to the blob.
             if (response.GetRawResponse().Status == StatusCodes.Status201Created)
             {
-                logger.LogInformation("Blob {BlobPath} successfully created", blobPath);
+                if (logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation("Blob {BlobPath} successfully created", blobPath);
+                }
                 return Created(blobClient.Uri.AbsoluteUri, null);
             }
             else

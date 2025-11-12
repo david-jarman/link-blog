@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!-- TODO: Remove explicit TargetFramework properties in each csproj after this issue is fixed -->
     <!-- https://github.com/heroku/buildpacks-dotnet/issues/187 -->
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Abstractions for entity definitions that are shared across the project.</Description>
   </PropertyGroup>
 
