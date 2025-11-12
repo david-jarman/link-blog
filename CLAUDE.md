@@ -3,13 +3,13 @@
 ## Build/Run Commands
 ```bash
 # Build solution
-dotnet build LinkBlog.sln
+dotnet build LinkBlog.slnxx
 
 # Run the application
 dotnet run --project src/LinkBlog.AppHost/LinkBlog.AppHost.csproj
 
 # Run tests
-dotnet test LinkBlog.sln
+dotnet test LinkBlog.slnx
 
 # Database migrations
 dotnet ef migrations add [MigrationName] --project src/LinkBlog.Web/LinkBlog.Web.csproj

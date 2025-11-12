@@ -20,10 +20,10 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore LinkBlog.sln
+      run: dotnet restore LinkBlog.slnx
 
     - name: Build
-      run: dotnet build LinkBlog.sln --no-restore
+      run: dotnet build LinkBlog.slnx --no-restore
 
     - name: Test
-      run: dotnet test LinkBlog.sln --no-build --verbosity normal
+      run: dotnet test LinkBlog.slnx --no-build --verbosity normal

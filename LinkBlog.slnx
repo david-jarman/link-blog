@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LinkBlog.Abstractions/LinkBlog.Abstractions.csproj" />
+    <Project Path="src/LinkBlog.Feed/LinkBlog.Feed.csproj" />
+    <Project Path="src/LinkBlog.Images/LinkBlog.Images.csproj" />
+    <Project Path="test/LinkBlog.Web.Tests/LinkBlog.Web.Tests.csproj" />
+  </Folder>
+  <Project Path="src/LinkBlog.AppHost/LinkBlog.AppHost.csproj" />
+  <Project Path="src/LinkBlog.ServiceDefaults/LinkBlog.ServiceDefaults.csproj" />
+  <Project Path="src/LinkBlog.Web/LinkBlog.Web.csproj" />
+</Solution>

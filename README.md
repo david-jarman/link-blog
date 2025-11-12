@@ -27,13 +27,13 @@ LinkBlog is a multi-project solution for building a comprehensive blogging platf
 To build the entire solution, run the following command in the project root:
 
 ```sh
-dotnet build LinkBlog.sln
+dotnet build LinkBlog.slnx
 ```
 
 Then, to run tests
 
 ```sh
-dotnet test LinkBlog.sln
+dotnet test LinkBlog.slnx
 ```
 
 Connect to database
