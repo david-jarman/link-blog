@@ -2,7 +2,7 @@ build:
   dotnet build
 
 run:
-  dotnet run --project src/LinkBlog.AppHost/LinkBlog.AppHost.csproj
+  aspire run
 
 test:
   dotnet test
