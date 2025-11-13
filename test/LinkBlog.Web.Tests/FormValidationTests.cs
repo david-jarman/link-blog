@@ -9,7 +9,7 @@ using Moq;
 
 namespace LinkBlog.Web.Tests;
 
-public class FormValidationTests : TestContext
+public class FormValidationTests : BunitContext
 {
     private readonly Mock<IPostStore> _mockPostStore;
     private readonly Mock<ILogger<AdminHome>> _mockLogger;
@@ -33,7 +33,7 @@ public class FormValidationTests : TestContext
     public void ValidationErrors_DisplayedForMissingRequiredFields()
     {
         // Arrange
-        var component = RenderComponent<AdminHome>();
+        var component = Render<AdminHome>();
         var form = component.Find("form");
 
         // Act - Submit the form without filling in required fields
@@ -54,7 +54,7 @@ public class FormValidationTests : TestContext
     public void ValidationErrors_DisplayedForInvalidShortTitle()
     {
         // Arrange
-        var component = RenderComponent<AdminHome>();
+        var component = Render<AdminHome>();
 
         // Find inputs
         var titleInput = component.Find("#PostTitle");
@@ -84,7 +84,7 @@ public class FormValidationTests : TestContext
             .Setup(store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(true));
 
-        var component = RenderComponent<AdminHome>();
+        var component = Render<AdminHome>();
 
         // Fill in required fields
         component.Find("#PostTitle").Change("Test Title");
@@ -112,7 +112,7 @@ public class FormValidationTests : TestContext
             .Setup(store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
             .Throws(new DbUpdateException("Duplicate key", new Exception("duplicate key value violates unique constraint")));
 
-        var component = RenderComponent<AdminHome>();
+        var component = Render<AdminHome>();
 
         // Fill in all required fields
         component.Find("#PostTitle").Change("Test Title");
@@ -137,7 +137,7 @@ public class FormValidationTests : TestContext
             .Setup(store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(true));
 
-        var component = RenderComponent<AdminHome>();
+        var component = Render<AdminHome>();
 
         // Fill in all required fields
         component.Find("#PostTitle").Change("Test Title");
