@@ -14,6 +14,9 @@ dotnet test LinkBlog.slnx
 # Database migrations
 dotnet ef migrations add [MigrationName] --project src/LinkBlog.Web/LinkBlog.Web.csproj
 dotnet ef database update --project src/LinkBlog.Web/LinkBlog.Web.csproj
+
+## Create idempotent script
+dotnet ef migrations script --idempotent
 ```
 
 ## Code Style Guidelines
