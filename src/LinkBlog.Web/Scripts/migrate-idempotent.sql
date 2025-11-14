@@ -152,4 +152,29 @@ BEGIN
     VALUES ('20250425033914_AddIsArchivedColumn', '9.0.9');
     END IF;
 END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20251114050210_AddFullTextSearchVector') THEN
+    ALTER TABLE "Posts" ADD "SearchVector" tsvector GENERATED ALWAYS AS (setweight(to_tsvector('english', COALESCE("Title", '')), 'A') ||
+                      setweight(to_tsvector('english', COALESCE("LinkTitle", '')), 'B') ||
+                      setweight(to_tsvector('english', COALESCE("Contents", '')), 'C')) STORED;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20251114050210_AddFullTextSearchVector') THEN
+    CREATE INDEX "IX_Posts_SearchVector" ON "Posts" USING GIN ("SearchVector");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20251114050210_AddFullTextSearchVector') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20251114050210_AddFullTextSearchVector', '9.0.9');
+    END IF;
+END $EF$;
 COMMIT;
+
