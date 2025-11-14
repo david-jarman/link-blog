@@ -18,6 +18,21 @@ public class PostDbContext : DbContext
             .HasMany(e => e.Tags)
             .WithMany(e => e.Posts)
             .UsingEntity("PostTag");
+
+        // Configure full-text search computed column
+        // Weight: Title (A - highest), LinkTitle (B - medium), Contents (C - lowest)
+        modelBuilder.Entity<PostEntity>()
+            .Property(p => p.SearchVector)
+            .HasComputedColumnSql(
+                @"setweight(to_tsvector('english', COALESCE(""Title"", '')), 'A') ||
+                  setweight(to_tsvector('english', COALESCE(""LinkTitle"", '')), 'B') ||
+                  setweight(to_tsvector('english', COALESCE(""Contents"", '')), 'C')",
+                stored: true);
+
+        // Add GIN index for fast full-text search
+        modelBuilder.Entity<PostEntity>()
+            .HasIndex(p => p.SearchVector)
+            .HasMethod("GIN");
     }
 
     public DbSet<PostEntity> Posts { get; set; } = null!;

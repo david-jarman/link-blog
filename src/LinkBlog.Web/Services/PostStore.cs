@@ -18,6 +18,8 @@ public interface IPostStore
 
     Task<Post?> GetPostForShortTitleAsync(string shortTitle, CancellationToken cancellationToken = default);
 
+    IAsyncEnumerable<Post> SearchPostsAsync(string searchQuery, int maxResults = 50, CancellationToken cancellationToken = default);
+
     Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default);
 
     Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default);
@@ -103,6 +105,36 @@ public class PostStoreDb : IPostStore
             .SingleOrDefaultAsync(p => p.ShortTitle == shortTitle && !p.IsArchived, cancellationToken: cancellationToken);
 
         return post?.ToPost();
+    }
+
+    public async IAsyncEnumerable<Post> SearchPostsAsync(string searchQuery, int maxResults = 50, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            yield break;
+        }
+
+        // Use PostgreSQL full-text search with the precomputed SearchVector column
+        // SearchVector is a computed column with weighted tsvector (Title: A, LinkTitle: B, Contents: C)
+        var posts = this.postDbContext.Posts
+            .FromSqlRaw(@"
+                SELECT p.*
+                FROM ""Posts"" p
+                WHERE p.""IsArchived"" = false
+                AND p.""SearchVector"" @@ plainto_tsquery('english', {0})
+                ORDER BY ts_rank(p.""SearchVector"", plainto_tsquery('english', {0})) DESC
+                LIMIT {1}",
+                searchQuery,
+                maxResults)
+            .Include(p => p.Tags)
+            .AsAsyncEnumerable();
+
+        await foreach (var post in posts)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            yield return post.ToPost();
+        }
     }
 
     public Task<Post?> GetPostById(string id, CancellationToken cancellationToken = default)

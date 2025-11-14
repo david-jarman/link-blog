@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using NpgsqlTypes;
 
 namespace LinkBlog.Data;
 
@@ -32,6 +33,8 @@ public sealed class PostEntity
     public string Contents { get; set; }
 
     public bool IsArchived { get; set; }
+
+    public NpgsqlTsVector? SearchVector { get; set; }
 
     public List<TagEntity> Tags { get; set; } = new();
 
