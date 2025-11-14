@@ -1,0 +1,77 @@
+@page "/search"
+@using LinkBlog.Abstractions
+@using LinkBlog.Data
+@using LinkBlog.Web.Components.Posts
+@using Microsoft.AspNetCore.WebUtilities
+
+@inject IPostStore PostStore
+
+<HeadContent>
+    <meta property="og:title" content="Search - David Jarman's Blog" />
+    <meta property="og:type" content="website" />
+</HeadContent>
+
+<PageTitle>Search - David Jarman's Blog</PageTitle>
+
+<div class="search-page">
+    <div class="search-header">
+        <h2>Search Results</h2>
+        @if (!string.IsNullOrWhiteSpace(searchQuery))
+        {
+            <p class="search-query">Showing results for: <strong>@searchQuery</strong></p>
+        }
+    </div>
+
+    @if (posts != null && posts.Length > 0)
+    {
+        <div class="search-results">
+            <p class="results-count">Found @posts.Length result@(posts.Length != 1 ? "s" : "")</p>
+            <PostList Posts="posts" />
+        </div>
+    }
+    else if (!string.IsNullOrWhiteSpace(searchQuery))
+    {
+        <div class="no-results">
+            <p>No posts found matching your search.</p>
+            <p>Try different keywords or check your spelling.</p>
+        </div>
+    }
+    else
+    {
+        <div class="no-query">
+            <p>Enter a search query to find posts.</p>
+        </div>
+    }
+</div>
+
+@code {
+    private const int MaxResults = 50;
+
+    private Post[]? posts;
+
+    [SupplyParameterFromQuery(Name = "q")]
+    public string? searchQuery { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        return PerformSearchAsync();
+    }
+
+    private async Task PerformSearchAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(searchQuery))
+        {
+            List<Post> results = new List<Post>();
+            await foreach (var post in PostStore.SearchPostsAsync(searchQuery, MaxResults))
+            {
+                results.Add(post);
+            }
+
+            posts = results.ToArray();
+        }
+        else
+        {
+            posts = null;
+        }
+    }
+}
