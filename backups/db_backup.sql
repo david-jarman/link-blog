@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict nQmjTIR24Qr3OUeKYIl3cqSgHq00opefPcblRy4nayGryJDeZZ2z2Vj6yUk8c4o
+\restrict cwawXeaWMxVYColw052ukwgnWzlonUgsGYkPllvNcHklLJC5ZuKgTJrDblQWn06
 
 -- Dumped from database version 16.8
 -- Dumped by pg_dump version 16.10 (Ubuntu 16.10-1.pgdg24.04+1)
@@ -228,6 +228,7 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 20250224000450_AddPostIndexesAndTagNameIndex	9.0.2
 20250224051317_AddUpdatedDate	9.0.2
 20250425033914_AddIsArchivedColumn	9.0.4
+20251114050210_AddFullTextSearchVector	9.0.9
 \.
 
 
@@ -235,5 +236,5 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 -- PostgreSQL database dump complete
 --
 
-\unrestrict nQmjTIR24Qr3OUeKYIl3cqSgHq00opefPcblRy4nayGryJDeZZ2z2Vj6yUk8c4o
+\unrestrict cwawXeaWMxVYColw052ukwgnWzlonUgsGYkPllvNcHklLJC5ZuKgTJrDblQWn06
 
