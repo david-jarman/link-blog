@@ -45,7 +45,7 @@ builder.Services.AddAuthorization(policy =>
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 
-var isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
+bool isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
 builder.AddPostStore("postgresdb", options =>
 {
     if (isHeroku)

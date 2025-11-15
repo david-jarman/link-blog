@@ -3,19 +3,19 @@
 ## Build/Run Commands
 ```bash
 # Build solution
-dotnet build LinkBlog.slnxx
+just build
 
 # Run the application
-dotnet run --project src/LinkBlog.AppHost/LinkBlog.AppHost.csproj
+just run
 
 # Run tests
-dotnet test LinkBlog.slnx
+just test
 
 # Database migrations
 dotnet ef migrations add [MigrationName] --project src/LinkBlog.Web/LinkBlog.Web.csproj
 dotnet ef database update --project src/LinkBlog.Web/LinkBlog.Web.csproj
 
-## Create idempotent script
+## Create idempotent script (located at src/LinkBlog.Web/Scripts/migrate-idempotent.sql)
 dotnet ef migrations script --idempotent
 ```
 
@@ -29,4 +29,5 @@ dotnet ef migrations script --idempotent
 
 # Best practices
 
-CSS style for forms should NEVER be inline or defined in the actual razor component file (.razor). Use CSS isolation by adding CSS style to the associated .razor.css file instead. The web app should adhere to the principal that HTML should define content and not style.
+- CSS style for forms should NEVER be inline or defined in the actual razor component file (.razor). Use CSS isolation by adding CSS style to the associated .razor.css file instead. The web app should adhere to the principal that HTML should define content and not style.
+- Blog uses Blazor Static Server Side (SSR) Rendering. Do not use any features of Blazor that require a constant connection to the backend server.
