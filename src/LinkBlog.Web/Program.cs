@@ -45,12 +45,12 @@ builder.Services.AddAuthorization(policy =>
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 
-bool isHeroku = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO"));
+bool isHeroku = !string.IsNullOrEmpty(config["DYNO"]);
 builder.AddPostStore("postgresdb", options =>
 {
     if (isHeroku)
     {
-        var match = Regex.Match(Environment.GetEnvironmentVariable("DATABASE_URL") ?? "", @"postgres://(.*):(.*)@(.*):(.*)/(.*)");
+        var match = Regex.Match(config["DATABASE_URL"] ?? "", @"postgres://(.*):(.*)@(.*):(.*)/(.*)");
         options.ConnectionString = $"Server={match.Groups[3]};Port={match.Groups[4]};User Id={match.Groups[1]};Password={match.Groups[2]};Database={match.Groups[5]};sslmode=Prefer;Trust Server Certificate=true";
     }
 });

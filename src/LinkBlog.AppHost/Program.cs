@@ -19,7 +19,6 @@ var storage = builder.AddAzureStorage("storage")
             .WithBlobPort(34553);
     });
 
-
 var blobStore = storage.AddBlobs("blobstore");
 
 builder.AddProject<Projects.LinkBlog_Web>("webfrontend")
