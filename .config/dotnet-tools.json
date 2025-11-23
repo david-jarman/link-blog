@@ -2,15 +2,8 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "upgrade-assistant": {
-      "version": "0.5.829",
-      "commands": [
-        "upgrade-assistant"
-      ],
-      "rollForward": false
-    },
     "dotnet-ef": {
-      "version": "9.0.4",
+      "version": "10.0.0",
       "commands": [
         "dotnet-ef"
       ],
