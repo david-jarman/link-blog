@@ -67,7 +67,7 @@ if [[ $DATABASE_URL =~ postgres://([^:]+):([^@]+)@([^:]+):([^/]+)/(.+) ]]; then
     echo "Applying migrations to database: $DB_NAME on $DB_HOST:$DB_PORT"
 
     cd src/LinkBlog.Web
-    dotnet ef database update --connection "$CONNECTION_STRING" --no-build
+    dotnet ef database update --connection "$CONNECTION_STRING"
 
     if [ $? -ne 0 ]; then
         echo "Database migration failed! Aborting release."
