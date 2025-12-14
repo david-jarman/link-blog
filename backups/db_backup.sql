@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict vCjR0KHqgfqMLp3U6WaYoeItkJJyRaFRUwGkzqPPbWliSDpezVvIxoSL3khUNwn
+\restrict IsV6Yyh11bMWi7WEs7bDTkxgLNzceHR85BQmuE4AI1k4akZ6SFr7dLUyJiPnYs5
 
 -- Dumped from database version 16.9
 -- Dumped by pg_dump version 16.11 (Ubuntu 16.11-1.pgdg24.04+1)
@@ -60,6 +60,7 @@ ac171c34-84b3-41b6-a071-20025fa49230	Embedding an iframe using Trix	2025-04-25 1
 60247833-9dc0-4962-907f-24bd60bcea99	Edit - a Windows-native CLI text editor	2025-05-19 19:18:36.612732+00	https://github.com/microsoft/edit	GitHub - Edit	<div>It's 2025, and I'm excited about a new CLI text editor. When I need a text editor in a shell, I always reach for vim, but I don't love it. It's there when I need it and serves its purpose, but I've never gotten over the weird key binding knowledge required just to exit and save a file.<br><br>What I like about Edit is that it's built as a TUI (Terminal User Interface) which means you can use your mouse (point and click), you can use ctrl+a to select all text, you can use ctrl+c and ctrl+v for copy paste, and it's just way more intuitive to use.<br><br></div><div><strong>Getting it to run</strong><br><br>The tool was just released, so as expected, there are some quirks. First and foremost, <a href="https://github.com/microsoft/edit/issues/42">Windows Defenders think the pre-built binary the released is a virus</a>! In order to actually play with it, I had to build it from source using the rust tool chain.<br><br>Here's what I had to do:<br><br>Install the C++ toolchain using Visual Studio Installer.<br>Restart my shell, to update paths.<br><a href="https://www.rust-lang.org/tools/install">Install the rust toolchain</a><br>git clone https://github.com/microsoft/edit.git<br>rustup install nightly<br>rustup default nightly-x86_64-pc-windows-msvc (to set the nightly toolchain as the default)<br>rustup component add rust-src --toolchain nightly-x86_64-pc-windows-msvc (no idea why I had to do this, but rustup said I had to)<br>cargo build --config .cargo/release.toml --release (compile and linking step)<br>cp .\\target\\release\\edit.exe D:\\tools\\ (D:\\tools is where I store my adhoc tools that I build or maintain)<br><br>A few of these steps were documented on the Edit README.md file, but several were missing.</div>	edit-windows-cli	2025-05-19 19:18:36.612732+00	f
 2249598e-8306-45ea-a74b-f708bf89da76	.NET Aspire 9.3	2025-05-20 15:04:20.857188+00	https://learn.microsoft.com/en-us/dotnet/aspire/whats-new/dotnet-aspire-9.3	Release Notes	<div>I've updated this blog to Aspire 9.3. This particular release didn't have anything that I wanted to use right away, but this being such a simple blog website, it doesn't really need many of the fancy deployment features, especially since I deploy to Heroku and not Azure.<br><br>If I find any features I can use in the coming days, I'll create another post to highlight those.</div>	net-aspire-9-3	2025-05-20 15:04:20.857188+00	f
 e20f7bb4-7533-47c0-8c3d-e6b110e3df9a	Online text to diagram tools	2025-05-24 03:31:09.863047+00	https://xosh.org/text-to-diagram/	https://xosh.org/text-to-diagram/	<blockquote>A comprehensive list of various text to diagram tools</blockquote><div>I love a good curated list. Next time I need to create a diagram, I’m going to look here.&nbsp;</div>	diagrams	2025-05-24 03:31:09.863047+00	f
+c5d4fb34-cff1-453d-968b-be0c14db6592	Music theory - Interval trainer	2025-12-14 04:08:55.693974+00	https://hacks.davidjarman.net/interval-trainer	Interval Trainer	<div>Over the past few months, I have been getting back into playing guitar after a fairly long hiatus. I even started taking guitar lessons. My practice has involved playing a lot of bluegrass fiddle tunes and learning carter-style arrangements of old country and bluegrass songs.<br><br>Playing bluegrass with others involves playing solos, or "taking breaks". This just means improvising over the melody of the song. As I've been inching closer toward working on my own improvisational skills, I've realized that I don't have as much intuition about what each interval in the chromatic scale truly sounds like. I want to get to the point where I can listen to a song and recognize when the 4th chord is played vs the 5th or in a break when someone adds in a flat 5.&nbsp;<br><br>To help myself train my ear to recognize each interval, I vibe coded a tool using Claude code. The page has two main parts: play each interval at your own pace and a quiz that will play intervals at random and you have to choose the correct one. I also added some descriptions to the intervals to help myself think about what those intervals feel like. There is also a toggle to show the "blue notes".&nbsp;<br><br>This is one part of my journey to being able to both improvise better but also transcribe music faster.</div>	music-theory-interval-trainer	2025-12-14 04:08:55.693974+00	f
 \.
 
 
@@ -119,6 +120,7 @@ dfe7eb18-0047-4db8-be10-462bbe54ca97	testing-in-prod
 31b1d4f5-d072-479e-9499-3f2fc581c9ee	cli
 9e06719a-e987-4d74-89ea-107910486a6e	hacks
 473d8584-9f26-4676-bade-de8c7b5690f7	quotes
+55592631-1d13-47da-9729-9de8a5314795	theory
 \.
 
 
@@ -215,6 +217,10 @@ e20f7bb4-7533-47c0-8c3d-e6b110e3df9a	62cd5d58-679d-4f0b-b8f8-d4835c1e9f3f
 fb711bf5-1f4a-4052-a87e-907a84f79948	473d8584-9f26-4676-bade-de8c7b5690f7
 fb711bf5-1f4a-4052-a87e-907a84f79948	739afc03-a0a4-4b50-9aa6-0b00b36dd48d
 fb711bf5-1f4a-4052-a87e-907a84f79948	b8244f53-df27-42d4-8728-fc1411b55c54
+c5d4fb34-cff1-453d-968b-be0c14db6592	55592631-1d13-47da-9729-9de8a5314795
+c5d4fb34-cff1-453d-968b-be0c14db6592	62cd5d58-679d-4f0b-b8f8-d4835c1e9f3f
+c5d4fb34-cff1-453d-968b-be0c14db6592	9e06719a-e987-4d74-89ea-107910486a6e
+c5d4fb34-cff1-453d-968b-be0c14db6592	a5cb93f6-d4e6-436b-9130-6b874f7fc0b1
 \.
 
 
@@ -236,5 +242,5 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 -- PostgreSQL database dump complete
 --
 
-\unrestrict vCjR0KHqgfqMLp3U6WaYoeItkJJyRaFRUwGkzqPPbWliSDpezVvIxoSL3khUNwn
+\unrestrict IsV6Yyh11bMWi7WEs7bDTkxgLNzceHR85BQmuE4AI1k4akZ6SFr7dLUyJiPnYs5
 
