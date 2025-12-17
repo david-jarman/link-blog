@@ -47,5 +47,6 @@ clean:
 lint:
   dotnet format
 
-push: test lint
+push: test
+  dotnet format --verify-no-changes
   git push heroku main
