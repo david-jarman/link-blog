@@ -2,9 +2,9 @@
 -- PostgreSQL database dump
 --
 
-\restrict rA3SskgBdFC8I2Mg5cmfn2qSSzVQZ5JWv20D3PbTpvEno6uZTpnAliJnyRfrPRp
+\restrict TbWkgbKFxdKden3E31qVyjZ6WaaFGSuvPtzAYpJ0yudnapub7lEkBeT7bUFbqDW
 
--- Dumped from database version 16.9
+-- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.11 (Ubuntu 16.11-1.pgdg24.04+1)
 
 SET statement_timeout = 0;
@@ -61,6 +61,7 @@ ac171c34-84b3-41b6-a071-20025fa49230	Embedding an iframe using Trix	2025-04-25 1
 2249598e-8306-45ea-a74b-f708bf89da76	.NET Aspire 9.3	2025-05-20 15:04:20.857188+00	https://learn.microsoft.com/en-us/dotnet/aspire/whats-new/dotnet-aspire-9.3	Release Notes	<div>I've updated this blog to Aspire 9.3. This particular release didn't have anything that I wanted to use right away, but this being such a simple blog website, it doesn't really need many of the fancy deployment features, especially since I deploy to Heroku and not Azure.<br><br>If I find any features I can use in the coming days, I'll create another post to highlight those.</div>	net-aspire-9-3	2025-05-20 15:04:20.857188+00	f
 e20f7bb4-7533-47c0-8c3d-e6b110e3df9a	Online text to diagram tools	2025-05-24 03:31:09.863047+00	https://xosh.org/text-to-diagram/	https://xosh.org/text-to-diagram/	<blockquote>A comprehensive list of various text to diagram tools</blockquote><div>I love a good curated list. Next time I need to create a diagram, I’m going to look here.&nbsp;</div>	diagrams	2025-05-24 03:31:09.863047+00	f
 c5d4fb34-cff1-453d-968b-be0c14db6592	Music theory - Interval trainer	2025-12-14 04:08:55.693974+00	https://hacks.davidjarman.net/interval-trainer	Interval Trainer	<div>Over the past few months, I have been getting back into playing guitar after a fairly long hiatus. I even started taking guitar lessons. My practice has involved playing a lot of bluegrass fiddle tunes and learning carter-style arrangements of old country and bluegrass songs.<br><br>Playing bluegrass with others involves playing solos, or "taking breaks". This just means improvising over the melody of the song. As I've been inching closer toward working on my own improvisational skills, I've realized that I don't have as much intuition about what each interval in the chromatic scale truly sounds like. I want to get to the point where I can listen to a song and recognize when the 4th chord is played vs the 5th or in a break when someone adds in a flat 5.&nbsp;<br><br>To help myself train my ear to recognize each interval, I vibe coded a tool using Claude code. The page has two main parts: play each interval at your own pace and a quiz that will play intervals at random and you have to choose the correct one. I also added some descriptions to the intervals to help myself think about what those intervals feel like. There is also a toggle to show the "blue notes".&nbsp;<br><br>This is one part of my journey to being able to both improvise better but also transcribe music faster.</div>	music-theory-interval-trainer	2025-12-14 04:08:55.693974+00	f
+dad0edef-7156-4ee7-9648-df8ea3f3a7d0	FYI: dotnet-outdated	2025-12-17 04:08:04.298497+00	https://github.com/dotnet-outdated/dotnet-outdated	GitHub: Dotnet Outdated	<div>I hate having to update package dependencies in projects. Fortunately there is a handy dotnet tool that will report and update packages that are out of date. I used this to update all the packages in the link-blog source code this evening and was pleasantly surprised it just worked. Only issue I found was that because I create a msbuild property to store the OpenTelemetry version (there are three OTel packages with the same version), the tool updated the PackageVersions directly instead of just updating the property. Not a big deal, and I would have been shocked if it was able to handle a corner case like that.<br><br>Now I need to see if I can get this to run as a daily CI task.</div>	dotnet-outdated-tool	2025-12-17 04:08:04.298497+00	f
 \.
 
 
@@ -221,6 +222,10 @@ c5d4fb34-cff1-453d-968b-be0c14db6592	55592631-1d13-47da-9729-9de8a5314795
 c5d4fb34-cff1-453d-968b-be0c14db6592	62cd5d58-679d-4f0b-b8f8-d4835c1e9f3f
 c5d4fb34-cff1-453d-968b-be0c14db6592	9e06719a-e987-4d74-89ea-107910486a6e
 c5d4fb34-cff1-453d-968b-be0c14db6592	a5cb93f6-d4e6-436b-9130-6b874f7fc0b1
+dad0edef-7156-4ee7-9648-df8ea3f3a7d0	2ffe5765-86cc-4550-a05b-d3d1b675afa7
+dad0edef-7156-4ee7-9648-df8ea3f3a7d0	62cd5d58-679d-4f0b-b8f8-d4835c1e9f3f
+dad0edef-7156-4ee7-9648-df8ea3f3a7d0	b65176f2-4961-494c-83ad-81bfbf60c78f
+dad0edef-7156-4ee7-9648-df8ea3f3a7d0	b8244f53-df27-42d4-8728-fc1411b55c54
 \.
 
 
@@ -242,5 +247,5 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 -- PostgreSQL database dump complete
 --
 
-\unrestrict rA3SskgBdFC8I2Mg5cmfn2qSSzVQZ5JWv20D3PbTpvEno6uZTpnAliJnyRfrPRp
+\unrestrict TbWkgbKFxdKden3E31qVyjZ6WaaFGSuvPtzAYpJ0yudnapub7lEkBeT7bUFbqDW
 
