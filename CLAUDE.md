@@ -9,7 +9,7 @@ just build
 just run
 
 # Run tests
-just test
+just test-all
 
 # Database migrations
 dotnet ef migrations add [MigrationName] --project src/LinkBlog.Web/LinkBlog.Web.csproj
