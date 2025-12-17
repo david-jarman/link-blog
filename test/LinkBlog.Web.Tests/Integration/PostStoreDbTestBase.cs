@@ -1,0 +1,41 @@
+using LinkBlog.Data;
+using LinkBlog.Web.Tests.Fixtures;
+
+namespace LinkBlog.Web.Tests.Integration;
+
+[Collection("PostgreSQL")]
+[Trait("Category", "IntegrationTest")]
+public abstract class PostStoreDbTestBase : IAsyncLifetime
+{
+    protected PostgreSqlFixture Fixture { get; }
+    protected PostDbContext DbContext { get; private set; } = null!;
+    protected PostStoreDb PostStore { get; private set; } = null!;
+
+    private string databaseName = string.Empty;
+
+    protected PostStoreDbTestBase(PostgreSqlFixture fixture)
+    {
+        this.Fixture = fixture;
+    }
+
+    public async Task InitializeAsync()
+    {
+        // Create unique database name using test class name and GUID
+        this.databaseName = $"test_{GetType().Name}_{Guid.NewGuid():N}".ToLowerInvariant();
+
+        // Create database with migrations applied
+        this.DbContext = await this.Fixture.CreateDatabaseAsync(this.databaseName);
+
+        // Create the PostStoreDb instance
+        this.PostStore = new PostStoreDb(this.DbContext);
+    }
+
+    public async Task DisposeAsync()
+    {
+        // Dispose DbContext
+        await this.DbContext.DisposeAsync();
+
+        // Drop the test database
+        await this.Fixture.DropDatabaseAsync(this.databaseName);
+    }
+}

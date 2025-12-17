@@ -37,7 +37,7 @@ dotnet tool restore
 
 # Build and Run unit tests
 echo "Running unit tests..."
-dotnet test test/LinkBlog.Web.Tests/LinkBlog.Web.Tests.csproj --configuration Release
+dotnet test test/LinkBlog.Web.Tests/LinkBlog.Web.Tests.csproj --filter "Category!=IntegrationTest" --configuration Release
 
 if [ $? -ne 0 ]; then
     echo "Tests failed! Aborting release."
