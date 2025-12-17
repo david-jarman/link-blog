@@ -126,7 +126,7 @@ app.MapControllers();
 
 app.MapDefaultEndpoints();
 
-app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, IOptions<FeedOptions> options, HttpContext httpContext, CancellationToken ct) =>
+app.MapGet("/atom/all", static async (IPostStore postStore, ISyndicationFeed feed, IOptions<FeedOptions> options, HttpContext httpContext, CancellationToken ct) =>
 {
     List<Post> posts = new();
     var postsFromDb = postStore.GetPosts(options.Value.MaxPostCount, ct);
@@ -145,7 +145,7 @@ app.MapGet("/atom/all", async (IPostStore postStore, ISyndicationFeed feed, IOpt
 });
 
 // Archive post endpoint
-app.MapPost("/admin/{id}/archive", async (string id, IPostStore postStore, HttpContext httpContext, CancellationToken ct) =>
+app.MapPost("/admin/{id}/archive", static async (string id, IPostStore postStore, HttpContext httpContext, CancellationToken ct) =>
 {
     bool success = await postStore.ArchivePostAsync(id, ct);
     if (!success)
