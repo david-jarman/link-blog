@@ -1,7 +1,5 @@
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using LinkBlog.Abstractions;
-using LinkBlog.Data;
 using LinkBlog.Data.Extensions;
 using LinkBlog.Feed;
 using LinkBlog.Images;
@@ -9,7 +7,6 @@ using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -125,35 +122,5 @@ app.MapRazorComponents<App>();
 app.MapControllers();
 
 app.MapDefaultEndpoints();
-
-app.MapGet("/atom/all", static async (IPostStore postStore, ISyndicationFeed feed, IOptions<FeedOptions> options, HttpContext httpContext, CancellationToken ct) =>
-{
-    List<Post> posts = new();
-    var postsFromDb = postStore.GetPosts(options.Value.MaxPostCount, ct);
-    await foreach (var post in postsFromDb)
-    {
-        posts.Add(post);
-    }
-
-    httpContext.Response.Headers["Content-Type"] = "application/xml; charset=utf-8";
-
-    // Prevent browsers from trying to automatically open the feed in an RSS reader
-    // Useful for debugging the feed locally.
-    httpContext.Response.Headers["X-Content-Type-Options"] = "nosniff";
-
-    return feed.GetXmlForPosts(posts);
-});
-
-// Archive post endpoint
-app.MapPost("/admin/{id}/archive", static async (string id, IPostStore postStore, HttpContext httpContext, CancellationToken ct) =>
-{
-    bool success = await postStore.ArchivePostAsync(id, ct);
-    if (!success)
-    {
-        return Results.NotFound();
-    }
-
-    return Results.Redirect("/admin?message=Post%20archived%20successfully");
-}).RequireAuthorization("Admin");
 
 app.Run();
