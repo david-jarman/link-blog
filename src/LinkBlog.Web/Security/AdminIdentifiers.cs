@@ -1,7 +1,6 @@
-namespace LinkBlog.Web.Security
+namespace LinkBlog.Web.Security;
+
+public static class AdminIdentifiers
 {
-    public static class AdminIdentifiers
-    {
-        public const string DavidJarmanGitHubId = "1639399";
-    }
+    public const string DavidJarmanGitHubId = "1639399";
 }

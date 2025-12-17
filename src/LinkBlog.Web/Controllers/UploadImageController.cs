@@ -6,82 +6,81 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LinkBlog.Web.Controllers
-{
-    [Route("api")]
-    [Authorize(Policy = "Admin")]
-    public class UploadImageController : Controller
-    {
-        private readonly BlobServiceClient blobServiceClient;
-        private readonly IImageConverter imageConverter;
-        private readonly ILogger<UploadImageController> logger;
+namespace LinkBlog.Web.Controllers;
 
-        public UploadImageController(BlobServiceClient blobServiceClient, IImageConverter imageConverter, ILogger<UploadImageController> logger)
+[Route("api")]
+[Authorize(Policy = "Admin")]
+public class UploadImageController : Controller
+{
+    private readonly BlobServiceClient blobServiceClient;
+    private readonly IImageConverter imageConverter;
+    private readonly ILogger<UploadImageController> logger;
+
+    public UploadImageController(BlobServiceClient blobServiceClient, IImageConverter imageConverter, ILogger<UploadImageController> logger)
+    {
+        this.blobServiceClient = blobServiceClient;
+        this.imageConverter = imageConverter;
+        this.logger = logger;
+    }
+
+    [HttpPost("upload")]
+    [RequireAntiforgeryToken(required: false)]
+    public async Task<ActionResult> UploadAsync(IFormFile file, CancellationToken ct)
+    {
+        if (file is null)
         {
-            this.blobServiceClient = blobServiceClient;
-            this.imageConverter = imageConverter;
-            this.logger = logger;
+            logger.NoFileUploaded();
+            return BadRequest();
         }
 
-        [HttpPost("upload")]
-        [RequireAntiforgeryToken(required: false)]
-        public async Task<ActionResult> UploadAsync(IFormFile file, CancellationToken ct)
+        // Get or create the container first. Container name is "images".
+        var containerClient = blobServiceClient.GetBlobContainerClient("images");
+        await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob, cancellationToken: ct);
+
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
+
+        // Blob path should be prefixed with the current datetime to ensure uniqueness.
+        // Example: "2025/08/01/12/00/00/imagename.png"
+        string blobPath = $"{DateTimeOffset.UtcNow:yyyy/MM/dd/HH/mm/ss}/{fileNameWithoutExtension}.png";
+
+        var blobClient = containerClient.GetBlobClient(blobPath);
+
+        // Check if the blob already exists. If it does, return a 409 Conflict.
+        if (await blobClient.ExistsAsync(ct))
         {
-            if (file is null)
+            if (logger.IsEnabled(LogLevel.Warning))
             {
-                logger.NoFileUploaded();
-                return BadRequest();
+                logger.LogWarning("Blob {BlobPath} already exists.", blobPath);
             }
+            return Conflict();
+        }
 
-            // Get or create the container first. Container name is "images".
-            var containerClient = blobServiceClient.GetBlobContainerClient("images");
-            await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob, cancellationToken: ct);
-
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
-
-            // Blob path should be prefixed with the current datetime to ensure uniqueness.
-            // Example: "2025/08/01/12/00/00/imagename.png"
-            string blobPath = $"{DateTimeOffset.UtcNow:yyyy/MM/dd/HH/mm/ss}/{fileNameWithoutExtension}.png";
-
-            var blobClient = containerClient.GetBlobClient(blobPath);
-
-            // Check if the blob already exists. If it does, return a 409 Conflict.
-            if (await blobClient.ExistsAsync(ct))
+        // Load the image from the stream.
+        using Stream originalImage = file.OpenReadStream();
+        using Stream processedImage = await imageConverter.ConvertToPngAsync(originalImage, file.Length, ct);
+        var blobUploadOptions = new BlobUploadOptions
+        {
+            HttpHeaders = new BlobHttpHeaders
             {
-                if (logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("Blob {BlobPath} already exists.", blobPath);
-                }
-                return Conflict();
+                ContentType = "image/png"
             }
+        };
 
-            // Load the image from the stream.
-            using Stream originalImage = file.OpenReadStream();
-            using Stream processedImage = await imageConverter.ConvertToPngAsync(originalImage, file.Length, ct);
-            var blobUploadOptions = new BlobUploadOptions
+        var response = await blobClient.UploadAsync(processedImage, blobUploadOptions, ct);
+
+        // Check if the response was successful. If it was, return the permanent url to the blob.
+        if (response.GetRawResponse().Status == StatusCodes.Status201Created)
+        {
+            if (logger.IsEnabled(LogLevel.Information))
             {
-                HttpHeaders = new BlobHttpHeaders
-                {
-                    ContentType = "image/png"
-                }
-            };
-
-            var response = await blobClient.UploadAsync(processedImage, blobUploadOptions, ct);
-
-            // Check if the response was successful. If it was, return the permanent url to the blob.
-            if (response.GetRawResponse().Status == StatusCodes.Status201Created)
-            {
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Blob {BlobPath} successfully created", blobPath);
-                }
-                return Created(blobClient.Uri.AbsoluteUri, null);
+                logger.LogInformation("Blob {BlobPath} successfully created", blobPath);
             }
-            else
-            {
-                // If the response was not successful, return a 500 Internal Server Error.
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
+            return Created(blobClient.Uri.AbsoluteUri, null);
+        }
+        else
+        {
+            // If the response was not successful, return a 500 Internal Server Error.
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
 }
