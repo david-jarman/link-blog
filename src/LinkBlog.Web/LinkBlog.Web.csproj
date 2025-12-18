@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LinkBlog.ServiceDefaults\LinkBlog.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\LinkBlog.Data\LinkBlog.Data.csproj" />
     <ProjectReference Include="..\LinkBlog.Feed\LinkBlog.Feed.csproj" />
     <ProjectReference Include="..\LinkBlog.Images\LinkBlog.Images.csproj" />
   </ItemGroup>

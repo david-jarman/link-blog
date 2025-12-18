@@ -12,11 +12,11 @@ just run
 just test-all
 
 # Database migrations
-dotnet ef migrations add [MigrationName] --project src/LinkBlog.Web/LinkBlog.Web.csproj
-dotnet ef database update --project src/LinkBlog.Web/LinkBlog.Web.csproj
+dotnet ef migrations add [MigrationName] --project src/LinkBlog.Data/LinkBlog.Data.csproj --startup-project src/LinkBlog.Web/LinkBlog.Web.csproj
+dotnet ef database update --project src/LinkBlog.Data/LinkBlog.Data.csproj --startup-project src/LinkBlog.Web/LinkBlog.Web.csproj
 
 ## Create idempotent script (located at src/LinkBlog.Web/Scripts/migrate-idempotent.sql)
-dotnet ef migrations script --idempotent
+dotnet ef migrations script --idempotent --project src/LinkBlog.Data/LinkBlog.Data.csproj --startup-project src/LinkBlog.Web/LinkBlog.Web.csproj --output src/LinkBlog.Web/Scripts/migrate-idempotent.sql
 ```
 
 ## Code Style Guidelines
