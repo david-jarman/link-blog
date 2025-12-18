@@ -21,9 +21,15 @@ var storage = builder.AddAzureStorage("storage")
 
 var blobStore = storage.AddBlobs("blobstore");
 
+var migrations = builder.AddProject<Projects.LinkBlog_MigrationService>("migrations")
+    .WithReference(postgresdb)
+    .WaitFor(postgresdb);
+
 builder.AddProject<Projects.LinkBlog_Web>("webfrontend")
     .WithExternalHttpEndpoints()
     .WithReference(postgresdb)
-    .WithReference(blobStore);
+    .WithReference(blobStore)
+    .WithReference(migrations)
+    .WaitForCompletion(migrations);
 
 builder.Build().Run();

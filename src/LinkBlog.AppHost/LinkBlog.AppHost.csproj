@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LinkBlog.MigrationService\LinkBlog.MigrationService.csproj" />
     <ProjectReference Include="..\LinkBlog.Web\LinkBlog.Web.csproj" />
   </ItemGroup>
 
