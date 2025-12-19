@@ -7,6 +7,9 @@
     <Project Path="src/LinkBlog.MigrationService/LinkBlog.MigrationService.csproj" />
     <Project Path="test/LinkBlog.Web.Tests/LinkBlog.Web.Tests.csproj" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/LinkBlog.IntegrationTests/LinkBlog.IntegrationTests.csproj" />
+  </Folder>
   <Project Path="src/LinkBlog.AppHost/LinkBlog.AppHost.csproj" />
   <Project Path="src/LinkBlog.ServiceDefaults/LinkBlog.ServiceDefaults.csproj" />
   <Project Path="src/LinkBlog.Web/LinkBlog.Web.csproj" />
