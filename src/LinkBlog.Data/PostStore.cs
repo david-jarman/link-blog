@@ -68,7 +68,7 @@ public class PostStoreDb : IPostStore
         TagEntity? tagFromDb = await this.postDbContext.Tags
             .Include(t => t.Posts)
             .ThenInclude(p => p.Tags)
-            .FirstAsync(t => t.Name == tag, cancellationToken);
+            .FirstOrDefaultAsync(t => t.Name == tag, cancellationToken);
         if (tagFromDb == null)
         {
             yield break;

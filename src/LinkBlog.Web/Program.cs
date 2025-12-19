@@ -35,10 +35,12 @@ builder.Services.AddAuthentication(options =>
         options.ClientSecret = config["CLIENT_SECRET"] ?? throw new InvalidOperationException("GitHub:ClientSecret is required.");
     })
     .AddCookie();
+
 builder.Services.AddAuthorization(policy =>
 {
     policy.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.NameIdentifier, AdminIdentifiers.DavidJarmanGitHubId));
 });
+
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 

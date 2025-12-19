@@ -52,6 +52,15 @@ else
 
         if (Day.HasValue && Month.HasValue)
         {
+            // Validate date parameters
+            if (!IsValidDate(Year, Month.Value, Day.Value))
+            {
+                Caption = "Invalid date";
+                HeaderTitle = null;
+                this.posts = Array.Empty<Post>();
+                return;
+            }
+
             // Assume the date provided is in pacific standard time. Convert to UTC.
             var startTime = new DateTime(Year, Month.Value, Day.Value);
 
@@ -87,6 +96,15 @@ else
         }
         else if (Month.HasValue)
         {
+            // Validate month parameter
+            if (Month.Value < 1 || Month.Value > 12)
+            {
+                Caption = "Invalid month";
+                HeaderTitle = null;
+                this.posts = Array.Empty<Post>();
+                return;
+            }
+
             startDate = new DateTime(Year, Month.Value, 1);
             endDate = startDate.AddMonths(1);
 
@@ -113,5 +131,17 @@ else
         }
 
         this.posts = posts.ToArray();
+    }
+
+    private static bool IsValidDate(int year, int month, int day)
+    {
+        if (month < 1 || month > 12)
+            return false;
+
+        if (day < 1)
+            return false;
+
+        int daysInMonth = DateTime.DaysInMonth(year, month);
+        return day <= daysInMonth;
     }
 }

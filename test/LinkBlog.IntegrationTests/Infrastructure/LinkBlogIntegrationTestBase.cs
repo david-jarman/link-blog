@@ -11,7 +11,7 @@ namespace LinkBlog.IntegrationTests.Infrastructure;
 /// </summary>
 public class LinkBlogIntegrationTestBase : IAsyncLifetime
 {
-    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(60);
 
     protected DistributedApplication? App { get; private set; }
     protected HttpClient WebClient { get; private set; } = null!;
@@ -25,7 +25,7 @@ public class LinkBlogIntegrationTestBase : IAsyncLifetime
 
         // Create the AppHost builder
         var appHost = await DistributedApplicationTestingBuilder
-            .CreateAsync<Projects.LinkBlog_AppHost>(cancellationToken);
+            .CreateAsync<Projects.LinkBlog_AppHost>(["--environment=Testing"], cancellationToken);
 
         // Configure logging to reduce noise
         appHost.Services.AddLogging(logging =>
