@@ -41,7 +41,6 @@
             <outline text="Simon Willison's Weblog" title="Simon Willison's Weblog" type="rss" version="RSS" htmlUrl="http://simonwillison.net/" xmlUrl="https://simonwillison.net/atom/everything/" />
             <outline text="✰Vicki Boykis✰" title="✰Vicki Boykis✰" type="rss" version="RSS" htmlUrl="https://veekaybee.github.io/" xmlUrl="https://vickiboykis.com/index.xml" />
             <outline text="r y x, r" title="r y x, r" type="rss" version="RSS" htmlUrl="https://ryxcommar.com" xmlUrl="https://ryxcommar.com/feed/" />
-            <outline text="Latent.Space" title="Latent.Space" type="rss" version="RSS" htmlUrl="https://www.latent.space" xmlUrl="https://www.latent.space/feed" />
             <outline text="Posts on Max Woolf's Blog" title="Posts on Max Woolf's Blog" type="rss" version="RSS" htmlUrl="https://minimaxir.com/post/" xmlUrl="https://minimaxir.com/post/index.xml" />
             <outline text="Import AI" title="Import AI" type="rss" version="RSS" htmlUrl="https://jack-clark.net" xmlUrl="https://jack-clark.net/feed/" />
             <outline text="Salmon Run" title="Salmon Run" type="rss" version="RSS" htmlUrl="http://sujitpal.blogspot.com/" xmlUrl="http://sujitpal.blogspot.com/feeds/posts/default" />
