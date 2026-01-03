@@ -53,46 +53,28 @@
     font-size: 1.75rem;
     margin-bottom: 0.5rem;
     color: #333;
-    border-bottom: 2px solid #fff8000;
+    border-bottom: 2px solid;
     padding-bottom: 0.5rem;
 }
 
-.blog-entry {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    padding-left: 1rem;
-}
-
-.blog-entry h3 {
-    font-size: 1.1rem;
+.category ul {
+    list-style-type: disc;
+    padding-left: 2rem;
     margin: 0;
-    flex: 1;
 }
 
-.blog-entry h3 a {
+.category li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.category li a {
     color: #333;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
-.blog-entry h3 a:hover {
+.category li a:hover {
     color: #005fa3;
-}
-
-.feed-link {
-    font-size: 0.85rem;
-    color: #666;
-    text-decoration: none;
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-}
-
-.feed-link:hover {
-    background-color: #005fa3;
-    color: white;
-    border-color: #005fa3;
+    text-decoration: underline;
 }
