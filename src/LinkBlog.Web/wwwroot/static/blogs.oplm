@@ -11,7 +11,6 @@
             <outline text="Scott Hanselman" title="Scott Hanselman" type="rss" version="RSS" htmlUrl="https://www.hanselman.com/blog/" xmlUrl="https://www.hanselman.com/blog/feed/rss" />
             <outline text="Microsoft for Developers" title="Microsoft for Developers" type="rss" version="RSS" htmlUrl="https://devblogs.microsoft.com/" xmlUrl="https://devblogs.microsoft.com/landingpage/" />
             <outline text="Scott Helme (security)" title="Scott Helme (security)" type="rss" version="RSS" htmlUrl="https://scotthelme.ghost.io/" xmlUrl="https://scotthelme.co.uk/rss/" />
-            <outline text="Scott Hanselman" title="Scott Hanselman" type="rss" version="RSS" htmlUrl="https://www.youtube.com/channel/UCL-fHOdarou-CR2XUmK48Og" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCL-fHOdarou-CR2XUmK48Og" />
             <outline text="Julia Evans" title="Julia Evans" type="rss" version="RSS" htmlUrl="https://jvns.ca" xmlUrl="https://jvns.ca/atom.xml" />
             <outline text="Bartosz Ciechanowski" title="Bartosz Ciechanowski" type="rss" version="RSS" htmlUrl="https://ciechanow.ski/" xmlUrl="https://ciechanow.ski/atom.xml" />
             <outline text="Writing - rachelbythebay" title="Writing - rachelbythebay" type="rss" version="RSS" htmlUrl="http://rachelbythebay.com/w/" xmlUrl="http://rachelbythebay.com/w/atom.xml" />
