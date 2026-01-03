@@ -31,3 +31,5 @@ dotnet ef migrations script --idempotent --project src/LinkBlog.Data/LinkBlog.Da
 
 - CSS style for forms should NEVER be inline or defined in the actual razor component file (.razor). Use CSS isolation by adding CSS style to the associated .razor.css file instead. The web app should adhere to the principal that HTML should define content and not style.
 - Blog uses Blazor Static Server Side (SSR) Rendering. Do not use any features of Blazor that require a constant connection to the backend server.
+- Do not use Javascript except on admin pages. Any page that is public will not use Javascript or files hosted on external sites.
+- Prefer to use semantic HTML elements.

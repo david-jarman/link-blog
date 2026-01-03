@@ -1,0 +1,30 @@
+.page-links-container {
+    max-width: 50rem;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.page-links {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1rem;
+    background-color: lightskyblue;
+    border-style: solid;
+    border-radius: 1rem;
+    box-shadow: 10px 10px;
+}
+
+.page-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.page-link:hover {
+    color: #005fa3;
+}
