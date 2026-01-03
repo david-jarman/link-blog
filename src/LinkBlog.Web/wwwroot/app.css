@@ -13,7 +13,7 @@ html, body {
 /* Dark mode styles */
 #theme-toggle:checked ~ body {
     background-color: #1a1a1a;
-    background-image: none;
+    background-image: url("background-dark.svg");
     color: #f0f0f0;
 }
 

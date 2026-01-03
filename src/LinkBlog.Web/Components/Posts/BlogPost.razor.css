@@ -9,12 +9,12 @@
     margin: 1rem 0;
 
     /* Colors */
-    background-color: orange;
+    background-color: #d96704;
 }
 
 /* Dark mode post */
 #theme-toggle:checked ~ * .post {
-    background-color: #cc7000;
+    background-color: #b35503;
     border-color: #e0e0e0;
     box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
 }
