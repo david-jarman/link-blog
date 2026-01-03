@@ -14,6 +14,11 @@
     color: #333;
 }
 
+/* Dark mode search header */
+#theme-toggle:checked ~ * .search-header h2 {
+    color: #f0f0f0;
+}
+
 .search-query {
     font-size: 1.1rem;
     color: #666;
@@ -24,11 +29,25 @@
     color: #333;
 }
 
+/* Dark mode search query */
+#theme-toggle:checked ~ * .search-query {
+    color: #b0b0b0;
+}
+
+#theme-toggle:checked ~ * .search-query strong {
+    color: #f0f0f0;
+}
+
 .loading {
     text-align: center;
     padding: 3rem 0;
     color: #666;
     font-size: 1.1rem;
+}
+
+/* Dark mode loading */
+#theme-toggle:checked ~ * .loading {
+    color: #b0b0b0;
 }
 
 .search-results {
@@ -41,6 +60,12 @@
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #e0e0e0;
+}
+
+/* Dark mode results count */
+#theme-toggle:checked ~ * .results-count {
+    color: #b0b0b0;
+    border-bottom-color: #555;
 }
 
 .no-results,
@@ -59,4 +84,14 @@
 .no-results p:first-child {
     font-weight: 600;
     color: #333;
+}
+
+/* Dark mode no results */
+#theme-toggle:checked ~ * .no-results,
+#theme-toggle:checked ~ * .no-query {
+    color: #b0b0b0;
+}
+
+#theme-toggle:checked ~ * .no-results p:first-child {
+    color: #f0f0f0;
 }

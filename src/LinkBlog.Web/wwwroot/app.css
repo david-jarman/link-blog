@@ -10,8 +10,21 @@ html, body {
     }
 }
 
+/* Dark mode styles */
+#theme-toggle:checked ~ body {
+    background-color: #1a1a1a;
+    background-image: none;
+    color: #f0f0f0;
+}
+
 a, .btn-link {
     color: #006bb7;
+}
+
+/* Dark mode links */
+#theme-toggle:checked ~ body a,
+#theme-toggle:checked ~ body .btn-link {
+    color: #4a9eff;
 }
 
 .btn-primary {
