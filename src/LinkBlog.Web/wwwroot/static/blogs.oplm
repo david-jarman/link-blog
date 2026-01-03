@@ -44,7 +44,6 @@
             <outline text="Posts on Max Woolf's Blog" title="Posts on Max Woolf's Blog" type="rss" version="RSS" htmlUrl="https://minimaxir.com/post/" xmlUrl="https://minimaxir.com/post/index.xml" />
             <outline text="Import AI" title="Import AI" type="rss" version="RSS" htmlUrl="https://jack-clark.net" xmlUrl="https://jack-clark.net/feed/" />
             <outline text="Salmon Run" title="Salmon Run" type="rss" version="RSS" htmlUrl="http://sujitpal.blogspot.com/" xmlUrl="http://sujitpal.blogspot.com/feeds/posts/default" />
-            <outline text="Google AI Blog" title="Google AI Blog" type="rss" version="RSS" htmlUrl="http://blog.research.google/" xmlUrl="https://feeds.feedburner.com/blogspot/gJZg" />
             <outline text="Don't Worry About the Vase" title="Don't Worry About the Vase" type="rss" version="RSS" htmlUrl="https://thezvi.wordpress.com" xmlUrl="https://thezvi.wordpress.com/feed/" />
             <outline text="Ben Congdon" title="Ben Congdon" type="rss" version="RSS" htmlUrl="https://benjamincongdon.me/" xmlUrl="https://benjamincongdon.me/feed.xml" />
             <outline text="Nicholas Carlini" title="Nicholas Carlini" type="rss" version="RSS" htmlUrl="https://nicholas.carlini.com/" xmlUrl="https://nicholas.carlini.com/writing/feed.xml" />
