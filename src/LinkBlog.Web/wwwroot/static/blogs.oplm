@@ -14,22 +14,19 @@
             <outline text="Julia Evans" title="Julia Evans" type="rss" version="RSS" htmlUrl="https://jvns.ca" xmlUrl="https://jvns.ca/atom.xml" />
             <outline text="Bartosz Ciechanowski" title="Bartosz Ciechanowski" type="rss" version="RSS" htmlUrl="https://ciechanow.ski/" xmlUrl="https://ciechanow.ski/atom.xml" />
             <outline text="Writing - rachelbythebay" title="Writing - rachelbythebay" type="rss" version="RSS" htmlUrl="http://rachelbythebay.com/w/" xmlUrl="http://rachelbythebay.com/w/atom.xml" />
-            <outline text="Kubernetes Blog" title="Kubernetes Blog" type="rss" version="RSS" htmlUrl="https://kubernetes.io/blog" xmlUrl="https://kubernetes.io/feed.xml" />
             <outline text="thoughts from the red planet" title="thoughts from the red planet" type="rss" version="RSS" htmlUrl="http://nathanmarz.com/blog/" xmlUrl="http://feeds.feedburner.com/ThoughtsFromTheRedPlanet" />
             <outline text="zwischenzugs.com" title="zwischenzugs.com" type="rss" version="RSS" htmlUrl="https://zwischenzugs.com" xmlUrl="https://zwischenzugs.com/feed/" />
             <outline text="Old Vintage Computing Research" title="Old Vintage Computing Research" type="rss" version="RSS" htmlUrl="http://oldvcr.blogspot.com/" xmlUrl="http://oldvcr.blogspot.com/feeds/posts/default?alt=rss" />
             <outline text="Explained from First Principles" title="Explained from First Principles" type="rss" version="RSS" htmlUrl="https://explained-from-first-principles.com/" xmlUrl="https://explained-from-first-principles.com/feed.xml" />
-            <outline text="Microsoft Azure Blog" title="Microsoft Azure Blog" type="rss" version="RSS" htmlUrl="https://azure.microsoft.com/en-us/blog/" xmlUrl="https://azure.microsoft.com/en-us/blog/feed/" />
             <outline text="Stavros' Stuff" title="Stavros' Stuff" type="rss" version="RSS" htmlUrl="https://www.stavros.io/" xmlUrl="https://feeds.feedburner.com/stavrosstuff" />
             <outline text="Internal Tech Emails" title="Internal Tech Emails" type="rss" version="RSS" htmlUrl="https://www.techemails.com" xmlUrl="https://www.techemails.com/feed" />
-            <outline text="Stephen Toub - MSFT, Author at .NET Blog" title="Stephen Toub - MSFT, Author at .NET Blog" type="rss" version="RSS" htmlUrl="https://devblogs.microsoft.com/dotnet/author/toub/" xmlUrl="https://devblogs.microsoft.com/dotnet/author/toub/feed/" />
+            <outline text="Stephen Toub" title="Stephen Toub - MSFT, Author at .NET Blog" type="rss" version="RSS" htmlUrl="https://devblogs.microsoft.com/dotnet/author/toub/" xmlUrl="https://devblogs.microsoft.com/dotnet/author/toub/feed/" />
             <outline text="Mitchell Hashimoto" title="Mitchell Hashimoto" type="rss" version="RSS" htmlUrl="https://mitchellh.com/writing" xmlUrl="https://mitchellh.com/feed.xml" />
             <outline text="Seldo.com" title="Seldo.com" type="rss" version="RSS" htmlUrl="https://seldo.com" xmlUrl="https://seldo.com/rss.xml" />
             <outline text="Daring Fireball" title="Daring Fireball" type="rss" version="RSS" htmlUrl="https://daringfireball.net/" xmlUrl="https://daringfireball.net/feeds/json" />
             <outline text="Irrational Exuberance" title="Irrational Exuberance" type="rss" version="RSS" htmlUrl="https://lethain.com/" xmlUrl="https://lethain.com/feeds.xml" />
         </outline>
         <outline text="InfoSec" title="InfoSec">
-            <outline text="Black Hills Information Security, Inc." title="Black Hills Information Security, Inc." type="rss" version="RSS" htmlUrl="https://www.blackhillsinfosec.com/" xmlUrl="https://www.blackhillsinfosec.com/feed/" />
             <outline text="Schneier on Security" title="Schneier on Security" type="rss" version="RSS" htmlUrl="https://www.schneier.com/" xmlUrl="https://www.schneier.com/feed/atom/" />
             <outline text="Troy Hunt" title="Troy Hunt" type="rss" version="RSS" htmlUrl="https://www.troyhunt.com/" xmlUrl="https://www.troyhunt.com/rss/" />
             <outline text="Krebs on Security" title="Krebs on Security" type="rss" version="RSS" htmlUrl="https://krebsonsecurity.com" xmlUrl="https://krebsonsecurity.com/feed/" />
@@ -45,16 +42,12 @@
             <outline text="✰Vicki Boykis✰" title="✰Vicki Boykis✰" type="rss" version="RSS" htmlUrl="https://veekaybee.github.io/" xmlUrl="https://vickiboykis.com/index.xml" />
             <outline text="r y x, r" title="r y x, r" type="rss" version="RSS" htmlUrl="https://ryxcommar.com" xmlUrl="https://ryxcommar.com/feed/" />
             <outline text="Latent.Space" title="Latent.Space" type="rss" version="RSS" htmlUrl="https://www.latent.space" xmlUrl="https://www.latent.space/feed" />
-            <outline text="Pinboard (sachaa)" title="Pinboard (sachaa)" type="rss" version="RSS" htmlUrl="https://pinboard.in/u:sachaa/public/" xmlUrl="http://feeds.pinboard.in/rss/u:sachaa/" />
             <outline text="Posts on Max Woolf's Blog" title="Posts on Max Woolf's Blog" type="rss" version="RSS" htmlUrl="https://minimaxir.com/post/" xmlUrl="https://minimaxir.com/post/index.xml" />
             <outline text="Import AI" title="Import AI" type="rss" version="RSS" htmlUrl="https://jack-clark.net" xmlUrl="https://jack-clark.net/feed/" />
             <outline text="Salmon Run" title="Salmon Run" type="rss" version="RSS" htmlUrl="http://sujitpal.blogspot.com/" xmlUrl="http://sujitpal.blogspot.com/feeds/posts/default" />
             <outline text="Google AI Blog" title="Google AI Blog" type="rss" version="RSS" htmlUrl="http://blog.research.google/" xmlUrl="https://feeds.feedburner.com/blogspot/gJZg" />
-            <outline text="[Untitled]" title="[Untitled]" type="rss" version="RSS" htmlUrl="http://ben-evans.com/" xmlUrl="https://www.ben-evans.com/rss" />
-            <outline text="lobste.rs: ai" title="lobste.rs: ai" type="rss" version="RSS" htmlUrl="https://lobste.rs/" xmlUrl="https://lobste.rs/t/ai.rss" />
             <outline text="Don't Worry About the Vase" title="Don't Worry About the Vase" type="rss" version="RSS" htmlUrl="https://thezvi.wordpress.com" xmlUrl="https://thezvi.wordpress.com/feed/" />
             <outline text="Ben Congdon" title="Ben Congdon" type="rss" version="RSS" htmlUrl="https://benjamincongdon.me/" xmlUrl="https://benjamincongdon.me/feed.xml" />
-            <outline text="AndrejKarpathy's YouTube Videos" title="AndrejKarpathy's YouTube Videos" type="rss" version="RSS" htmlUrl="https://www.youtube.com/user/AndrejKarpathy" xmlUrl="http://gdata.youtube.com/feeds/base/users/AndrejKarpathy/uploads" />
             <outline text="Nicholas Carlini" title="Nicholas Carlini" type="rss" version="RSS" htmlUrl="https://nicholas.carlini.com/" xmlUrl="https://nicholas.carlini.com/writing/feed.xml" />
             <outline text="Massively Parallel Procrastination" title="Massively Parallel Procrastination" type="rss" version="RSS" htmlUrl="https://blog.fsck.com/" xmlUrl="https://blog.fsck.com/feed/feed.xml" />
         </outline>
