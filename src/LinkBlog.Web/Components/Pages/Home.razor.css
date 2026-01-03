@@ -8,9 +8,10 @@
     display: flex;
     gap: 1.5rem;
     padding: 1rem;
-    background-color: rgba(245, 245, 245, 0.25);
-    border: 2px solid #ddd;
-    border-radius: 0.25rem;
+    background-color: lightskyblue;
+    border-style: solid;
+    border-radius: 1rem;
+    box-shadow: 10px 10px;
 }
 
 .page-link {
