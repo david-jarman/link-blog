@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using LinkBlog.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
@@ -10,10 +9,10 @@ namespace LinkBlog.Data;
 /// In-memory cached implementation of IPostStore that wraps PostStoreDb.
 /// Caches all posts in memory and provides fast read access with cache invalidation on writes.
 /// </summary>
-public sealed class CachedPostStore : IPostStore
+public sealed class CachedPostStore : IPostStore, IDisposable
 {
     private const string AllPostsCacheKey = "CachedPostStore_AllPosts";
-    private readonly IPostStore innerStore;
+    private readonly PostStoreDb innerStore;
     private readonly IMemoryCache memoryCache;
     private readonly ILogger<CachedPostStore> logger;
     private readonly SemaphoreSlim cacheLock = new SemaphoreSlim(1, 1);
@@ -53,7 +52,11 @@ public sealed class CachedPostStore : IPostStore
 
             this.memoryCache.Set(AllPostsCacheKey, posts, cacheOptions);
 
-            this.logger.LogInformation("Post cache refreshed with {PostCount} posts", posts.Count);
+            if (this.logger.IsEnabled(LogLevel.Information))
+            {
+                var postCount = posts.Count;
+                this.logger.LogInformation("Post cache refreshed with {PostCount} posts", postCount);
+            }
         }
         catch (Exception ex)
         {
@@ -96,7 +99,7 @@ public sealed class CachedPostStore : IPostStore
         var posts = await this.GetCachedPostsAsync(cancellationToken);
 
         var results = posts
-            .OrderByDescending(p => p.Date)
+            .OrderByDescending(p => p.CreatedDate)
             .Take(topN);
 
         foreach (var post in results)
@@ -118,7 +121,7 @@ public sealed class CachedPostStore : IPostStore
 
         var results = posts
             .Where(p => p.Tags.Any(t => t.Name.Equals(tag, StringComparison.OrdinalIgnoreCase)))
-            .OrderByDescending(p => p.Date);
+            .OrderByDescending(p => p.CreatedDate);
 
         foreach (var post in results)
         {
@@ -148,8 +151,8 @@ public sealed class CachedPostStore : IPostStore
         var posts = await this.GetCachedPostsAsync(cancellationToken);
 
         var results = posts
-            .Where(p => p.Date >= startDateTime && p.Date < endDateTime)
-            .OrderByDescending(p => p.Date);
+            .Where(p => p.CreatedDate >= startDateTime && p.CreatedDate < endDateTime)
+            .OrderByDescending(p => p.CreatedDate);
 
         foreach (var post in results)
         {
@@ -238,7 +241,7 @@ public sealed class CachedPostStore : IPostStore
             }
 
             // Tag matches (weight: 8)
-            if (post.Tags.Any(tag => tag.Name.ToLowerInvariant().Contains(term)))
+            if (post.Tags.Any(tag => tag.Name.Contains(term, StringComparison.OrdinalIgnoreCase)))
             {
                 score += 8;
             }
@@ -288,5 +291,10 @@ public sealed class CachedPostStore : IPostStore
         }
 
         return result;
+    }
+
+    public void Dispose()
+    {
+        this.cacheLock.Dispose();
     }
 }

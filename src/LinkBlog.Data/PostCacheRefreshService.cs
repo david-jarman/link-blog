@@ -25,7 +25,10 @@ public sealed class PostCacheRefreshService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        this.logger.LogInformation("Post cache refresh service starting. Refresh interval: {RefreshInterval}", this.refreshInterval);
+        if (this.logger.IsEnabled(LogLevel.Information))
+        {
+            this.logger.LogInformation("Post cache refresh service starting. Refresh interval: {RefreshInterval}", refreshInterval);
+        }
 
         // Initial cache warm-up on startup
         await this.RefreshCacheAsync(stoppingToken);
