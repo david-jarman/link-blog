@@ -10,6 +10,11 @@
     color: #333;
 }
 
+/* Dark mode blogroll heading */
+[data-theme="dark"] .blogroll-container h1 {
+    color: #f0f0f0;
+}
+
 .blogroll-intro {
     margin-bottom: 2rem;
     padding: 1rem;
@@ -19,11 +24,23 @@
     box-shadow: 10px 10px;
 }
 
+/* Dark mode blogroll intro */
+[data-theme="dark"] .blogroll-intro {
+    background-color: #6b5d28;
+    border-color: #e0e0e0;
+    box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
+}
+
 .blogroll-intro p {
     font-size: 1.1rem;
     line-height: 1.6;
     color: #555;
     margin-bottom: 0.75rem;
+}
+
+/* Dark mode blogroll intro text */
+[data-theme="dark"] .blogroll-intro p {
+    color: #e0e0e0;
 }
 
 .opml-download {
@@ -38,6 +55,11 @@
 
 .opml-download a:hover {
     text-decoration: underline;
+}
+
+/* Dark mode OPML link */
+[data-theme="dark"] .opml-download a {
+    color: #4a9eff;
 }
 
 .blogroll-list {
@@ -57,12 +79,25 @@
     box-shadow: 10px 10px;
 }
 
+/* Dark mode category */
+[data-theme="dark"] .category {
+    background-color: #4a3a5a;
+    border-color: #e0e0e0;
+    box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
+}
+
 .category h2 {
     font-size: 1.75rem;
     margin-bottom: 0.5rem;
     color: #333;
     border-bottom: 2px solid;
     padding-bottom: 0.5rem;
+}
+
+/* Dark mode category heading */
+[data-theme="dark"] .category h2 {
+    color: #f0f0f0;
+    border-bottom-color: #e0e0e0;
 }
 
 .category ul {
@@ -86,3 +121,13 @@
     color: #005fa3;
     text-decoration: underline;
 }
+
+/* Dark mode category links */
+[data-theme="dark"] .category li a {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .category li a:hover {
+    color: #4a9eff;
+}
+

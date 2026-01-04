@@ -8,10 +8,23 @@ html, body {
         background-image: url("background.svg");
         background-color: #fff;
     }
+
+    /* Dark mode styles */
+    [data-theme="dark"] body {
+        background-color: #1a1a1a;
+        background-image: url("background-dark.svg");
+        color: #f0f0f0;
+    }
 }
 
 a, .btn-link {
     color: #006bb7;
+}
+
+/* Dark mode links */
+[data-theme="dark"] a,
+[data-theme="dark"] .btn-link {
+    color: #4a9eff;
 }
 
 .btn-primary {
