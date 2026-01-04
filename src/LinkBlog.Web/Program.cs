@@ -43,6 +43,7 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 
 bool isHeroku = !string.IsNullOrEmpty(config["DYNO"]);
+bool enablePostCache = config.GetValue<bool>("PostStore:EnableInMemoryCache", false);
 builder.AddPostStore("postgresdb", options =>
 {
     if (isHeroku)
@@ -50,7 +51,7 @@ builder.AddPostStore("postgresdb", options =>
         var match = Regex.Match(config["DATABASE_URL"] ?? "", @"postgres://(.*):(.*)@(.*):(.*)/(.*)");
         options.ConnectionString = $"Server={match.Groups[3]};Port={match.Groups[4]};User Id={match.Groups[1]};Password={match.Groups[2]};Database={match.Groups[5]};sslmode=Prefer;Trust Server Certificate=true";
     }
-});
+}, enableInMemoryCache: enablePostCache);
 
 builder.AddAzureBlobServiceClient("blobstore");
 
