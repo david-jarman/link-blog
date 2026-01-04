@@ -13,14 +13,6 @@
 }
 
 /* Dark mode post */
-@media (prefers-color-scheme: dark) {
-    .post {
-        background-color: #b35503;
-        border-color: #e0e0e0;
-        box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
-    }
-}
-
 [data-theme="dark"] .post {
     background-color: #b35503;
     border-color: #e0e0e0;
@@ -70,14 +62,6 @@ button.edit-btn:hover svg {
 }
 
 /* Dark mode blockquote */
-@media (prefers-color-scheme: dark) {
-    .post ::deep blockquote {
-        background-color: rgba(0, 0, 0, 0.2);
-        border-left-color: #e0e0e0;
-        color: #ccc;
-    }
-}
-
 [data-theme="dark"] .post ::deep blockquote {
     background-color: rgba(0, 0, 0, 0.2);
     border-left-color: #e0e0e0;

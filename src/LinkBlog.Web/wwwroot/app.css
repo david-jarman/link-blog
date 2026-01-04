@@ -8,19 +8,8 @@ html, body {
         background-image: url("background.svg");
         background-color: #fff;
     }
-}
 
-/* Dark mode styles (system preference) */
-@media (min-width: 768px) and (prefers-color-scheme: dark) {
-    body {
-        background-color: #1a1a1a;
-        background-image: url("background-dark.svg");
-        color: #f0f0f0;
-    }
-}
-
-/* Dark mode styles (manual preference) */
-@media (min-width: 768px) {
+    /* Dark mode styles */
     [data-theme="dark"] body {
         background-color: #1a1a1a;
         background-image: url("background-dark.svg");
@@ -32,14 +21,7 @@ a, .btn-link {
     color: #006bb7;
 }
 
-/* Dark mode links (system preference) */
-@media (prefers-color-scheme: dark) {
-    a, .btn-link {
-        color: #4a9eff;
-    }
-}
-
-/* Dark mode links (manual preference) */
+/* Dark mode links */
 [data-theme="dark"] a,
 [data-theme="dark"] .btn-link {
     color: #4a9eff;

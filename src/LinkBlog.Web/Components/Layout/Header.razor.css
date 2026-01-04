@@ -32,17 +32,7 @@
     display: block;
 }
 
-/* Show sun in dark mode (system preference) */
-@media (prefers-color-scheme: dark) {
-    .sun-icon {
-        display: block;
-    }
-    .moon-icon {
-        display: none;
-    }
-}
-
-/* Show sun in dark mode (manual preference) */
+/* Show sun in dark mode */
 [data-theme="dark"] .sun-icon {
     display: block;
 }
@@ -51,7 +41,7 @@
     display: none;
 }
 
-/* Show moon in light mode (manual preference) */
+/* Show moon in light mode */
 [data-theme="light"] .sun-icon {
     display: none;
 }
@@ -66,16 +56,7 @@
     border-bottom: 5px solid black;
 }
 
-/* Dark mode header (system preference) */
-@media (prefers-color-scheme: dark) {
-    .header {
-        background-color: #b35503;
-        border-top-color: #e0e0e0;
-        border-bottom-color: #e0e0e0;
-    }
-}
-
-/* Dark mode header (manual preference) */
+/* Dark mode header */
 [data-theme="dark"] .header {
     background-color: #b35503;
     border-top-color: #e0e0e0;
@@ -114,13 +95,6 @@ h1 {
 }
 
 /* Dark mode search form */
-@media (prefers-color-scheme: dark) {
-    .search-form {
-        background-color: #2a2a2a;
-        border-color: #e0e0e0;
-    }
-}
-
 [data-theme="dark"] .search-form {
     background-color: #2a2a2a;
     border-color: #e0e0e0;
@@ -140,16 +114,6 @@ h1 {
 }
 
 /* Dark mode search input */
-@media (prefers-color-scheme: dark) {
-    .search-input {
-        color: #f0f0f0;
-    }
-
-    .search-input::placeholder {
-        color: #888;
-    }
-}
-
 [data-theme="dark"] .search-input {
     color: #f0f0f0;
 }
@@ -176,16 +140,6 @@ h1 {
 }
 
 /* Dark mode search button */
-@media (prefers-color-scheme: dark) {
-    .search-button {
-        color: #f0f0f0;
-    }
-
-    .search-button:hover {
-        color: #4a9eff;
-    }
-}
-
 [data-theme="dark"] .search-button {
     color: #f0f0f0;
 }
@@ -209,12 +163,6 @@ h1 {
 }
 
 /* Dark mode title link */
-@media (prefers-color-scheme: dark) {
-    .title-link {
-        color: #f0f0f0;
-    }
-}
-
 [data-theme="dark"] .title-link {
     color: #f0f0f0;
 }
@@ -245,12 +193,6 @@ h1 {
 }
 
 /* Dark mode social links */
-@media (prefers-color-scheme: dark) {
-    .social-link {
-        color: #f0f0f0;
-    }
-}
-
 [data-theme="dark"] .social-link {
     color: #f0f0f0;
 }
@@ -265,12 +207,6 @@ a:hover {
 }
 
 /* Dark mode link hover */
-@media (prefers-color-scheme: dark) {
-    a:hover {
-        color: #4a9eff;
-    }
-}
-
 [data-theme="dark"] a:hover {
     color: #4a9eff;
 }

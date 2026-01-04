@@ -11,12 +11,6 @@
 }
 
 /* Dark mode blogroll heading */
-@media (prefers-color-scheme: dark) {
-    .blogroll-container h1 {
-        color: #f0f0f0;
-    }
-}
-
 [data-theme="dark"] .blogroll-container h1 {
     color: #f0f0f0;
 }
@@ -31,14 +25,6 @@
 }
 
 /* Dark mode blogroll intro */
-@media (prefers-color-scheme: dark) {
-    .blogroll-intro {
-        background-color: #6b5d28;
-        border-color: #e0e0e0;
-        box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
-    }
-}
-
 [data-theme="dark"] .blogroll-intro {
     background-color: #6b5d28;
     border-color: #e0e0e0;
@@ -53,12 +39,6 @@
 }
 
 /* Dark mode blogroll intro text */
-@media (prefers-color-scheme: dark) {
-    .blogroll-intro p {
-        color: #e0e0e0;
-    }
-}
-
 [data-theme="dark"] .blogroll-intro p {
     color: #e0e0e0;
 }
@@ -78,12 +58,6 @@
 }
 
 /* Dark mode OPML link */
-@media (prefers-color-scheme: dark) {
-    .opml-download a {
-        color: #4a9eff;
-    }
-}
-
 [data-theme="dark"] .opml-download a {
     color: #4a9eff;
 }
@@ -106,14 +80,6 @@
 }
 
 /* Dark mode category */
-@media (prefers-color-scheme: dark) {
-    .category {
-        background-color: #4a3a5a;
-        border-color: #e0e0e0;
-        box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
-    }
-}
-
 [data-theme="dark"] .category {
     background-color: #4a3a5a;
     border-color: #e0e0e0;
@@ -129,13 +95,6 @@
 }
 
 /* Dark mode category heading */
-@media (prefers-color-scheme: dark) {
-    .category h2 {
-        color: #f0f0f0;
-        border-bottom-color: #e0e0e0;
-    }
-}
-
 [data-theme="dark"] .category h2 {
     color: #f0f0f0;
     border-bottom-color: #e0e0e0;
@@ -164,20 +123,8 @@
 }
 
 /* Dark mode category links */
-@media (prefers-color-scheme: dark) {
-    .category li a {
-        color: #f0f0f0;
-    }
-}
-
 [data-theme="dark"] .category li a {
     color: #f0f0f0;
-}
-
-@media (prefers-color-scheme: dark) {
-    .category li a:hover {
-        color: #4a9eff;
-    }
 }
 
 [data-theme="dark"] .category li a:hover {
