@@ -2,18 +2,26 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+/* Base background colors for all screen sizes */
+body {
+    background-color: #fff;
+}
+
+/* Dark mode base styles - applies to all screen sizes */
+[data-theme="dark"] body {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
 /* Add the textured background for desktop displays */
 @media (min-width: 768px) {
     body {
         background-image: url("background.svg");
-        background-color: #fff;
     }
 
-    /* Dark mode styles */
+    /* Dark mode textured background for desktop */
     [data-theme="dark"] body {
-        background-color: #1a1a1a;
         background-image: url("background-dark.svg");
-        color: #f0f0f0;
     }
 }
 
