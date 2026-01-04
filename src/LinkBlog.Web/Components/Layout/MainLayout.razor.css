@@ -8,12 +8,6 @@ main {
     flex: 1;
 }
 
-/* Dark mode for page */
-[data-theme="dark"] .page {
-    background-color: #1a1a1a;
-    color: #f0f0f0;
-}
-
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
