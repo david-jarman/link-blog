@@ -1,5 +1,5 @@
 /* Theme toggle button styling */
-.theme-toggle-label {
+.theme-toggle-button {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -8,10 +8,11 @@
     height: 2.5rem;
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.1);
+    border: none;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.theme-toggle-label:hover {
+.theme-toggle-button:hover {
     background-color: rgba(0, 0, 0, 0.2);
     transform: scale(1.1);
 }
@@ -22,33 +23,60 @@
     transition: opacity 0.3s ease;
 }
 
-/* Show sun icon by default (dark mode is on by default) */
-#theme-toggle:checked ~ * .header .theme-toggle-label .sun-icon {
+/* Default: light mode - show moon icon */
+.sun-icon {
+    display: none;
+}
+
+.moon-icon {
     display: block;
 }
 
-#theme-toggle:checked ~ * .header .theme-toggle-label .moon-icon {
+/* Show sun in dark mode (system preference) */
+@media (prefers-color-scheme: dark) {
+    .sun-icon {
+        display: block;
+    }
+    .moon-icon {
+        display: none;
+    }
+}
+
+/* Show sun in dark mode (manual preference) */
+[data-theme="dark"] .sun-icon {
+    display: block;
+}
+
+[data-theme="dark"] .moon-icon {
     display: none;
 }
 
-/* Show moon icon when checkbox is unchecked (light mode) */
-#theme-toggle:not(:checked) ~ * .header .theme-toggle-label .sun-icon {
+/* Show moon in light mode (manual preference) */
+[data-theme="light"] .sun-icon {
     display: none;
 }
 
-#theme-toggle:not(:checked) ~ * .header .theme-toggle-label .moon-icon {
+[data-theme="light"] .moon-icon {
     display: block;
 }
 
 .header {
     background-color: #d96704;
-
     border-top: 5px solid black;
     border-bottom: 5px solid black;
 }
 
-/* Dark mode styles for header */
-#theme-toggle:checked ~ * .header {
+/* Dark mode header (system preference) */
+@media (prefers-color-scheme: dark) {
+    .header {
+        background-color: #b35503;
+        border-top-color: #e0e0e0;
+        border-bottom-color: #e0e0e0;
+    }
+}
+
+/* Dark mode header (manual preference) */
+[data-theme="dark"] .header {
     background-color: #b35503;
     border-top-color: #e0e0e0;
     border-bottom-color: #e0e0e0;
@@ -86,7 +114,14 @@ h1 {
 }
 
 /* Dark mode search form */
-#theme-toggle:checked ~ * .header .search-form {
+@media (prefers-color-scheme: dark) {
+    .search-form {
+        background-color: #2a2a2a;
+        border-color: #e0e0e0;
+    }
+}
+
+[data-theme="dark"] .search-form {
     background-color: #2a2a2a;
     border-color: #e0e0e0;
 }
@@ -105,11 +140,21 @@ h1 {
 }
 
 /* Dark mode search input */
-#theme-toggle:checked ~ * .header .search-input {
+@media (prefers-color-scheme: dark) {
+    .search-input {
+        color: #f0f0f0;
+    }
+
+    .search-input::placeholder {
+        color: #888;
+    }
+}
+
+[data-theme="dark"] .search-input {
     color: #f0f0f0;
 }
 
-#theme-toggle:checked ~ * .header .search-input::placeholder {
+[data-theme="dark"] .search-input::placeholder {
     color: #888;
 }
 
@@ -131,11 +176,21 @@ h1 {
 }
 
 /* Dark mode search button */
-#theme-toggle:checked ~ * .header .search-button {
+@media (prefers-color-scheme: dark) {
+    .search-button {
+        color: #f0f0f0;
+    }
+
+    .search-button:hover {
+        color: #4a9eff;
+    }
+}
+
+[data-theme="dark"] .search-button {
     color: #f0f0f0;
 }
 
-#theme-toggle:checked ~ * .header .search-button:hover {
+[data-theme="dark"] .search-button:hover {
     color: #4a9eff;
 }
 
@@ -154,7 +209,13 @@ h1 {
 }
 
 /* Dark mode title link */
-#theme-toggle:checked ~ * .header .title-link {
+@media (prefers-color-scheme: dark) {
+    .title-link {
+        color: #f0f0f0;
+    }
+}
+
+[data-theme="dark"] .title-link {
     color: #f0f0f0;
 }
 
@@ -184,7 +245,13 @@ h1 {
 }
 
 /* Dark mode social links */
-#theme-toggle:checked ~ * .header .social-link {
+@media (prefers-color-scheme: dark) {
+    .social-link {
+        color: #f0f0f0;
+    }
+}
+
+[data-theme="dark"] .social-link {
     color: #f0f0f0;
 }
 
@@ -198,6 +265,12 @@ a:hover {
 }
 
 /* Dark mode link hover */
-#theme-toggle:checked ~ * .header a:hover {
+@media (prefers-color-scheme: dark) {
+    a:hover {
+        color: #4a9eff;
+    }
+}
+
+[data-theme="dark"] a:hover {
     color: #4a9eff;
 }

@@ -15,7 +15,13 @@
 }
 
 /* Dark mode search header */
-#theme-toggle:checked ~ * .search-header h2 {
+@media (prefers-color-scheme: dark) {
+    .search-header h2 {
+        color: #f0f0f0;
+    }
+}
+
+[data-theme="dark"] .search-header h2 {
     color: #f0f0f0;
 }
 
@@ -30,11 +36,23 @@
 }
 
 /* Dark mode search query */
-#theme-toggle:checked ~ * .search-query {
+@media (prefers-color-scheme: dark) {
+    .search-query {
+        color: #b0b0b0;
+    }
+}
+
+[data-theme="dark"] .search-query {
     color: #b0b0b0;
 }
 
-#theme-toggle:checked ~ * .search-query strong {
+@media (prefers-color-scheme: dark) {
+    .search-query strong {
+        color: #f0f0f0;
+    }
+}
+
+[data-theme="dark"] .search-query strong {
     color: #f0f0f0;
 }
 
@@ -46,7 +64,13 @@
 }
 
 /* Dark mode loading */
-#theme-toggle:checked ~ * .loading {
+@media (prefers-color-scheme: dark) {
+    .loading {
+        color: #b0b0b0;
+    }
+}
+
+[data-theme="dark"] .loading {
     color: #b0b0b0;
 }
 
@@ -63,7 +87,14 @@
 }
 
 /* Dark mode results count */
-#theme-toggle:checked ~ * .results-count {
+@media (prefers-color-scheme: dark) {
+    .results-count {
+        color: #b0b0b0;
+        border-bottom-color: #555;
+    }
+}
+
+[data-theme="dark"] .results-count {
     color: #b0b0b0;
     border-bottom-color: #555;
 }
@@ -88,10 +119,23 @@
 
 /* Dark mode no results */
 #theme-toggle:checked ~ * .no-results,
-#theme-toggle:checked ~ * .no-query {
+@media (prefers-color-scheme: dark) {
+    .no-query {
+        color: #b0b0b0;
+    }
+}
+
+[data-theme="dark"] .no-query {
     color: #b0b0b0;
 }
 
-#theme-toggle:checked ~ * .no-results p:first-child {
+@media (prefers-color-scheme: dark) {
+    .no-results p:first-child {
+        color: #f0f0f0;
+    }
+}
+
+[data-theme="dark"] .no-results p:first-child {
     color: #f0f0f0;
 }
+

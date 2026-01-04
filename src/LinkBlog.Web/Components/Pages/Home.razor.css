@@ -18,7 +18,15 @@
 }
 
 /* Dark mode page links */
-#theme-toggle:checked ~ * .page-links {
+@media (prefers-color-scheme: dark) {
+    .page-links {
+        background-color: #2b5278;
+        border-color: #e0e0e0;
+        box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
+    }
+}
+
+[data-theme="dark"] .page-links {
     background-color: #2b5278;
     border-color: #e0e0e0;
     box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
@@ -37,10 +45,23 @@
 }
 
 /* Dark mode page link */
-#theme-toggle:checked ~ * .page-link {
+@media (prefers-color-scheme: dark) {
+    .page-link {
+        color: #f0f0f0;
+    }
+}
+
+[data-theme="dark"] .page-link {
     color: #f0f0f0;
 }
 
-#theme-toggle:checked ~ * .page-link:hover {
+@media (prefers-color-scheme: dark) {
+    .page-link:hover {
+        color: #4a9eff;
+    }
+}
+
+[data-theme="dark"] .page-link:hover {
     color: #4a9eff;
 }
+
