@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict OoeDZ1EulnNkbImHrcJzVzRr3xgfCZPBpbX0YY2gvOhKisIC2pYSOxIPNN1bRdY
+\restrict 7INrWNi4lVcRfoSF8Pawo47GOaB5esWvNmi4TVUFJXCgOgfeKWIvTpTDfpuesDd
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.11 (Ubuntu 16.11-1.pgdg24.04+1)
@@ -66,6 +66,8 @@ dad0edef-7156-4ee7-9648-df8ea3f3a7d0	FYI: dotnet-outdated	2025-12-17 04:08:04.29
 4e99a749-c543-44ec-a6fd-83d4e08dda1c	Aspire 13.1	2025-12-18 06:27:35.021382+00	https://aspire.dev/whats-new/aspire-13-1/	Aspire 13.1 Release Notes	<div>Another minor release from the Aspire team. I've updated the blog to use it, which you can see here: <a href="https://github.com/david-jarman/link-blog/pull/8">https://github.com/david-jarman/link-blog/pull/8</a><br><br>Here's the main highlight for me:<br><br><strong>Automatic instance deletion</strong> - I'm always running multiple shell instances and often I'll forget I already had aspire running somewhere else. This new feature will let me run aspire again from anywhere and stop the other instance instead of getting an error!<br><br><figure data-trix-attachment="{&quot;contentType&quot;:&quot;image/png&quot;,&quot;filename&quot;:&quot;autodelete.png&quot;,&quot;filesize&quot;:48928,&quot;height&quot;:210,&quot;href&quot;:&quot;https://linkblog.blob.core.windows.net/images/2025/12/18/06/21/57/autodelete.png&quot;,&quot;url&quot;:&quot;https://linkblog.blob.core.windows.net/images/2025/12/18/06/21/57/autodelete.png&quot;,&quot;width&quot;:1184}" data-trix-content-type="image/png" data-trix-attributes="{&quot;caption&quot;:&quot;Screenshot&quot;,&quot;presentation&quot;:&quot;gallery&quot;}" class="attachment attachment--preview attachment--png"><a href="https://linkblog.blob.core.windows.net/images/2025/12/18/06/21/57/autodelete.png"><img src="https://linkblog.blob.core.windows.net/images/2025/12/18/06/21/57/autodelete.png" width="1184" height="210"><figcaption class="attachment__caption attachment__caption--edited">Screenshot</figcaption></a></figure></div>	aspire-13-1	2025-12-18 06:27:46.620846+00	f
 8f8eee48-f47b-4a1a-a76d-424473fe397a	Yoto Player Image Converter	2025-12-26 17:59:55.770332+00	https://hacks.davidjarman.net/yoto-player-image-creator	Yoto Player Custom Playlist Image Generator	<div>Santa brought my daughter a <a href="https://us.yotoplay.com/">Yoto player</a> so she can choose the music she listens to. The music is linked to cards that you insert to the player. The cards don't hold any actual data are instead just an NFC chip that tells the player what music and artwork to download and play. It's a clever little device and I really like it so far. Another great feature is that you can create custom cards from MP3s and your own pixel artwork. <br><br>My daughter is obsessed with Marty Robbins "Gunfighter Ballads and Trail Songs". It's a really great album that we listen to on vinyl all the time. So my first task on Christmas was to load a custom card with the album and make some custom artwork. I won't go into detail on how I did the MP3s, but for the background image, I decided to vibe code a tool to take an image and downscale it to a 16x16 pixel png file. I used Claude Code to create the tool and had to go through quite a few iterations to work the bugs out of the crop selection tool.<br><br>Anyways, here is the final result showing good ol' Marty going for his "Big Iron" on the Yoto!<br><figure data-trix-attachment="{&quot;contentType&quot;:&quot;image/jpeg&quot;,&quot;filename&quot;:&quot;C574CE5A-C745-4BDB-970E-68E8C483E764_1_102_o.jpeg&quot;,&quot;filesize&quot;:958287,&quot;height&quot;:2048,&quot;href&quot;:&quot;https://linkblog.blob.core.windows.net/images/2025/12/26/17/52/33/C574CE5A-C745-4BDB-970E-68E8C483E764_1_102_o.png&quot;,&quot;url&quot;:&quot;https://linkblog.blob.core.windows.net/images/2025/12/26/17/52/33/C574CE5A-C745-4BDB-970E-68E8C483E764_1_102_o.png&quot;,&quot;width&quot;:1536}" data-trix-content-type="image/jpeg" data-trix-attributes="{&quot;caption&quot;:&quot;Yoto Player Background&quot;,&quot;presentation&quot;:&quot;gallery&quot;}" class="attachment attachment--preview attachment--jpeg"><a href="https://linkblog.blob.core.windows.net/images/2025/12/26/17/52/33/C574CE5A-C745-4BDB-970E-68E8C483E764_1_102_o.png"><img src="https://linkblog.blob.core.windows.net/images/2025/12/26/17/52/33/C574CE5A-C745-4BDB-970E-68E8C483E764_1_102_o.png" width="1536" height="2048"><figcaption class="attachment__caption attachment__caption--edited">Yoto Player Background</figcaption></a></figure></div>	yoto-player-image-gen	2025-12-26 17:59:55.770332+00	f
 8c2b6d9a-a06c-4c68-8d90-0d93d2a05c63	Splitting MKV files by chapter using ffmpeg	2025-12-31 04:25:47.782989+00	https://gist.github.com/david-jarman/dcf1d9f925be63700999085a4d10b6ca	PowerShell Script	<div>Created a small PowerShell scripts to split up MKV files by chapters. I wanted to avoid downloading yet another tool (handbrake or MKVToolNix) and I like the idea that I can use ffmpeg to do everything. For context, I have a DVD of Weird Al's ultimate music video collection that I got in middle school that I want available in Plex. I used MakeMKV to rip the DVD but all the music videos are in a single file, separated by chapters. <br><br><figure data-trix-attachment="{&quot;contentType&quot;:&quot;image/png&quot;,&quot;filename&quot;:&quot;image.png&quot;,&quot;filesize&quot;:215711,&quot;height&quot;:357,&quot;href&quot;:&quot;https://linkblog.blob.core.windows.net/images/2025/12/31/04/26/13/image.png&quot;,&quot;url&quot;:&quot;https://linkblog.blob.core.windows.net/images/2025/12/31/04/26/13/image.png&quot;,&quot;width&quot;:250}" data-trix-content-type="image/png" data-trix-attributes="{&quot;caption&quot;:&quot;Weird Al&quot;,&quot;presentation&quot;:&quot;gallery&quot;}" class="attachment attachment--preview attachment--png"><a href="https://linkblog.blob.core.windows.net/images/2025/12/31/04/26/13/image.png"><img src="https://linkblog.blob.core.windows.net/images/2025/12/31/04/26/13/image.png" width="250" height="357"><figcaption class="attachment__caption attachment__caption--edited">Weird Al</figcaption></a></figure></div>	split-mkv-by-chapter-ffmpeg	2025-12-31 04:26:21.628617+00	f
+d9291083-b95d-470a-8254-462f44f5470e	GIFs!	2026-01-05 06:28:54.643364+00			<div>I added GIF support today. And now that I have to go back to work tomorrow, I’ll be using this one multiple times a day again<br><br><figure data-trix-attachment="{&quot;contentType&quot;:&quot;image/gif&quot;,&quot;filename&quot;:&quot;IMG_7524.gif&quot;,&quot;filesize&quot;:938572,&quot;height&quot;:300,&quot;href&quot;:&quot;https://linkblog.blob.core.windows.net/images/2026/01/05/06/28/31/IMG_7524.gif&quot;,&quot;url&quot;:&quot;https://linkblog.blob.core.windows.net/images/2026/01/05/06/28/31/IMG_7524.gif&quot;,&quot;width&quot;:440}" data-trix-content-type="image/gif" data-trix-attributes="{&quot;caption&quot;:&quot;Elmo Fire&quot;,&quot;presentation&quot;:&quot;gallery&quot;}" class="attachment attachment--preview attachment--gif"><a href="https://linkblog.blob.core.windows.net/images/2026/01/05/06/28/31/IMG_7524.gif"><img src="https://linkblog.blob.core.windows.net/images/2026/01/05/06/28/31/IMG_7524.gif" width="440" height="300"><figcaption class="attachment__caption attachment__caption--edited">Elmo Fire</figcaption></a></figure></div>	gifs	2026-01-05 06:28:54.643364+00	f
+77901531-ef51-47df-a571-e3b76e3064d3	LLMs - unexpected side effects	2026-01-04 16:23:49.42734+00	https://simonwillison.net/2026/Jan/4/coding-again/	Simon Willison on helping people write code again	<div>+1 to what Simon is saying. I’ve been able to do a lot more on side projects now especially as a busy parent. I will kick off a prompt on Claude code (on my phone sometimes with Claude code web) and then go back to playing with my daughter or cooking or dishes. I can prototype ideas I have and look at the results whenever I have time. It’s really made me fall in love with programming again! I just wish I could find a better workflow for it at work. I’m struggling to get out of the “small toy projects” phase and into using it on larger projects. Probably less of a me problem and more of a tech / organization problem.&nbsp;</div>	llm-side-effects	2026-01-04 16:25:27.182259+00	f
 \.
 
 
@@ -128,6 +130,7 @@ dfe7eb18-0047-4db8-be10-462bbe54ca97	testing-in-prod
 55592631-1d13-47da-9729-9de8a5314795	theory
 c3a58dea-c752-4167-9598-f8ae5a0f719b	toys
 bc0853a7-adbd-4485-b8df-af048f1df8df	ffmpeg
+b4e99cba-fb1a-4f59-909d-18188c9de090	gifs
 \.
 
 
@@ -243,6 +246,24 @@ dad0edef-7156-4ee7-9648-df8ea3f3a7d0	b8244f53-df27-42d4-8728-fc1411b55c54
 8c2b6d9a-a06c-4c68-8d90-0d93d2a05c63	62cd5d58-679d-4f0b-b8f8-d4835c1e9f3f
 8c2b6d9a-a06c-4c68-8d90-0d93d2a05c63	63f97221-23f4-4592-a534-23573fec678d
 8c2b6d9a-a06c-4c68-8d90-0d93d2a05c63	bc0853a7-adbd-4485-b8df-af048f1df8df
+77901531-ef51-47df-a571-e3b76e3064d3	1bf414eb-395b-4c63-ba62-34e7c95e2018
+77901531-ef51-47df-a571-e3b76e3064d3	a0fc6cfc-7636-4eb7-b816-5798e2682f19
+77901531-ef51-47df-a571-e3b76e3064d3	aa217264-5d70-4208-b4b2-adbeb9a8c890
+d9291083-b95d-470a-8254-462f44f5470e	b4e99cba-fb1a-4f59-909d-18188c9de090
+\.
+
+
+--
+-- Data for Name: __EFMigrationsHistory; Type: TABLE DATA; Schema: public; Owner: u34fcet9a011tp
+--
+
+COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin;
+20250215004115_InitialCreate	9.0.2
+20250220042255_AddShortTitle	9.0.2
+20250224000450_AddPostIndexesAndTagNameIndex	9.0.2
+20250224051317_AddUpdatedDate	9.0.2
+20250425033914_AddIsArchivedColumn	9.0.4
+20251114050210_AddFullTextSearchVector	9.0.9
 \.
 
 
@@ -250,5 +271,5 @@ dad0edef-7156-4ee7-9648-df8ea3f3a7d0	b8244f53-df27-42d4-8728-fc1411b55c54
 -- PostgreSQL database dump complete
 --
 
-\unrestrict OoeDZ1EulnNkbImHrcJzVzRr3xgfCZPBpbX0YY2gvOhKisIC2pYSOxIPNN1bRdY
+\unrestrict 7INrWNi4lVcRfoSF8Pawo47GOaB5esWvNmi4TVUFJXCgOgfeKWIvTpTDfpuesDd
 
