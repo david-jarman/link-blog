@@ -247,20 +247,6 @@ dad0edef-7156-4ee7-9648-df8ea3f3a7d0	b8244f53-df27-42d4-8728-fc1411b55c54
 
 
 --
--- Data for Name: __EFMigrationsHistory; Type: TABLE DATA; Schema: public; Owner: u34fcet9a011tp
---
-
-COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin;
-20250215004115_InitialCreate	9.0.2
-20250220042255_AddShortTitle	9.0.2
-20250224000450_AddPostIndexesAndTagNameIndex	9.0.2
-20250224051317_AddUpdatedDate	9.0.2
-20250425033914_AddIsArchivedColumn	9.0.4
-20251114050210_AddFullTextSearchVector	9.0.9
-\.
-
-
---
 -- PostgreSQL database dump complete
 --
 
