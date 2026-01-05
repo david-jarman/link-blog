@@ -27,3 +27,6 @@ jobs:
 
     - name: Test
       run: dotnet test LinkBlog.slnx --no-build --verbosity normal
+
+    - name: Validate formatting
+      run: dotnet format --verify-no-changes
