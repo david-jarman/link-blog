@@ -2,5 +2,14 @@
 
 public interface IImageConverter
 {
-    Task<Stream> ConvertToPngAsync(Stream originalImage, long originalImageSize, CancellationToken ct);
+    Task<ProcessedImage> ProcessImageAsync(Stream originalImage, long originalImageSize, CancellationToken ct);
+}
+
+public record ProcessedImage(Stream Stream, string ContentType, string FileExtension) : IDisposable
+{
+    public void Dispose()
+    {
+        Stream?.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }

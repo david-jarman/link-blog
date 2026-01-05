@@ -39,9 +39,13 @@ public class UploadImageController : Controller
 
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
 
+        // Load and process the image from the stream
+        using Stream originalImage = file.OpenReadStream();
+        using var processedImage = await imageConverter.ProcessImageAsync(originalImage, file.Length, ct);
+
         // Blob path should be prefixed with the current datetime to ensure uniqueness.
-        // Example: "2025/08/01/12/00/00/imagename.png"
-        string blobPath = $"{DateTimeOffset.UtcNow:yyyy/MM/dd/HH/mm/ss}/{fileNameWithoutExtension}.png";
+        // Example: "2025/08/01/12/00/00/imagename.png" or "2025/08/01/12/00/00/imagename.gif"
+        string blobPath = $"{DateTimeOffset.UtcNow:yyyy/MM/dd/HH/mm/ss}/{fileNameWithoutExtension}{processedImage.FileExtension}";
 
         var blobClient = containerClient.GetBlobClient(blobPath);
 
@@ -55,18 +59,15 @@ public class UploadImageController : Controller
             return Conflict();
         }
 
-        // Load the image from the stream.
-        using Stream originalImage = file.OpenReadStream();
-        using Stream processedImage = await imageConverter.ConvertToPngAsync(originalImage, file.Length, ct);
         var blobUploadOptions = new BlobUploadOptions
         {
             HttpHeaders = new BlobHttpHeaders
             {
-                ContentType = "image/png"
+                ContentType = processedImage.ContentType
             }
         };
 
-        var response = await blobClient.UploadAsync(processedImage, blobUploadOptions, ct);
+        var response = await blobClient.UploadAsync(processedImage.Stream, blobUploadOptions, ct);
 
         // Check if the response was successful. If it was, return the permanent url to the blob.
         if (response.GetRawResponse().Status == StatusCodes.Status201Created)
