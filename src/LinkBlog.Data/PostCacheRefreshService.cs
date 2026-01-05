@@ -1,12 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace LinkBlog.Data;
 
 /// <summary>
 /// Background service that periodically refreshes the post cache.
-/// Runs every 5 minutes by default to keep the cache fresh.
 /// </summary>
 public sealed class PostCacheRefreshService : BackgroundService
 {
@@ -16,11 +16,13 @@ public sealed class PostCacheRefreshService : BackgroundService
 
     public PostCacheRefreshService(
         IServiceProvider serviceProvider,
-        ILogger<PostCacheRefreshService> logger)
+        ILogger<PostCacheRefreshService> logger,
+        IOptions<PostStoreOptions> options)
     {
         this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.refreshInterval = TimeSpan.FromMinutes(5); // Configurable refresh interval
+        ArgumentNullException.ThrowIfNull(options);
+        this.refreshInterval = options.Value.CacheRefreshInterval;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
