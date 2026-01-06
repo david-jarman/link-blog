@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="LinkBlog.Web.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LinkBlog.Abstractions\LinkBlog.Abstractions.csproj" />
   </ItemGroup>
 

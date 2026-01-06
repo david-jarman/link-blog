@@ -101,7 +101,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         this.logger.LogInformation("Orphaned image cleanup service stopped");
     }
 
-    private async Task CleanupOrphanedImagesAsync(CancellationToken cancellationToken)
+    internal async Task CleanupOrphanedImagesAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -170,7 +170,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         }
     }
 
-    private async Task<HashSet<string>> GetAllBlobUrlsAsync(CancellationToken cancellationToken)
+    internal async Task<HashSet<string>> GetAllBlobUrlsAsync(CancellationToken cancellationToken)
     {
         var blobUrls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var containerClient = this.blobServiceClient.GetBlobContainerClient("images");
@@ -191,7 +191,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         return blobUrls;
     }
 
-    private async Task<HashSet<string>> GetReferencedImageUrlsAsync(CancellationToken cancellationToken)
+    internal async Task<HashSet<string>> GetReferencedImageUrlsAsync(CancellationToken cancellationToken)
     {
         var referencedUrls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 

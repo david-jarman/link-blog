@@ -246,10 +246,8 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.mockDelayService.Object,
             this.options);
 
-        // Act - Use reflection to call the private method
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("CleanupOrphanedImagesAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        await (Task)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
 
         // Assert - No blobs should be deleted
         mockBlobClientForReferenced.Verify(
@@ -290,9 +288,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("CleanupOrphanedImagesAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        await (Task)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
 
         // Assert
         mockOrphanedBlobClient.Verify(
@@ -344,9 +340,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("CleanupOrphanedImagesAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        await (Task)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
 
         // Assert
         mockOrphanedBlobClient1.Verify(
@@ -401,9 +395,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("CleanupOrphanedImagesAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        await (Task)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
 
         // Assert - Second blob should still be deleted even if first fails
         mockOrphanedBlobClient2.Verify(
@@ -436,9 +428,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("GetAllBlobUrlsAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var result = await (Task<HashSet<string>>)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        var result = await service.GetAllBlobUrlsAsync(CancellationToken.None);
 
         // Assert
         Assert.Empty(result);
@@ -464,9 +454,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("GetReferencedImageUrlsAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var result = await (Task<HashSet<string>>)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        var result = await service.GetReferencedImageUrlsAsync(CancellationToken.None);
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -492,9 +480,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("GetReferencedImageUrlsAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var result = await (Task<HashSet<string>>)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        var result = await service.GetReferencedImageUrlsAsync(CancellationToken.None);
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -521,9 +507,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("GetReferencedImageUrlsAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var result = await (Task<HashSet<string>>)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        var result = await service.GetReferencedImageUrlsAsync(CancellationToken.None);
 
         // Assert
         Assert.Single(result);
@@ -555,9 +539,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("GetReferencedImageUrlsAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var result = await (Task<HashSet<string>>)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        var result = await service.GetReferencedImageUrlsAsync(CancellationToken.None);
 
         // Assert
         Assert.Empty(result);
@@ -582,9 +564,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("GetReferencedImageUrlsAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var result = await (Task<HashSet<string>>)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        var result = await service.GetReferencedImageUrlsAsync(CancellationToken.None);
 
         // Assert
         Assert.Equal(3, result.Count);
@@ -608,9 +588,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             this.options);
 
         // Act
-        var method = typeof(OrphanedImageCleanupService)
-            .GetMethod("GetReferencedImageUrlsAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var result = await (Task<HashSet<string>>)method!.Invoke(service, new object[] { CancellationToken.None })!;
+        var result = await service.GetReferencedImageUrlsAsync(CancellationToken.None);
 
         // Assert
         Assert.Single(result);
