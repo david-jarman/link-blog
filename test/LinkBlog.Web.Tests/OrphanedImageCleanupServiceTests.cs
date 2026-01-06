@@ -44,6 +44,11 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
         this.mockLogger = new Mock<ILogger<OrphanedImageCleanupService>>();
         this.mockDelayService = new Mock<IDelayService>();
 
+        // Setup logger to be enabled for all log levels
+        this.mockLogger
+            .Setup(x => x.IsEnabled(It.IsAny<LogLevel>()))
+            .Returns(true);
+
         // Setup delay service to return immediately (no actual delays in tests)
         this.mockDelayService
             .Setup(x => x.DelayAsync(It.IsAny<TimeSpan>(), It.IsAny<CancellationToken>()))
@@ -616,6 +621,237 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
                 It.IsAny<BlobRequestConditions>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
+    }
+
+    // ===== CleanupOrphanedImagesAsync Dry Run Tests =====
+
+    [Fact]
+    public async Task CleanupOrphanedImagesAsync_WithDryRunEnabled_DoesNotDeleteBlobs()
+    {
+        // Arrange
+        var dryRunOptions = Options.Create(new ImageCleanupOptions
+        {
+            CleanupInterval = TimeSpan.FromSeconds(1),
+            EnableCleanup = true,
+            MinimumImageAge = TimeSpan.FromHours(1),
+            DryRun = true
+        });
+
+        var orphanedUrl = "https://test.blob.core.windows.net/images/orphaned.jpg";
+
+        var mockOrphanedBlobClient = new Mock<BlobClient>();
+        mockOrphanedBlobClient.SetupGet(x => x.Uri).Returns(new Uri(orphanedUrl));
+        mockOrphanedBlobClient
+            .Setup(x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        SetupBlobStorageWithImagesAndMocks((orphanedUrl, mockOrphanedBlobClient.Object));
+
+        var service = new OrphanedImageCleanupService(
+            this.serviceProvider,
+            this.mockBlobServiceClient.Object,
+            this.mockLogger.Object,
+            this.mockDelayService.Object,
+            dryRunOptions);
+
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
+
+        // Assert - Blob should NOT be deleted in dry run mode
+        mockOrphanedBlobClient.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never,
+            "Blobs should not be deleted in dry run mode");
+    }
+
+    [Fact]
+    public async Task CleanupOrphanedImagesAsync_WithDryRunEnabled_LogsWhatWouldBeDeleted()
+    {
+        // Arrange
+        var dryRunOptions = Options.Create(new ImageCleanupOptions
+        {
+            CleanupInterval = TimeSpan.FromSeconds(1),
+            EnableCleanup = true,
+            MinimumImageAge = TimeSpan.FromHours(1),
+            DryRun = true
+        });
+
+        var orphanedUrl = "https://test.blob.core.windows.net/images/orphaned.jpg";
+
+        var mockOrphanedBlobClient = new Mock<BlobClient>();
+        mockOrphanedBlobClient.SetupGet(x => x.Uri).Returns(new Uri(orphanedUrl));
+
+        SetupBlobStorageWithImagesAndMocks((orphanedUrl, mockOrphanedBlobClient.Object));
+
+        var service = new OrphanedImageCleanupService(
+            this.serviceProvider,
+            this.mockBlobServiceClient.Object,
+            this.mockLogger.Object,
+            this.mockDelayService.Object,
+            dryRunOptions);
+
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
+
+        // Assert - Verify dry run log messages were generated
+#pragma warning disable CA1873 // Evaluation of this argument may be expensive in production, but we're in test code
+        this.mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("[DRY RUN] Would delete orphaned image: orphaned.jpg")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once,
+            "Should log what would be deleted in dry run mode");
+
+        this.mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("[DRY RUN] Orphaned image cleanup completed. Would have deleted 1 of 1 orphaned images")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once,
+            "Should log dry run completion summary");
+#pragma warning restore CA1873
+    }
+
+    [Fact]
+    public async Task CleanupOrphanedImagesAsync_WithDryRunDisabled_DeletesBlobsNormally()
+    {
+        // Arrange
+        var normalOptions = Options.Create(new ImageCleanupOptions
+        {
+            CleanupInterval = TimeSpan.FromSeconds(1),
+            EnableCleanup = true,
+            MinimumImageAge = TimeSpan.FromHours(1),
+            DryRun = false
+        });
+
+        var orphanedUrl = "https://test.blob.core.windows.net/images/orphaned.jpg";
+
+        var mockOrphanedBlobClient = new Mock<BlobClient>();
+        mockOrphanedBlobClient.SetupGet(x => x.Uri).Returns(new Uri(orphanedUrl));
+        mockOrphanedBlobClient
+            .Setup(x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        SetupBlobStorageWithImagesAndMocks((orphanedUrl, mockOrphanedBlobClient.Object));
+
+        var service = new OrphanedImageCleanupService(
+            this.serviceProvider,
+            this.mockBlobServiceClient.Object,
+            this.mockLogger.Object,
+            this.mockDelayService.Object,
+            normalOptions);
+
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
+
+        // Assert - Blob SHOULD be deleted when dry run is disabled
+        mockOrphanedBlobClient.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Once,
+            "Blobs should be deleted when dry run is disabled");
+    }
+
+    [Fact]
+    public async Task CleanupOrphanedImagesAsync_WithDryRunEnabledAndMultipleOrphanedImages_LogsAllThatWouldBeDeleted()
+    {
+        // Arrange
+        var dryRunOptions = Options.Create(new ImageCleanupOptions
+        {
+            CleanupInterval = TimeSpan.FromSeconds(1),
+            EnableCleanup = true,
+            MinimumImageAge = TimeSpan.FromHours(1),
+            DryRun = true
+        });
+
+        var orphaned1 = "https://test.blob.core.windows.net/images/orphaned1.jpg";
+        var orphaned2 = "https://test.blob.core.windows.net/images/orphaned2.jpg";
+        var orphaned3 = "https://test.blob.core.windows.net/images/orphaned3.jpg";
+
+        var mockOrphanedBlobClient1 = new Mock<BlobClient>();
+        mockOrphanedBlobClient1.SetupGet(x => x.Uri).Returns(new Uri(orphaned1));
+
+        var mockOrphanedBlobClient2 = new Mock<BlobClient>();
+        mockOrphanedBlobClient2.SetupGet(x => x.Uri).Returns(new Uri(orphaned2));
+
+        var mockOrphanedBlobClient3 = new Mock<BlobClient>();
+        mockOrphanedBlobClient3.SetupGet(x => x.Uri).Returns(new Uri(orphaned3));
+
+        SetupBlobStorageWithImagesAndMocks(
+            (orphaned1, mockOrphanedBlobClient1.Object),
+            (orphaned2, mockOrphanedBlobClient2.Object),
+            (orphaned3, mockOrphanedBlobClient3.Object));
+
+        var service = new OrphanedImageCleanupService(
+            this.serviceProvider,
+            this.mockBlobServiceClient.Object,
+            this.mockLogger.Object,
+            this.mockDelayService.Object,
+            dryRunOptions);
+
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
+
+        // Assert - Verify all images are logged but none are deleted
+#pragma warning disable CA1873 // Evaluation of this argument may be expensive in production, but we're in test code
+        this.mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("[DRY RUN] Would delete orphaned image:")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Exactly(3),
+            "Should log all 3 images that would be deleted");
+
+        this.mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("[DRY RUN] Orphaned image cleanup completed. Would have deleted 3 of 3 orphaned images")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once,
+            "Should log dry run completion with correct count");
+#pragma warning restore CA1873
+
+        // Verify no actual deletions occurred
+        mockOrphanedBlobClient1.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
+
+        mockOrphanedBlobClient2.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
+
+        mockOrphanedBlobClient3.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 
     // ===== GetAllBlobUrlsAsync Tests =====

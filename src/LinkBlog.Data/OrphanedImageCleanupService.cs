@@ -21,6 +21,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
     private readonly TimeSpan cleanupInterval;
     private readonly TimeSpan minimumImageAge;
     private readonly bool enableCleanup;
+    private readonly bool dryRun;
 
     [GeneratedRegex(@"https?://[^/]+/images/[^\s""'<>]+", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex ImageUrlRegex();
@@ -49,6 +50,12 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
     [LoggerMessage(Level = LogLevel.Information, Message = "Orphaned image cleanup completed. Deleted {deletedCount} of {orphanedCount} orphaned images")]
     private partial void LogCleanupCompleted(int deletedCount, int orphanedCount);
 
+    [LoggerMessage(Level = LogLevel.Information, Message = "[DRY RUN] Would delete orphaned image: {blobName}")]
+    private partial void LogDryRunWouldDeleteImage(string blobName);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "[DRY RUN] Orphaned image cleanup completed. Would have deleted {deletedCount} of {orphanedCount} orphaned images")]
+    private partial void LogDryRunCleanupCompleted(int deletedCount, int orphanedCount);
+
     public OrphanedImageCleanupService(
         IServiceProvider serviceProvider,
         BlobServiceClient blobServiceClient,
@@ -64,6 +71,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         this.cleanupInterval = options.Value.CleanupInterval;
         this.minimumImageAge = options.Value.MinimumImageAge;
         this.enableCleanup = options.Value.EnableCleanup;
+        this.dryRun = options.Value.DryRun;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -77,6 +85,10 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         if (this.logger.IsEnabled(LogLevel.Information))
         {
             this.logger.LogInformation("Orphaned image cleanup service starting. Cleanup interval: {CleanupInterval}", this.cleanupInterval);
+            if (this.dryRun)
+            {
+                this.logger.LogInformation("DRY RUN MODE ENABLED - No images will actually be deleted");
+            }
         }
 
         // Wait before first cleanup to allow the application to fully start
@@ -149,7 +161,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
                 return;
             }
 
-            // Delete orphaned blobs
+            // Delete orphaned blobs (or log what would be deleted in dry run mode)
             var containerClient = this.blobServiceClient.GetBlobContainerClient("images");
             int deletedCount = 0;
 
@@ -169,13 +181,23 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
                         continue;
                     }
 
-                    var blobClient = containerClient.GetBlobClient(blobName);
-                    var deleted = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
-
-                    if (deleted.Value)
+                    if (this.dryRun)
                     {
+                        // Dry run mode - just log what would be deleted
                         deletedCount++;
-                        this.LogDeletedImage(blobName);
+                        this.LogDryRunWouldDeleteImage(blobName);
+                    }
+                    else
+                    {
+                        // Actually delete the blob
+                        var blobClient = containerClient.GetBlobClient(blobName);
+                        var deleted = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
+
+                        if (deleted.Value)
+                        {
+                            deletedCount++;
+                            this.LogDeletedImage(blobName);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -184,7 +206,14 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
                 }
             }
 
-            this.LogCleanupCompleted(deletedCount, oldOrphanedUrls.Count);
+            if (this.dryRun)
+            {
+                this.LogDryRunCleanupCompleted(deletedCount, oldOrphanedUrls.Count);
+            }
+            else
+            {
+                this.LogCleanupCompleted(deletedCount, oldOrphanedUrls.Count);
+            }
         }
         catch (Exception ex)
         {

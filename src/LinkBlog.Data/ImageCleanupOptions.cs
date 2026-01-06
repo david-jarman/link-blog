@@ -22,4 +22,12 @@ public sealed class ImageCleanupOptions
     /// Default is 8 hours.
     /// </summary>
     public TimeSpan MinimumImageAge { get; set; } = TimeSpan.FromHours(8);
+
+    /// <summary>
+    /// Gets or sets whether to run in dry run mode.
+    /// When enabled, the service will log what would be deleted without actually deleting anything.
+    /// This is useful for testing the cleanup logic in production.
+    /// Default is false.
+    /// </summary>
+    public bool DryRun { get; set; }
 }
