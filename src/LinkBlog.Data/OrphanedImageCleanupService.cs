@@ -23,6 +23,27 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
     [GeneratedRegex(@"https?://[^/]+/images/[^\s""'<>]+", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
     private static partial Regex ImageUrlRegex();
 
+    [LoggerMessage(Level = LogLevel.Information, Message = "Found {blobCount} images in blob storage")]
+    private partial void LogBlobCount(int blobCount);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Found {referencedCount} images referenced in posts")]
+    private partial void LogReferencedCount(int referencedCount);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Found {orphanedCount} orphaned images to delete")]
+    private partial void LogOrphanedCount(int orphanedCount);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Could not extract blob name from URL: {url}")]
+    private partial void LogCouldNotExtractBlobName(string url);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Deleted orphaned image: {blobName}")]
+    private partial void LogDeletedImage(string blobName);
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "Failed to delete orphaned image: {url}")]
+    private partial void LogFailedToDeleteImage(Exception ex, string url);
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Orphaned image cleanup completed. Deleted {deletedCount} of {orphanedCount} orphaned images")]
+    private partial void LogCleanupCompleted(int deletedCount, int orphanedCount);
+
     public OrphanedImageCleanupService(
         IServiceProvider serviceProvider,
         BlobServiceClient blobServiceClient,
@@ -85,11 +106,11 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
 
             // Get all blob URLs from Azure Storage
             var blobUrls = await this.GetAllBlobUrlsAsync(cancellationToken);
-            this.logger.LogInformation("Found {BlobCount} images in blob storage", blobUrls.Count);
+            this.LogBlobCount(blobUrls.Count);
 
             // Get all image URLs referenced in posts
             var referencedUrls = await this.GetReferencedImageUrlsAsync(cancellationToken);
-            this.logger.LogInformation("Found {ReferencedCount} images referenced in posts", referencedUrls.Count);
+            this.LogReferencedCount(referencedUrls.Count);
 
             // Find orphaned images (blobs not referenced by any post)
             var orphanedUrls = blobUrls.Except(referencedUrls, StringComparer.OrdinalIgnoreCase).ToList();
@@ -100,7 +121,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
                 return;
             }
 
-            this.logger.LogInformation("Found {OrphanedCount} orphaned images to delete", orphanedUrls.Count);
+            this.LogOrphanedCount(orphanedUrls.Count);
 
             // Delete orphaned blobs
             var containerClient = this.blobServiceClient.GetBlobContainerClient("images");
@@ -118,7 +139,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
 
                     if (string.IsNullOrEmpty(blobName))
                     {
-                        this.logger.LogWarning("Could not extract blob name from URL: {Url}", url);
+                        this.LogCouldNotExtractBlobName(url);
                         continue;
                     }
 
@@ -128,16 +149,16 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
                     if (deleted.Value)
                     {
                         deletedCount++;
-                        this.logger.LogInformation("Deleted orphaned image: {BlobName}", blobName);
+                        this.LogDeletedImage(blobName);
                     }
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogError(ex, "Failed to delete orphaned image: {Url}", url);
+                    this.LogFailedToDeleteImage(ex, url);
                 }
             }
 
-            this.logger.LogInformation("Orphaned image cleanup completed. Deleted {DeletedCount} of {OrphanedCount} orphaned images", deletedCount, orphanedUrls.Count);
+            this.LogCleanupCompleted(deletedCount, orphanedUrls.Count);
         }
         catch (Exception ex)
         {
