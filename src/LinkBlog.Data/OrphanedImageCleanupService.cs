@@ -17,6 +17,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
     private readonly IServiceProvider serviceProvider;
     private readonly BlobServiceClient blobServiceClient;
     private readonly ILogger<OrphanedImageCleanupService> logger;
+    private readonly IDelayService delayService;
     private readonly TimeSpan cleanupInterval;
     private readonly bool enableCleanup;
 
@@ -48,11 +49,13 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         IServiceProvider serviceProvider,
         BlobServiceClient blobServiceClient,
         ILogger<OrphanedImageCleanupService> logger,
+        IDelayService delayService,
         IOptions<ImageCleanupOptions> options)
     {
         this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         this.blobServiceClient = blobServiceClient ?? throw new ArgumentNullException(nameof(blobServiceClient));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.delayService = delayService ?? throw new ArgumentNullException(nameof(delayService));
         ArgumentNullException.ThrowIfNull(options);
         this.cleanupInterval = options.Value.CleanupInterval;
         this.enableCleanup = options.Value.EnableCleanup;
@@ -72,7 +75,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         }
 
         // Wait before first cleanup to allow the application to fully start
-        await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+        await this.delayService.DelayAsync(TimeSpan.FromMinutes(1), stoppingToken);
 
         // Periodic cleanup loop
         while (!stoppingToken.IsCancellationRequested)
@@ -80,7 +83,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
             try
             {
                 await this.CleanupOrphanedImagesAsync(stoppingToken);
-                await Task.Delay(this.cleanupInterval, stoppingToken);
+                await this.delayService.DelayAsync(this.cleanupInterval, stoppingToken);
             }
             catch (OperationCanceledException)
             {
