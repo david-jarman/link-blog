@@ -53,7 +53,8 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
         this.options = Options.Create(new ImageCleanupOptions
         {
             CleanupInterval = TimeSpan.FromSeconds(1),
-            EnableCleanup = true
+            EnableCleanup = true,
+            MinimumImageAge = TimeSpan.FromHours(1)
         });
 
         // Setup service provider with scoped DbContext
@@ -630,8 +631,9 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             var uri = new Uri(url);
             var pathParts = uri.AbsolutePath.Split("/images/", 2, StringSplitOptions.RemoveEmptyEntries);
             var blobName = pathParts.Length > 0 ? pathParts[^1] : uri.Segments[^1];
+            var properties = BlobsModelFactory.BlobItemProperties(true, createdOn: DateTimeOffset.UtcNow.AddHours(-3));
 
-            blobItems.Add(BlobsModelFactory.BlobItem(name: blobName));
+            blobItems.Add(BlobsModelFactory.BlobItem(name: blobName, properties: properties));
 
             // Use provided mock client or create a real BlobClient instance
             var blobClient = mockClient ?? new BlobClient(uri);

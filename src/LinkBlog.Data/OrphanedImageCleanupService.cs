@@ -19,6 +19,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
     private readonly ILogger<OrphanedImageCleanupService> logger;
     private readonly IDelayService delayService;
     private readonly TimeSpan cleanupInterval;
+    private readonly TimeSpan minimumImageAge;
     private readonly bool enableCleanup;
 
     [GeneratedRegex(@"https?://[^/]+/images/[^\s""'<>]+", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
@@ -42,6 +43,9 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
     [LoggerMessage(Level = LogLevel.Error, Message = "Failed to delete orphaned image: {url}")]
     private partial void LogFailedToDeleteImage(Exception ex, string url);
 
+    [LoggerMessage(Level = LogLevel.Information, Message = "Filtered out {filteredCount} orphaned images that are less than {minimumAge} old")]
+    private partial void LogFilteredRecentImages(int filteredCount, TimeSpan minimumAge);
+
     [LoggerMessage(Level = LogLevel.Information, Message = "Orphaned image cleanup completed. Deleted {deletedCount} of {orphanedCount} orphaned images")]
     private partial void LogCleanupCompleted(int deletedCount, int orphanedCount);
 
@@ -58,6 +62,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         this.delayService = delayService ?? throw new ArgumentNullException(nameof(delayService));
         ArgumentNullException.ThrowIfNull(options);
         this.cleanupInterval = options.Value.CleanupInterval;
+        this.minimumImageAge = options.Value.MinimumImageAge;
         this.enableCleanup = options.Value.EnableCleanup;
     }
 
@@ -107,16 +112,16 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         {
             this.logger.LogInformation("Starting orphaned image cleanup");
 
-            // Get all blob URLs from Azure Storage
-            var blobUrls = await this.GetAllBlobUrlsAsync(cancellationToken);
-            this.LogBlobCount(blobUrls.Count);
+            // Get all blob URLs from Azure Storage with their creation times
+            var blobInfo = await this.GetAllBlobUrlsAsync(cancellationToken);
+            this.LogBlobCount(blobInfo.Count);
 
             // Get all image URLs referenced in posts
             var referencedUrls = await this.GetReferencedImageUrlsAsync(cancellationToken);
             this.LogReferencedCount(referencedUrls.Count);
 
             // Find orphaned images (blobs not referenced by any post)
-            var orphanedUrls = blobUrls.Except(referencedUrls, StringComparer.OrdinalIgnoreCase).ToList();
+            var orphanedUrls = blobInfo.Keys.Except(referencedUrls, StringComparer.OrdinalIgnoreCase).ToList();
 
             if (orphanedUrls.Count == 0)
             {
@@ -126,11 +131,29 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
 
             this.LogOrphanedCount(orphanedUrls.Count);
 
+            // Filter out blobs that are too recent to prevent race conditions
+            var now = DateTimeOffset.UtcNow;
+            var oldOrphanedUrls = orphanedUrls
+                .Where(url => blobInfo.TryGetValue(url, out var createdOn) && (now - createdOn) >= this.minimumImageAge)
+                .ToList();
+
+            var filteredCount = orphanedUrls.Count - oldOrphanedUrls.Count;
+            if (filteredCount > 0)
+            {
+                this.LogFilteredRecentImages(filteredCount, this.minimumImageAge);
+            }
+
+            if (oldOrphanedUrls.Count == 0)
+            {
+                this.logger.LogInformation("No orphaned images old enough to delete");
+                return;
+            }
+
             // Delete orphaned blobs
             var containerClient = this.blobServiceClient.GetBlobContainerClient("images");
             int deletedCount = 0;
 
-            foreach (var url in orphanedUrls)
+            foreach (var url in oldOrphanedUrls)
             {
                 try
                 {
@@ -161,7 +184,7 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
                 }
             }
 
-            this.LogCleanupCompleted(deletedCount, orphanedUrls.Count);
+            this.LogCleanupCompleted(deletedCount, oldOrphanedUrls.Count);
         }
         catch (Exception ex)
         {
@@ -170,25 +193,26 @@ public sealed partial class OrphanedImageCleanupService : BackgroundService
         }
     }
 
-    internal async Task<HashSet<string>> GetAllBlobUrlsAsync(CancellationToken cancellationToken)
+    internal async Task<Dictionary<string, DateTimeOffset>> GetAllBlobUrlsAsync(CancellationToken cancellationToken)
     {
-        var blobUrls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var blobInfo = new Dictionary<string, DateTimeOffset>(StringComparer.OrdinalIgnoreCase);
         var containerClient = this.blobServiceClient.GetBlobContainerClient("images");
 
         // Check if container exists
         if (!await containerClient.ExistsAsync(cancellationToken))
         {
             this.logger.LogWarning("Images container does not exist");
-            return blobUrls;
+            return blobInfo;
         }
 
         await foreach (var blobItem in containerClient.GetBlobsAsync(cancellationToken: cancellationToken))
         {
             var blobClient = containerClient.GetBlobClient(blobItem.Name);
-            blobUrls.Add(blobClient.Uri.AbsoluteUri);
+            var createdOn = blobItem.Properties?.CreatedOn ?? DateTimeOffset.UtcNow;
+            blobInfo[blobClient.Uri.AbsoluteUri] = createdOn;
         }
 
-        return blobUrls;
+        return blobInfo;
     }
 
     internal async Task<HashSet<string>> GetReferencedImageUrlsAsync(CancellationToken cancellationToken)

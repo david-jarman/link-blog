@@ -15,4 +15,11 @@ public sealed class ImageCleanupOptions
     /// Gets or sets whether to enable the orphaned image cleanup service.
     /// </summary>
     public bool EnableCleanup { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the minimum age an image must be before it can be deleted.
+    /// This prevents race conditions where images are uploaded but not yet referenced.
+    /// Default is 8 hours.
+    /// </summary>
+    public TimeSpan MinimumImageAge { get; set; } = TimeSpan.FromHours(8);
 }
