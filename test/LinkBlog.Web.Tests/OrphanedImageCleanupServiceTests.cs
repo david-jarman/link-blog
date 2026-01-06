@@ -605,7 +605,7 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             Id = Guid.NewGuid().ToString(),
             Title = title,
             ShortTitle = shortTitle,
-            Contents = imageUrlOrContents,
+            Contents = $"In this test post is an image <img src=\"{imageUrlOrContents}\">",
             CreatedDate = DateTimeOffset.UtcNow,
             LastUpdatedDate = DateTimeOffset.UtcNow
         };
