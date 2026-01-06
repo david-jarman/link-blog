@@ -84,6 +84,7 @@ builder.Services.Configure<PostStoreOptions>(builder.Configuration.GetSection(ke
 builder.Services.Configure<ImageCleanupOptions>(builder.Configuration.GetSection(key: nameof(ImageCleanupOptions)));
 builder.Services.AddSingleton<ISyndicationFeed, AtomFeed>();
 builder.Services.AddSingleton<IImageConverter, ImageConverter>();
+builder.Services.AddSingleton<IDelayService, DelayService>();
 builder.Services.AddHostedService<OrphanedImageCleanupService>();
 
 var app = builder.Build();
