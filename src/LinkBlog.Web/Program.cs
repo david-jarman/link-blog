@@ -81,8 +81,10 @@ builder.Services.AddHttpsRedirection(options =>
 
 builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection("Feed"));
 builder.Services.Configure<PostStoreOptions>(builder.Configuration.GetSection(key: nameof(PostStoreOptions)));
+builder.Services.Configure<ImageCleanupOptions>(builder.Configuration.GetSection(key: nameof(ImageCleanupOptions)));
 builder.Services.AddSingleton<ISyndicationFeed, AtomFeed>();
 builder.Services.AddSingleton<IImageConverter, ImageConverter>();
+builder.Services.AddHostedService<OrphanedImageCleanupService>();
 
 var app = builder.Build();
 
