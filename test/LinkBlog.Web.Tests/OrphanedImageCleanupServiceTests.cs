@@ -407,6 +407,217 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             Times.Once);
     }
 
+    // ===== CleanupOrphanedImagesAsync Minimum Age Tests =====
+
+    [Fact]
+    public async Task CleanupOrphanedImagesAsync_WithOrphanedImageYoungerThanMinimumAge_DoesNotDeleteIt()
+    {
+        // Arrange
+        var minimumAge = TimeSpan.FromHours(2);
+        var ageOptions = Options.Create(new ImageCleanupOptions
+        {
+            CleanupInterval = TimeSpan.FromSeconds(1),
+            EnableCleanup = true,
+            MinimumImageAge = minimumAge
+        });
+
+        var orphanedUrl = "https://test.blob.core.windows.net/images/new-orphaned.jpg";
+
+        var mockOrphanedBlobClient = new Mock<BlobClient>();
+        mockOrphanedBlobClient.SetupGet(x => x.Uri).Returns(new Uri(orphanedUrl));
+        mockOrphanedBlobClient
+            .Setup(x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        // Create blob that is younger than minimum age (30 minutes old, but minimum is 2 hours)
+        var blobCreationTime = DateTimeOffset.UtcNow.AddMinutes(-30);
+        SetupBlobStorageWithImagesAndCreationTimes(
+            (orphanedUrl, mockOrphanedBlobClient.Object, blobCreationTime));
+
+        var service = new OrphanedImageCleanupService(
+            this.serviceProvider,
+            this.mockBlobServiceClient.Object,
+            this.mockLogger.Object,
+            this.mockDelayService.Object,
+            ageOptions);
+
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
+
+        // Assert - Blob should NOT be deleted because it's too new
+        mockOrphanedBlobClient.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
+    }
+
+    [Fact]
+    public async Task CleanupOrphanedImagesAsync_WithOrphanedImageOlderThanMinimumAge_DeletesIt()
+    {
+        // Arrange
+        var minimumAge = TimeSpan.FromHours(2);
+        var ageOptions = Options.Create(new ImageCleanupOptions
+        {
+            CleanupInterval = TimeSpan.FromSeconds(1),
+            EnableCleanup = true,
+            MinimumImageAge = minimumAge
+        });
+
+        var orphanedUrl = "https://test.blob.core.windows.net/images/old-orphaned.jpg";
+
+        var mockOrphanedBlobClient = new Mock<BlobClient>();
+        mockOrphanedBlobClient.SetupGet(x => x.Uri).Returns(new Uri(orphanedUrl));
+        mockOrphanedBlobClient
+            .Setup(x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        // Create blob that is older than minimum age (5 hours old, minimum is 2 hours)
+        var blobCreationTime = DateTimeOffset.UtcNow.AddHours(-5);
+        SetupBlobStorageWithImagesAndCreationTimes(
+            (orphanedUrl, mockOrphanedBlobClient.Object, blobCreationTime));
+
+        var service = new OrphanedImageCleanupService(
+            this.serviceProvider,
+            this.mockBlobServiceClient.Object,
+            this.mockLogger.Object,
+            this.mockDelayService.Object,
+            ageOptions);
+
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
+
+        // Assert - Blob SHOULD be deleted because it's old enough
+        mockOrphanedBlobClient.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task CleanupOrphanedImagesAsync_WithMixOfOldAndNewOrphanedImages_DeletesOnlyOldOnes()
+    {
+        // Arrange
+        var minimumAge = TimeSpan.FromHours(2);
+        var ageOptions = Options.Create(new ImageCleanupOptions
+        {
+            CleanupInterval = TimeSpan.FromSeconds(1),
+            EnableCleanup = true,
+            MinimumImageAge = minimumAge
+        });
+
+        var newOrphanedUrl = "https://test.blob.core.windows.net/images/new-orphaned.jpg";
+        var oldOrphanedUrl = "https://test.blob.core.windows.net/images/old-orphaned.jpg";
+
+        var mockNewBlobClient = new Mock<BlobClient>();
+        mockNewBlobClient.SetupGet(x => x.Uri).Returns(new Uri(newOrphanedUrl));
+        mockNewBlobClient
+            .Setup(x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        var mockOldBlobClient = new Mock<BlobClient>();
+        mockOldBlobClient.SetupGet(x => x.Uri).Returns(new Uri(oldOrphanedUrl));
+        mockOldBlobClient
+            .Setup(x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        // Create one new blob (30 minutes old) and one old blob (5 hours old)
+        var newBlobCreationTime = DateTimeOffset.UtcNow.AddMinutes(-30);
+        var oldBlobCreationTime = DateTimeOffset.UtcNow.AddHours(-5);
+        SetupBlobStorageWithImagesAndCreationTimes(
+            (newOrphanedUrl, mockNewBlobClient.Object, newBlobCreationTime),
+            (oldOrphanedUrl, mockOldBlobClient.Object, oldBlobCreationTime));
+
+        var service = new OrphanedImageCleanupService(
+            this.serviceProvider,
+            this.mockBlobServiceClient.Object,
+            this.mockLogger.Object,
+            this.mockDelayService.Object,
+            ageOptions);
+
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
+
+        // Assert - Only old blob should be deleted
+        mockNewBlobClient.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never,
+            "New blob should not be deleted");
+
+        mockOldBlobClient.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Once,
+            "Old blob should be deleted");
+    }
+
+    [Fact]
+    public async Task CleanupOrphanedImagesAsync_WithImageAtExactlyMinimumAge_DeletesIt()
+    {
+        // Arrange
+        var minimumAge = TimeSpan.FromHours(2);
+        var ageOptions = Options.Create(new ImageCleanupOptions
+        {
+            CleanupInterval = TimeSpan.FromSeconds(1),
+            EnableCleanup = true,
+            MinimumImageAge = minimumAge
+        });
+
+        var orphanedUrl = "https://test.blob.core.windows.net/images/exact-age-orphaned.jpg";
+
+        var mockOrphanedBlobClient = new Mock<BlobClient>();
+        mockOrphanedBlobClient.SetupGet(x => x.Uri).Returns(new Uri(orphanedUrl));
+        mockOrphanedBlobClient
+            .Setup(x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        // Create blob that is exactly at the minimum age (2 hours old)
+        var blobCreationTime = DateTimeOffset.UtcNow.Add(-minimumAge);
+        SetupBlobStorageWithImagesAndCreationTimes(
+            (orphanedUrl, mockOrphanedBlobClient.Object, blobCreationTime));
+
+        var service = new OrphanedImageCleanupService(
+            this.serviceProvider,
+            this.mockBlobServiceClient.Object,
+            this.mockLogger.Object,
+            this.mockDelayService.Object,
+            ageOptions);
+
+        // Act
+        await service.CleanupOrphanedImagesAsync(CancellationToken.None);
+
+        // Assert - Blob SHOULD be deleted because the condition is >= minimum age
+        mockOrphanedBlobClient.Verify(
+            x => x.DeleteIfExistsAsync(
+                It.IsAny<DeleteSnapshotsOption>(),
+                It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
     // ===== GetAllBlobUrlsAsync Tests =====
 
     [Fact]
@@ -632,6 +843,44 @@ public class OrphanedImageCleanupServiceTests : IAsyncLifetime
             var pathParts = uri.AbsolutePath.Split("/images/", 2, StringSplitOptions.RemoveEmptyEntries);
             var blobName = pathParts.Length > 0 ? pathParts[^1] : uri.Segments[^1];
             var properties = BlobsModelFactory.BlobItemProperties(true, createdOn: DateTimeOffset.UtcNow.AddHours(-3));
+
+            blobItems.Add(BlobsModelFactory.BlobItem(name: blobName, properties: properties));
+
+            // Use provided mock client or create a real BlobClient instance
+            var blobClient = mockClient ?? new BlobClient(uri);
+
+            this.mockContainerClient
+                .Setup(x => x.GetBlobClient(blobName))
+                .Returns(blobClient);
+        }
+
+        this.mockContainerClient
+            .Setup(x => x.ExistsAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        this.mockContainerClient
+            .Setup(x => x.GetBlobsAsync(
+                It.IsAny<BlobTraits>(),
+                It.IsAny<BlobStates>(),
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .Returns(new MockAsyncPageable(blobItems));
+
+        this.mockBlobServiceClient
+            .Setup(x => x.GetBlobContainerClient("images"))
+            .Returns(this.mockContainerClient.Object);
+    }
+
+    private void SetupBlobStorageWithImagesAndCreationTimes(params (string url, BlobClient? mockClient, DateTimeOffset createdOn)[] blobs)
+    {
+        var blobItems = new List<BlobItem>();
+
+        foreach (var (url, mockClient, createdOn) in blobs)
+        {
+            var uri = new Uri(url);
+            var pathParts = uri.AbsolutePath.Split("/images/", 2, StringSplitOptions.RemoveEmptyEntries);
+            var blobName = pathParts.Length > 0 ? pathParts[^1] : uri.Segments[^1];
+            var properties = BlobsModelFactory.BlobItemProperties(true, createdOn: createdOn);
 
             blobItems.Add(BlobsModelFactory.BlobItem(name: blobName, properties: properties));
 
