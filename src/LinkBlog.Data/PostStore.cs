@@ -23,6 +23,8 @@ public interface IPostStore
     Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default);
 
     Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<bool> IncrementKarmaAsync(string id, CancellationToken cancellationToken = default);
 }
 
 public class PostStoreDb : IPostStore
@@ -215,6 +217,22 @@ public class PostStoreDb : IPostStore
 
         postEntity.IsArchived = true;
         postEntity.UpdatedDate = DateTimeOffset.UtcNow;
+
+        await this.postDbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    public async Task<bool> IncrementKarmaAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var postEntity = await this.postDbContext.Posts
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+
+        if (postEntity == null)
+        {
+            return false;
+        }
+
+        postEntity.Karma += 1;
 
         await this.postDbContext.SaveChangesAsync(cancellationToken);
         return true;

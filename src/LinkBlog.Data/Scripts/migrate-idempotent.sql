@@ -176,5 +176,20 @@ BEGIN
     VALUES ('20251114050210_AddFullTextSearchVector', '9.0.9');
     END IF;
 END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260108000000_AddKarmaColumn') THEN
+    ALTER TABLE "Posts" ADD "Karma" integer NOT NULL DEFAULT 0;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20260108000000_AddKarmaColumn') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20260108000000_AddKarmaColumn', '9.0.9');
+    END IF;
+END $EF$;
 COMMIT;
 

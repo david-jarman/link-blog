@@ -53,6 +53,14 @@
             /
             <a href="/archive/@Year/@Month/@Day">@Day</a>
         </div>
+        <div class="post-karma">
+            <form method="post" action="/api/karma/@DisplayPost.Id">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="karma-button" title="Like this post">
+                    ❤️ @DisplayPost.Karma
+                </button>
+            </form>
+        </div>
     </article>
 }
 

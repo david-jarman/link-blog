@@ -34,6 +34,8 @@ public sealed class PostEntity
 
     public bool IsArchived { get; set; }
 
+    public int Karma { get; set; }
+
     public NpgsqlTsVector? SearchVector { get; set; }
 
     public List<TagEntity> Tags { get; set; } = new();
@@ -49,5 +51,6 @@ public sealed class PostEntity
         LinkTitle = null;
         Contents = string.Empty;
         IsArchived = false;
+        Karma = 0;
     }
 }

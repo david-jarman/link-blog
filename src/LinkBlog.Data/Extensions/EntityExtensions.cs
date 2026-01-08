@@ -17,6 +17,7 @@ internal static class EntityExtensions
             LinkTitle = postEntity.LinkTitle,
             Contents = postEntity.Contents,
             IsArchived = postEntity.IsArchived,
+            Karma = postEntity.Karma,
             Tags = postEntity.Tags.Select(t => t.ToTag())
         };
     }
@@ -44,6 +45,7 @@ internal static class EntityExtensions
             LinkTitle = post.LinkTitle,
             Contents = post.Contents,
             IsArchived = post.IsArchived,
+            Karma = post.Karma,
             Tags = post.Tags?.Select(t => t.ToTagEntity()).ToList() ?? new()
         };
     }

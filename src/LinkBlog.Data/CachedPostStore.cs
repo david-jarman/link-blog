@@ -293,6 +293,19 @@ public sealed class CachedPostStore : IPostStore, IDisposable
         return result;
     }
 
+    public async Task<bool> IncrementKarmaAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var result = await this.innerStore.IncrementKarmaAsync(id, cancellationToken);
+
+        if (result)
+        {
+            // Invalidate cache to reflect updated karma
+            this.InvalidateCache();
+        }
+
+        return result;
+    }
+
     public void Dispose()
     {
         this.cacheLock.Dispose();

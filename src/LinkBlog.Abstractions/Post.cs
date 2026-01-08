@@ -22,6 +22,8 @@ public sealed class Post
 
     public bool IsArchived { get; set; }
 
+    public int Karma { get; set; }
+
     // Chose IEnumerable over List because otherwise we can get into
     // an infinite loop resolving tags -> posts -> tags etc when calling
     // ToList() in the extensions to convert between contracts.
