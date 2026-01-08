@@ -1,0 +1,189 @@
+@page "/guestbook"
+@using LinkBlog.Abstractions
+@using LinkBlog.Data
+@using System.ComponentModel.DataAnnotations
+@attribute [OutputCache(Duration = 60)]
+
+@inject IGuestbookStore GuestbookStore
+@inject ILogger<Guestbook> Logger
+
+<PageTitle>Guestbook - David Jarman</PageTitle>
+
+<div class="guestbook-container">
+    <h1>Guestbook</h1>
+
+    <div class="guestbook-intro">
+        <p>Sign the guestbook and leave a message! All entries are reviewed before being published.</p>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(SuccessMessage))
+    {
+        <div class="message success-message" role="alert">
+            @SuccessMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <div class="message error-message" role="alert">
+            @ErrorMessage
+        </div>
+    }
+
+    <section class="guestbook-form-section">
+        <h2>Sign the Guestbook</h2>
+        <EditForm Model="EntryForm" FormName="guestbookForm" OnValidSubmit="HandleSubmitAsync">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label for="EntryName" class="form-label">Name (required):</label>
+                <InputText id="EntryName" @bind-Value="EntryForm!.Name" class="form-control" maxlength="200" />
+                <ValidationMessage For="@(() => EntryForm.Name)" class="validation-message" />
+            </div>
+
+            <div class="form-group">
+                <label for="EntryMessage" class="form-label">Message (required):</label>
+                <InputTextArea id="EntryMessage" @bind-Value="EntryForm!.Message" class="form-control" rows="5" maxlength="2000" />
+                <ValidationMessage For="@(() => EntryForm.Message)" class="validation-message" />
+            </div>
+
+            <div class="form-group">
+                <label for="EntryEmail" class="form-label">Email (optional):</label>
+                <InputText id="EntryEmail" @bind-Value="EntryForm!.Email" class="form-control" type="email" maxlength="200" />
+                <ValidationMessage For="@(() => EntryForm.Email)" class="validation-message" />
+                <small class="hint">Your email will not be displayed publicly.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="EntryWebsite" class="form-label">Website (optional):</label>
+                <InputText id="EntryWebsite" @bind-Value="EntryForm!.Website" class="form-control" type="url" maxlength="200" />
+                <ValidationMessage For="@(() => EntryForm.Website)" class="validation-message" />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn-primary">Submit Entry</button>
+            </div>
+        </EditForm>
+    </section>
+
+    <section class="guestbook-entries-section">
+        <h2>Entries</h2>
+        @if (entries == null)
+        {
+            <p>Loading entries...</p>
+        }
+        else if (!entries.Any())
+        {
+            <p>No entries yet. Be the first to sign the guestbook!</p>
+        }
+        else
+        {
+            <div class="guestbook-entries">
+                @foreach (var entry in entries)
+                {
+                    <article class="guestbook-entry">
+                        <header class="entry-header">
+                            <h3 class="entry-name">
+                                @if (!string.IsNullOrWhiteSpace(entry.Website))
+                                {
+                                    <a href="@entry.Website" rel="nofollow noopener noreferrer">@entry.Name</a>
+                                }
+                                else
+                                {
+                                    @entry.Name
+                                }
+                            </h3>
+                            <time class="entry-date" datetime="@entry.CreatedDate.ToString("o")">
+                                @entry.LocalCreatedTime.ToString("MMMM d, yyyy 'at' h:mm tt")
+                            </time>
+                        </header>
+                        <div class="entry-message">
+                            @entry.Message
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private GuestbookEntryFormModel? EntryForm { get; set; }
+
+    private string? ErrorMessage { get; set; }
+    private string? SuccessMessage { get; set; }
+    private List<GuestbookEntry>? entries;
+
+    public class GuestbookEntryFormModel
+    {
+        [Required(ErrorMessage = "Name is required")]
+        [StringLength(200, ErrorMessage = "Name must be less than 200 characters")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Message is required")]
+        [StringLength(2000, ErrorMessage = "Message must be less than 2000 characters")]
+        [MinLength(10, ErrorMessage = "Message must be at least 10 characters")]
+        public string Message { get; set; } = string.Empty;
+
+        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
+        [StringLength(200, ErrorMessage = "Email must be less than 200 characters")]
+        public string? Email { get; set; }
+
+        [Url(ErrorMessage = "Please enter a valid URL")]
+        [StringLength(200, ErrorMessage = "Website must be less than 200 characters")]
+        public string? Website { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        EntryForm ??= new();
+
+        // Load approved entries
+        var entriesList = new List<GuestbookEntry>();
+        await foreach (var entry in GuestbookStore.GetApprovedEntriesAsync())
+        {
+            entriesList.Add(entry);
+        }
+        entries = entriesList;
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        try
+        {
+            var entry = new GuestbookEntry
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = EntryForm!.Name,
+                Message = EntryForm!.Message,
+                Email = EntryForm.Email,
+                Website = EntryForm.Website,
+                CreatedDate = DateTimeOffset.UtcNow,
+                IsApproved = false // Requires admin approval
+            };
+
+            bool success = await GuestbookStore.CreateEntryAsync(entry);
+
+            if (success)
+            {
+                SuccessMessage = "Thank you for signing the guestbook! Your entry will appear after review.";
+                ErrorMessage = null;
+                EntryForm = new(); // Clear form
+                Logger.LogInformation("Guestbook entry created: {Name}", entry.Name);
+            }
+            else
+            {
+                ErrorMessage = "Failed to submit your entry. Please try again.";
+                SuccessMessage = null;
+                Logger.LogError("Failed to create guestbook entry");
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "An error occurred while submitting your entry. Please try again.";
+            SuccessMessage = null;
+            Logger.LogError(ex, "Error creating guestbook entry");
+        }
+    }
+}

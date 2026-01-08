@@ -39,6 +39,9 @@ public static class ServiceCollectionExtensions
             app.Services.AddScoped<IPostStore, PostStoreDb>();
         }
 
+        // Register GuestbookStore
+        app.Services.AddScoped<IGuestbookStore, GuestbookStoreDb>();
+
         return app;
     }
 }

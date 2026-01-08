@@ -38,4 +38,6 @@ public class PostDbContext : DbContext
     public DbSet<PostEntity> Posts { get; set; } = null!;
 
     public DbSet<TagEntity> Tags { get; set; } = null!;
+
+    public DbSet<GuestbookEntryEntity> GuestbookEntries { get; set; } = null!;
 }

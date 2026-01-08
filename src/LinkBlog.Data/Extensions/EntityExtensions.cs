@@ -57,4 +57,32 @@ internal static class EntityExtensions
             Posts = tag.Posts.Select(p => p.ToPostEntity()).ToList()
         };
     }
+
+    public static GuestbookEntry ToGuestbookEntry(this GuestbookEntryEntity entity)
+    {
+        return new GuestbookEntry()
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Message = entity.Message,
+            Email = entity.Email,
+            Website = entity.Website,
+            CreatedDate = entity.CreatedDate,
+            IsApproved = entity.IsApproved
+        };
+    }
+
+    public static GuestbookEntryEntity ToGuestbookEntryEntity(this GuestbookEntry entry)
+    {
+        return new GuestbookEntryEntity()
+        {
+            Id = entry.Id,
+            Name = entry.Name,
+            Message = entry.Message,
+            Email = entry.Email,
+            Website = entry.Website,
+            CreatedDate = entry.CreatedDate,
+            IsApproved = entry.IsApproved
+        };
+    }
 }

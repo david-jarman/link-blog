@@ -1,0 +1,183 @@
+.guestbook-admin-container {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.guestbook-admin-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+/* Alert Styles */
+.alert {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+/* Admin Stats */
+.admin-stats {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #e9ecef;
+    border-radius: 0.5rem;
+}
+
+.admin-stats p {
+    margin: 0;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Entries List */
+.guestbook-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.guestbook-entry {
+    padding: 1.5rem;
+    border: 2px solid;
+    border-radius: 0.5rem;
+}
+
+.guestbook-entry.approved {
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+
+.guestbook-entry.pending {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #333;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.entry-metadata {
+    flex: 1;
+}
+
+.entry-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+}
+
+.entry-name a {
+    color: #005fa3;
+    text-decoration: none;
+}
+
+.entry-name a:hover {
+    text-decoration: underline;
+}
+
+.entry-email {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0.25rem 0;
+}
+
+.entry-email a {
+    color: #005fa3;
+    text-decoration: none;
+}
+
+.entry-email a:hover {
+    text-decoration: underline;
+}
+
+.entry-date {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.entry-status {
+    display: flex;
+    align-items: flex-start;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.approved-badge {
+    background-color: #28a745;
+    color: white;
+}
+
+.pending-badge {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.entry-message {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-bottom: 1rem;
+}
+
+.entry-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-approve,
+.btn-delete {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-approve {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #218838;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}

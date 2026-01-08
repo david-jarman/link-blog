@@ -1,0 +1,172 @@
+@page "/admin/guestbook"
+@using LinkBlog.Abstractions
+@using LinkBlog.Data
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "Admin")]
+
+@inject IGuestbookStore GuestbookStore
+@inject ILogger<GuestbookAdmin> Logger
+@inject NavigationManager NavigationManager
+
+<PageTitle>Guestbook Admin</PageTitle>
+
+<div class="guestbook-admin-container">
+    <h1>Guestbook Administration</h1>
+
+    @if (!string.IsNullOrWhiteSpace(SuccessMessage))
+    {
+        <div class="alert alert-success" role="alert">
+            @SuccessMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ErrorMessage
+        </div>
+    }
+
+    @if (entries == null)
+    {
+        <p>Loading entries...</p>
+    }
+    else if (!entries.Any())
+    {
+        <p>No guestbook entries yet.</p>
+    }
+    else
+    {
+        <div class="admin-stats">
+            <p>Total entries: @entries.Count | Approved: @entries.Count(e => e.IsApproved) | Pending: @entries.Count(e => !e.IsApproved)</p>
+        </div>
+
+        <div class="guestbook-entries">
+            @foreach (var entry in entries)
+            {
+                <article class="guestbook-entry @(entry.IsApproved ? "approved" : "pending")">
+                    <header class="entry-header">
+                        <div class="entry-metadata">
+                            <h3 class="entry-name">
+                                @if (!string.IsNullOrWhiteSpace(entry.Website))
+                                {
+                                    <a href="@entry.Website" target="_blank" rel="nofollow noopener noreferrer">@entry.Name</a>
+                                }
+                                else
+                                {
+                                    @entry.Name
+                                }
+                            </h3>
+                            @if (!string.IsNullOrWhiteSpace(entry.Email))
+                            {
+                                <p class="entry-email">Email: <a href="mailto:@entry.Email">@entry.Email</a></p>
+                            }
+                            <time class="entry-date" datetime="@entry.CreatedDate.ToString("o")">
+                                @entry.LocalCreatedTime.ToString("MMMM d, yyyy 'at' h:mm tt")
+                            </time>
+                        </div>
+                        <div class="entry-status">
+                            @if (entry.IsApproved)
+                            {
+                                <span class="status-badge approved-badge">Approved</span>
+                            }
+                            else
+                            {
+                                <span class="status-badge pending-badge">Pending</span>
+                            }
+                        </div>
+                    </header>
+                    <div class="entry-message">
+                        @entry.Message
+                    </div>
+                    <div class="entry-actions">
+                        @if (!entry.IsApproved)
+                        {
+                            <button type="button" class="btn-approve" @onclick="() => ApproveEntry(entry.Id)">
+                                Approve
+                            </button>
+                        }
+                        <button type="button" class="btn-delete" @onclick="() => DeleteEntry(entry.Id)">
+                            Delete
+                        </button>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<GuestbookEntry>? entries;
+    private string? ErrorMessage { get; set; }
+    private string? SuccessMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEntries();
+    }
+
+    private async Task LoadEntries()
+    {
+        var entriesList = new List<GuestbookEntry>();
+        await foreach (var entry in GuestbookStore.GetAllEntriesAsync())
+        {
+            entriesList.Add(entry);
+        }
+        entries = entriesList;
+    }
+
+    private async Task ApproveEntry(string id)
+    {
+        try
+        {
+            bool success = await GuestbookStore.ApproveEntryAsync(id);
+            if (success)
+            {
+                SuccessMessage = "Entry approved successfully";
+                ErrorMessage = null;
+                Logger.LogInformation("Guestbook entry approved: {Id}", id);
+                await LoadEntries();
+            }
+            else
+            {
+                ErrorMessage = "Failed to approve entry";
+                SuccessMessage = null;
+                Logger.LogError("Failed to approve guestbook entry: {Id}", id);
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error approving entry: {ex.Message}";
+            SuccessMessage = null;
+            Logger.LogError(ex, "Error approving guestbook entry: {Id}", id);
+        }
+    }
+
+    private async Task DeleteEntry(string id)
+    {
+        try
+        {
+            bool success = await GuestbookStore.DeleteEntryAsync(id);
+            if (success)
+            {
+                SuccessMessage = "Entry deleted successfully";
+                ErrorMessage = null;
+                Logger.LogInformation("Guestbook entry deleted: {Id}", id);
+                await LoadEntries();
+            }
+            else
+            {
+                ErrorMessage = "Failed to delete entry";
+                SuccessMessage = null;
+                Logger.LogError("Failed to delete guestbook entry: {Id}", id);
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error deleting entry: {ex.Message}";
+            SuccessMessage = null;
+            Logger.LogError(ex, "Error deleting guestbook entry: {Id}", id);
+        }
+    }
+}
