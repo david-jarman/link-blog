@@ -1,7 +1,0 @@
-BEGIN;
-
-DELETE FROM "PostTag";
-DELETE FROM "Posts";
-DELETE FROM "Tags";
-
-COMMIT;

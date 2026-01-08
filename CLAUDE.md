@@ -16,7 +16,7 @@ dotnet ef migrations add [MigrationName] --project src/LinkBlog.Data/LinkBlog.Da
 dotnet ef database update --project src/LinkBlog.Data/LinkBlog.Data.csproj --startup-project src/LinkBlog.Web/LinkBlog.Web.csproj
 
 ## Create idempotent migration script (located at src/LinkBlog.Web/Scripts/migrate-idempotent.sql)
-dotnet ef migrations script --idempotent --project src/LinkBlog.Data/LinkBlog.Data.csproj --startup-project src/LinkBlog.Web/LinkBlog.Web.csproj --output src/LinkBlog.Web/Scripts/migrate-idempotent.sql
+dotnet ef migrations script --idempotent --project src/LinkBlog.Data/LinkBlog.Data.csproj --startup-project src/LinkBlog.Web/LinkBlog.Web.csproj --output src/LinkBlog.Data/Scripts/migrate-idempotent.sql
 ```
 
 ## Code Style Guidelines
