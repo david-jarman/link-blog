@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git mv:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(dotnet build:*)",
+      "Bash(just build:*)",
+      "Bash(find:*)",
+      "Bash(just test-all:*)",
+      "Bash(dotnet test:*)",
+      "Bash(aspire run:*)",
+      "Bash(just run:*)",
+      "WebFetch(domain:aspire.dev)",
+      "mcp__aspire__list_resources",
+      "mcp__aspire__list_apphosts",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_console_messages"
+    ]
+  }
+}
