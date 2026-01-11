@@ -47,27 +47,20 @@ dotnet --version
 if [ -n "$HTTP_PROXY" ]; then
     echo "Configuring NuGet proxy from HTTP_PROXY..."
 
-    echo "DEBUG: HTTP_PROXY: $HTTP_PROXY"
-    echo "DEBUG: HTTPS_PROXY: $HTTPS_PROXY"
+    PROXY_SCRIPT="$CLAUDE_PROJECT_DIR/scripts/get-userinfo.cs"
 
-    # Parse HTTP_PROXY - format: http://[user:pass@]host:port
-    # Remove protocol prefix
-    proxy_without_protocol="${HTTP_PROXY#http://}"
-    proxy_without_protocol="${proxy_without_protocol#https://}"
+    # Use C# to parse the proxy URL components
+    proxy_user=$(dotnet run "$PROXY_SCRIPT" -- user 2>/dev/null) || proxy_user=""
+    proxy_pass=$(dotnet run "$PROXY_SCRIPT" -- password 2>/dev/null) || proxy_pass=""
+    proxy_url=$(dotnet run "$PROXY_SCRIPT" -- url 2>/dev/null) || proxy_url=""
 
-    # Check if credentials are present (contains @)
-    if [[ "$proxy_without_protocol" == *"@"* ]]; then
-        # Extract credentials (everything before @)
-        credentials="${proxy_without_protocol%%@*}"
-        # Extract proxy URL (everything after @)
-        proxy_host="${proxy_without_protocol#*@}"
+    echo "DEBUG user: $proxy_user"
+    echo "DEBUG pass: $proxy_pass"
+    echo "DEBUG url: $proxy_url"
 
-        # Split credentials into username and password
-        proxy_user="${credentials%%:*}"
-        proxy_pass="${credentials#*:}"
-
+    if [ -n "$proxy_user" ]; then
         # Set proxy with credentials
-        dotnet nuget config set http_proxy "http://$proxy_host"
+        dotnet nuget config set http_proxy "$proxy_url"
         dotnet nuget config set http_proxy.user "$proxy_user"
         dotnet nuget config set http_proxy.password "$proxy_pass"
 
