@@ -43,3 +43,36 @@ fi
 # Verify installation
 echo "Verifying .NET SDK installation..."
 dotnet --version
+
+# Configure NuGet proxy if HTTP_PROXY is set
+if [ -n "$HTTP_PROXY" ]; then
+    echo "Configuring NuGet proxy from HTTP_PROXY..."
+
+    # Parse HTTP_PROXY - format: http://[user:pass@]host:port
+    # Remove protocol prefix
+    proxy_without_protocol="${HTTP_PROXY#http://}"
+    proxy_without_protocol="${proxy_without_protocol#https://}"
+
+    # Check if credentials are present (contains @)
+    if [[ "$proxy_without_protocol" == *"@"* ]]; then
+        # Extract credentials (everything before @)
+        credentials="${proxy_without_protocol%%@*}"
+        # Extract proxy URL (everything after @)
+        proxy_host="${proxy_without_protocol#*@}"
+
+        # Split credentials into username and password
+        proxy_user="${credentials%%:*}"
+        proxy_pass="${credentials#*:}"
+
+        # Set proxy with credentials
+        dotnet nuget config set http_proxy "http://$proxy_host"
+        dotnet nuget config set http_proxy.user "$proxy_user"
+        dotnet nuget config set http_proxy.password "$proxy_pass"
+
+        echo "NuGet proxy configured with authentication"
+    else
+        # No credentials, just set the proxy URL
+        dotnet nuget config set http_proxy "$HTTP_PROXY"
+        echo "NuGet proxy configured without authentication"
+    fi
+fi
