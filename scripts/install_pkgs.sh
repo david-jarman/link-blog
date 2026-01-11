@@ -11,7 +11,7 @@ echo "Installing .NET SDK..."
 
 DOTNET_INSTALL_DIR="$HOME/.dotnet"
 
-GLOBAL_JSON="../global.json"
+GLOBAL_JSON="$CLAUDE_PROJECT_DIR/global.json"
 
 # Validate global.json exists
 if [ ! -f $GLOBAL_JSON ]; then
