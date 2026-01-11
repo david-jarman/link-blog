@@ -65,9 +65,24 @@ if [ -n "$HTTP_PROXY" ]; then
         dotnet nuget config set http_proxy.password "$proxy_pass"
 
         echo "NuGet proxy configured with authentication"
+
+        # Verify config was set
+        echo "DEBUG: Verifying config..."
+        dotnet nuget config get http_proxy
+        dotnet nuget config get http_proxy.user
+
+        # Unset HTTP_PROXY to force NuGet to use config instead of env var
+        unset HTTP_PROXY
+        unset HTTPS_PROXY
+        unset http_proxy
+        unset https_proxy
+        echo "DEBUG: Unset HTTP_PROXY env vars to force config usage"
     else
         # No credentials, just set the proxy URL
         dotnet nuget config set http_proxy "$HTTP_PROXY"
         echo "NuGet proxy configured without authentication"
     fi
 fi
+
+# try to restore using the above settings
+dotnet restore
