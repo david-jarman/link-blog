@@ -32,6 +32,14 @@ fi
 export PATH="$DOTNET_INSTALL_DIR:$PATH"
 export DOTNET_ROOT="$DOTNET_INSTALL_DIR"
 
+# Persist environment variables for Claude Code
+if [ -n "$CLAUDE_ENV_FILE" ]; then
+    echo "DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR" >> "$CLAUDE_ENV_FILE"
+    echo "DOTNET_ROOT=$DOTNET_INSTALL_DIR" >> "$CLAUDE_ENV_FILE"
+    echo "DOTNET_CLI_TELEMETRY_OPTOUT=1" >> "$CLAUDE_ENV_FILE"
+    echo "PATH=$DOTNET_INSTALL_DIR:\$PATH" >> "$CLAUDE_ENV_FILE"
+fi
+
 # Verify installation
 echo "Verifying .NET SDK installation..."
 dotnet --version
