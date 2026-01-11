@@ -43,7 +43,3 @@ fi
 # Verify installation
 echo "Verifying .NET SDK installation..."
 dotnet --version
-
-# Restore dotnet tools (includes dotnet-ef)
-echo "Restoring dotnet tools..."
-dotnet tool restore
