@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Only run in remote environments
+if [ "$CLAUDE_CODE_REMOTE" != "true" ]; then
+  exit 0
+fi
+
 # Install .NET SDK
 echo "Installing .NET SDK..."
 
