@@ -3,13 +3,13 @@
 ## Build/Run Commands
 ```bash
 # Build solution
-just build
+dotnet build
 
 # Run the application
-just run
+aspire run
 
 # Run tests
-just test-all
+dotnet test
 
 ## Code Style Guidelines
 - **Naming**: PascalCase for classes, methods, public properties; camelCase for parameters and private fields
