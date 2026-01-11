@@ -79,3 +79,5 @@ fi
 
 # try to restore using the above settings
 dotnet restore
+
+exit 100
