@@ -47,6 +47,9 @@ dotnet --version
 if [ -n "$HTTP_PROXY" ]; then
     echo "Configuring NuGet proxy from HTTP_PROXY..."
 
+    echo "DEBUG: HTTP_PROXY: $HTTP_PROXY"
+    echo "DEBUG: HTTPS_PROXY: $HTTPS_PROXY"
+
     # Parse HTTP_PROXY - format: http://[user:pass@]host:port
     # Remove protocol prefix
     proxy_without_protocol="${HTTP_PROXY#http://}"
