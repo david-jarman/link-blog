@@ -126,4 +126,7 @@ fi
 echo "Restoring NuGet packages..."
 dotnet restore "$CLAUDE_PROJECT_DIR"
 
+echo "Restoring tools"
+dotnet tool restore
+
 echo "Setup complete!"
