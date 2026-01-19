@@ -1,7 +1,7 @@
-set -e
+set -euo pipefail
 
 # Only run in remote environments
-if [ "$CLAUDE_CODE_REMOTE" != "true" ]; then
+if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   exit 0
 fi
 
@@ -33,7 +33,7 @@ export PATH="$DOTNET_INSTALL_DIR:$PATH"
 export DOTNET_ROOT="$DOTNET_INSTALL_DIR"
 
 # Persist environment variables for Claude Code
-if [ -n "$CLAUDE_ENV_FILE" ]; then
+if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
     echo "DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR" >> "$CLAUDE_ENV_FILE"
     echo "DOTNET_ROOT=$DOTNET_INSTALL_DIR" >> "$CLAUDE_ENV_FILE"
     echo "DOTNET_CLI_TELEMETRY_OPTOUT=1" >> "$CLAUDE_ENV_FILE"
@@ -46,7 +46,7 @@ dotnet --version
 
 # Function to start local auth proxy for NuGet
 start_auth_proxy() {
-    if [ -z "$HTTP_PROXY" ]; then
+    if [ -z "${HTTP_PROXY:-}" ]; then
         return 0  # No proxy configured, nothing to do
     fi
 
@@ -79,7 +79,7 @@ start_auth_proxy() {
 
 # Function to stop auth proxy
 stop_auth_proxy() {
-    if [ -n "$AUTH_PROXY_PID" ]; then
+    if [ -n "${AUTH_PROXY_PID:-}" ]; then
         echo "Stopping auth proxy..."
         kill $AUTH_PROXY_PID 2>/dev/null || true
         wait $AUTH_PROXY_PID 2>/dev/null || true
