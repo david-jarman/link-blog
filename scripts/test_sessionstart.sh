@@ -19,11 +19,7 @@ if [ ! -d "$DOTNET_INSTALL_DIR" ]; then
     echo "Downloading and installing .NET SDK using global.json..."
     curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
     chmod +x dotnet-install.sh
-    if ! ./dotnet-install.sh --jsonfile $GLOBAL_JSON --install-dir $DOTNET_INSTALL_DIR; then
-        echo "ERROR: .NET SDK install failed"
-        rm -f dotnet-install.sh
-        exit 2
-    fi
+    ./dotnet-install.sh --jsonfile $GLOBAL_JSON --install-dir $DOTNET_INSTALL_DIR >&1
     rm -f dotnet-install.sh
 else
     echo ".NET SDK already installed at $DOTNET_INSTALL_DIR"
