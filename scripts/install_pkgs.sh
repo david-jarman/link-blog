@@ -1,6 +1,6 @@
-# Log all output to a file for debugging
+# Log all output to a file and stderr for debugging
 INSTALL_LOG="$HOME/.install_pkgs.log"
-exec > >(tee -a "$INSTALL_LOG") 2>&1
+exec > >(tee -a "$INSTALL_LOG" >&2) 2>&1
 echo "=== Install started at $(date) ==="
 
 # Debug information
@@ -24,14 +24,18 @@ GLOBAL_JSON="$CLAUDE_PROJECT_DIR/global.json"
 # Validate global.json exists
 if [ ! -f $GLOBAL_JSON ]; then
     echo "ERROR: global.json not found"
-    exit 1
+    exit 2
 fi
 
 if [ ! -d "$DOTNET_INSTALL_DIR" ]; then
     echo "Downloading and installing .NET SDK using global.json..."
     curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
     chmod +x dotnet-install.sh
-    ./dotnet-install.sh --jsonfile $GLOBAL_JSON --install-dir $DOTNET_INSTALL_DIR || echo "Warning: .NET SDK install failed"
+    if ! ./dotnet-install.sh --jsonfile $GLOBAL_JSON --install-dir $DOTNET_INSTALL_DIR; then
+        echo "ERROR: .NET SDK install failed"
+        rm -f dotnet-install.sh
+        exit 2
+    fi
     rm -f dotnet-install.sh
 else
     echo ".NET SDK already installed at $DOTNET_INSTALL_DIR"
@@ -104,10 +108,16 @@ start_auth_proxy
 
 # Restore NuGet packages
 echo "Restoring NuGet packages..."
-dotnet restore "$CLAUDE_PROJECT_DIR" || echo "Warning: dotnet restore failed"
+if ! dotnet restore "$CLAUDE_PROJECT_DIR"; then
+    echo "ERROR: dotnet restore failed"
+    exit 2
+fi
 
 echo "Restoring tools"
-dotnet tool restore || echo "Warning: dotnet tool restore failed"
+if ! dotnet tool restore; then
+    echo "ERROR: dotnet tool restore failed"
+    exit 2
+fi
 
 echo "Setup complete!"
 exit 0
