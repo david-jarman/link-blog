@@ -7,6 +7,7 @@ echo "=== Install started at $(date) ==="
 
 # Only run in remote environments
 if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
+  echo "Local run, exiting setup script early"
   exit 0
 fi
 
