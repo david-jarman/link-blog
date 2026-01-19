@@ -43,3 +43,58 @@ fi
 # Verify installation
 echo "Verifying .NET SDK installation..."
 dotnet --version
+
+# Function to start local auth proxy for NuGet
+start_auth_proxy() {
+    if [ -z "$HTTP_PROXY" ]; then
+        return 0  # No proxy configured, nothing to do
+    fi
+
+    echo "Starting local authentication proxy for NuGet..."
+
+    # Save original proxy as upstream
+    export UPSTREAM_HTTP_PROXY="$HTTP_PROXY"
+
+    # Start proxy in background
+    python3 "$CLAUDE_PROJECT_DIR/scripts/auth_proxy.py" &
+    AUTH_PROXY_PID=$!
+
+    # Wait for proxy to start
+    sleep 1
+
+    # Check if proxy started successfully
+    if ! kill -0 $AUTH_PROXY_PID 2>/dev/null; then
+        echo "ERROR: Failed to start auth proxy"
+        return 1
+    fi
+
+    # Point HTTP_PROXY to local proxy
+    export HTTP_PROXY="http://127.0.0.1:3128"
+    export HTTPS_PROXY="http://127.0.0.1:3128"
+    export http_proxy="$HTTP_PROXY"
+    export https_proxy="$HTTPS_PROXY"
+
+    echo "Auth proxy started (PID: $AUTH_PROXY_PID)"
+}
+
+# Function to stop auth proxy
+stop_auth_proxy() {
+    if [ -n "$AUTH_PROXY_PID" ]; then
+        echo "Stopping auth proxy..."
+        kill $AUTH_PROXY_PID 2>/dev/null || true
+        wait $AUTH_PROXY_PID 2>/dev/null || true
+        unset AUTH_PROXY_PID
+    fi
+}
+
+# Trap to ensure proxy is stopped on exit
+trap stop_auth_proxy EXIT
+
+# Start auth proxy if HTTP_PROXY is set (for NuGet compatibility)
+start_auth_proxy
+
+# Restore NuGet packages
+echo "Restoring NuGet packages..."
+dotnet restore "$CLAUDE_PROJECT_DIR"
+
+echo "Setup complete!"
