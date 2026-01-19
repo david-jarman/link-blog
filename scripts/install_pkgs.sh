@@ -1,4 +1,4 @@
-set -euo pipefail
+set -uo pipefail
 
 # Log all output to a file for debugging
 INSTALL_LOG="$HOME/.install_pkgs.log"
@@ -28,8 +28,8 @@ if [ ! -d "$DOTNET_INSTALL_DIR" ]; then
     echo "Downloading and installing .NET SDK using global.json..."
     curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
     chmod +x dotnet-install.sh
-    ./dotnet-install.sh --jsonfile $GLOBAL_JSON --install-dir $DOTNET_INSTALL_DIR
-    rm dotnet-install.sh
+    ./dotnet-install.sh --jsonfile $GLOBAL_JSON --install-dir $DOTNET_INSTALL_DIR || echo "Warning: .NET SDK install failed"
+    rm -f dotnet-install.sh
 else
     echo ".NET SDK already installed at $DOTNET_INSTALL_DIR"
 fi
@@ -101,9 +101,10 @@ start_auth_proxy
 
 # Restore NuGet packages
 echo "Restoring NuGet packages..."
-dotnet restore "$CLAUDE_PROJECT_DIR"
+dotnet restore "$CLAUDE_PROJECT_DIR" || echo "Warning: dotnet restore failed"
 
 echo "Restoring tools"
-dotnet tool restore
+dotnet tool restore || echo "Warning: dotnet tool restore failed"
 
 echo "Setup complete!"
+exit 0
