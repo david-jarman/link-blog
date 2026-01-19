@@ -1,5 +1,10 @@
 set -euo pipefail
 
+# Log all output to a file for debugging
+INSTALL_LOG="$HOME/.install_pkgs.log"
+exec > >(tee -a "$INSTALL_LOG") 2>&1
+echo "=== Install started at $(date) ==="
+
 # Only run in remote environments
 if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   exit 0
