@@ -5,6 +5,11 @@ INSTALL_LOG="$HOME/.install_pkgs.log"
 exec > >(tee -a "$INSTALL_LOG") 2>&1
 echo "=== Install started at $(date) ==="
 
+# Debug information
+echo "=== Environment Variables ==="
+printenv
+echo "=== End Environment Variables ==="
+
 # Only run in remote environments
 if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   echo "Local run, exiting setup script early"
