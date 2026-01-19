@@ -11,6 +11,12 @@ aspire run
 # Run tests
 dotnet test
 
+# Check for oudated packages
+dotnet outdated
+
+# Update outdated packages
+dotnet outdated -u
+
 ## Code Style Guidelines
 - **Naming**: PascalCase for classes, methods, public properties; camelCase for parameters and private fields
 - **Types**: Use interfaces prefixed with 'I'; entity classes suffixed with 'Entity'
