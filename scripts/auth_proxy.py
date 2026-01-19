@@ -68,9 +68,11 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
     def do_CONNECT(self) -> None:
         """Handle HTTPS CONNECT tunneling."""
+        upstream = None
         try:
             # Connect to upstream proxy
             upstream = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            upstream.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
             upstream.connect((self.upstream_host, self.upstream_port))
 
             # Send CONNECT request to upstream proxy with auth
@@ -87,53 +89,88 @@ class ProxyHandler(BaseHTTPRequestHandler):
             while b"\r\n\r\n" not in response:
                 chunk = upstream.recv(BUFFER_SIZE)
                 if not chunk:
-                    break
+                    self.send_error(502, "Upstream proxy closed connection")
+                    return
                 response += chunk
 
             # Check if upstream proxy accepted the connection
+            header_end = response.find(b"\r\n\r\n")
             status_line = response.split(b"\r\n")[0].decode()
             if "200" not in status_line:
                 self.send_error(502, f"Upstream proxy error: {status_line}")
-                upstream.close()
                 return
+
+            # Check for any data after the headers (shouldn't happen, but handle it)
+            extra_data = response[header_end + 4:] if header_end + 4 < len(response) else b""
 
             # Tell client the tunnel is established
             self.send_response(200, "Connection Established")
             self.end_headers()
 
+            # Flush the response to client
+            self.wfile.flush()
+
+            # Get raw client socket
+            client_socket = self.connection
+            client_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+
+            # If there was extra data from upstream, send it to client
+            if extra_data:
+                client_socket.sendall(extra_data)
+
             # Tunnel data between client and upstream
-            self._tunnel(self.connection, upstream)
+            self._tunnel(client_socket, upstream)
+            upstream = None  # Prevent double-close
 
         except Exception as e:
-            self.log_message(f"CONNECT error: {e}")
+            self.log_message(f"CONNECT error to {self.path}: {e}")
             try:
                 self.send_error(502, str(e))
             except:
                 pass
+        finally:
+            if upstream:
+                upstream.close()
 
     def _tunnel(self, client: socket.socket, upstream: socket.socket) -> None:
         """Bidirectional tunnel between client and upstream."""
+        # Keep sockets blocking but use select for multiplexing
         client.setblocking(False)
         upstream.setblocking(False)
 
         try:
             while True:
-                readable, _, _ = select.select([client, upstream], [], [], 30)
+                # Use longer timeout - TLS handshakes and idle connections need time
+                readable, _, exceptional = select.select(
+                    [client, upstream], [], [client, upstream], 300
+                )
+
+                if exceptional:
+                    break
 
                 if not readable:
-                    break  # Timeout
+                    # Timeout after 5 minutes of no activity
+                    break
 
                 for sock in readable:
                     other = upstream if sock is client else client
                     try:
                         data = sock.recv(BUFFER_SIZE)
                         if not data:
+                            # Connection closed cleanly
                             return
                         other.sendall(data)
-                    except (BlockingIOError, ConnectionResetError):
+                    except BlockingIOError:
+                        # No data available yet, continue
+                        continue
+                    except (ConnectionResetError, BrokenPipeError, OSError) as e:
+                        # Connection error
                         return
         finally:
-            upstream.close()
+            try:
+                upstream.close()
+            except:
+                pass
 
     def do_GET(self) -> None:
         self._forward_request()
