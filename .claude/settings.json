@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/test_sessionstart.sh"
+            "command": "printenv"
           }
         ]
       }
