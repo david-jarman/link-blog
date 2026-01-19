@@ -1,5 +1,3 @@
-set -uo pipefail
-
 # Log all output to a file for debugging
 INSTALL_LOG="$HOME/.install_pkgs.log"
 exec > >(tee -a "$INSTALL_LOG") 2>&1
