@@ -29,6 +29,7 @@
         "hooks": [
           {
             "type": "command",
+            "timeout": 120,
             "command": "${CLAUDE_PROJECT_DIR}/scripts/test_sessionstart.sh 2>&1 || echo \"Issue with startup script\""
           }
         ]
