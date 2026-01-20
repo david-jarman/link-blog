@@ -21,5 +21,19 @@
       "mcp__playwright__browser_snapshot",
       "mcp__playwright__browser_console_messages"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 120,
+            "command": "${CLAUDE_PROJECT_DIR}/scripts/install_pkgs.sh 2>&1 || echo \"Script failed\""
+          }
+        ]
+      }
+    ]
   }
 }
