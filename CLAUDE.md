@@ -10,18 +10,12 @@ aspire run
 
 # Run unit tests only (excludes integration tests that require Docker)
 dotnet test --filter "Category!=IntegrationTest"
-# Or using Just:
-just test-unit
 
 # Run integration tests only (requires Docker)
 dotnet test --filter "Category=IntegrationTest"
-# Or using Just:
-just test-integration
 
 # Run all tests (unit + integration, requires Docker for integration tests)
 dotnet test
-# Or using Just:
-just test-all
 
 # Check for outdated packages
 dotnet outdated
