@@ -103,4 +103,5 @@ if ! dotnet restore "$CLAUDE_PROJECT_DIR"; then
     exit 2
 fi
 
+echo "Install completed in ${SECONDS}s"
 exit 0
