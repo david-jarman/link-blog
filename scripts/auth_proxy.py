@@ -64,7 +64,11 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args) -> None:
         """Log to stderr with timestamp."""
-        print(f"[proxy] {args[0]}", file=sys.stderr)
+        if args:
+            message = format % args
+        else:
+            message = format
+        print(f"[proxy] {message}", file=sys.stderr)
 
     def do_CONNECT(self) -> None:
         """Handle HTTPS CONNECT tunneling."""
@@ -233,54 +237,58 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
     def _forward_response(self, upstream: socket.socket) -> None:
         """Read response from upstream and forward to client."""
-        # Read headers
-        response = b""
-        while b"\r\n\r\n" not in response:
-            chunk = upstream.recv(BUFFER_SIZE)
-            if not chunk:
-                break
-            response += chunk
-
-        # Split headers and any body data received
-        header_end = response.find(b"\r\n\r\n")
-        headers = response[:header_end]
-        body_start = response[header_end + 4:]
-
-        # Send headers to client
-        self.wfile.write(headers + b"\r\n\r\n")
-
-        # Send any body data already received
-        if body_start:
-            self.wfile.write(body_start)
-
-        # Check for chunked or content-length
-        headers_lower = headers.lower()
-
-        if b"transfer-encoding: chunked" in headers_lower:
-            # Stream chunked response
-            self._stream_chunked(upstream, body_start)
-        elif b"content-length:" in headers_lower:
-            # Stream fixed-length response
-            for line in headers.split(b"\r\n"):
-                if line.lower().startswith(b"content-length:"):
-                    content_length = int(line.split(b":")[1].strip())
-                    remaining = content_length - len(body_start)
-                    while remaining > 0:
-                        chunk = upstream.recv(min(BUFFER_SIZE, remaining))
-                        if not chunk:
-                            break
-                        self.wfile.write(chunk)
-                        remaining -= len(chunk)
-                    break
-        else:
-            # Stream until connection closes
-            while True:
+        try:
+            # Read headers
+            response = b""
+            while b"\r\n\r\n" not in response:
                 chunk = upstream.recv(BUFFER_SIZE)
                 if not chunk:
                     break
-                self.wfile.write(chunk)
+                response += chunk
 
-        upstream.close()
+            # Split headers and any body data received
+            header_end = response.find(b"\r\n\r\n")
+            headers = response[:header_end]
+            body_start = response[header_end + 4:]
+
+            # Send headers to client
+            self.wfile.write(headers + b"\r\n\r\n")
+
+            # Send any body data already received
+            if body_start:
+                self.wfile.write(body_start)
+
+            # Check for chunked or content-length
+            headers_lower = headers.lower()
+
+            if b"transfer-encoding: chunked" in headers_lower:
+                # Stream chunked response
+                self._stream_chunked(upstream, body_start)
+            elif b"content-length:" in headers_lower:
+                # Stream fixed-length response
+                for line in headers.split(b"\r\n"):
+                    if line.lower().startswith(b"content-length:"):
+                        content_length = int(line.split(b":")[1].strip())
+                        remaining = content_length - len(body_start)
+                        while remaining > 0:
+                            chunk = upstream.recv(min(BUFFER_SIZE, remaining))
+                            if not chunk:
+                                break
+                            self.wfile.write(chunk)
+                            remaining -= len(chunk)
+                        break
+            else:
+                # Stream until connection closes
+                while True:
+                    chunk = upstream.recv(BUFFER_SIZE)
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+        except (BrokenPipeError, ConnectionResetError):
+            # Client disconnected, nothing to do
+            pass
+        finally:
+            upstream.close()
 
     def _stream_chunked(self, upstream: socket.socket, initial: bytes) -> None:
         """Stream chunked transfer encoding response."""
