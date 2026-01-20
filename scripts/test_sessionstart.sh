@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# TODO: Check for running in remote environment
+# Only run in remote environments
+if [ "$CLAUDE_CODE_REMOTE" != "true" ]; then
+  exit 0
+fi
+
 # TODO: A set -e to fail for child processes
+# TODO: add a timeout of 2 minutes to this script and kill it and print out info to stdout
 
 # Install .NET SDK
 echo "Installing .NET SDK..."
