@@ -7,7 +7,7 @@
     <article class="post">
         <header>
             <div class="post-title">
-                <h2>@DisplayPost.Title</h2>
+                <h2><a href="@DisplayPost.UrlPath">@DisplayPost.Title</a></h2>
                 <AuthorizeView Policy="Admin">
                     <a class="edit-btn" href="/admin/@DisplayPost.Id">
                         <svg xmlns="http://www.w3.org/2000/svg"
