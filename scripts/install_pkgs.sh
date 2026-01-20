@@ -1,29 +1,22 @@
-# Log all output to a file and stderr for debugging
-INSTALL_LOG="$HOME/.install_pkgs.log"
-exec > >(tee -a "$INSTALL_LOG" >&2) 2>&1
-echo "=== Install started at $(date) ==="
-
-# Debug information
-echo "=== Environment Variables ==="
-printenv
-echo "=== End Environment Variables ==="
+#!/bin/bash
 
 # Only run in remote environments
-if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
-  echo "Local run, exiting setup script early"
+if [ "$CLAUDE_CODE_REMOTE" != "true" ]; then
   exit 0
 fi
+
+# TODO: A set -e to fail for child processes
+# TODO: add a timeout of 2 minutes to this script and kill it and print out info to stdout
 
 # Install .NET SDK
 echo "Installing .NET SDK..."
 
-DOTNET_INSTALL_DIR="$HOME/.dotnet"
-
-GLOBAL_JSON="$CLAUDE_PROJECT_DIR/global.json"
+DOTNET_INSTALL_DIR="${HOME}/.dotnet"
+GLOBAL_JSON="${CLAUDE_PROJECT_DIR}/global.json"
 
 # Validate global.json exists
 if [ ! -f $GLOBAL_JSON ]; then
-    echo "ERROR: global.json not found"
+    echo "ERROR: global.json not found" >&2
     exit 2
 fi
 
@@ -31,11 +24,7 @@ if [ ! -d "$DOTNET_INSTALL_DIR" ]; then
     echo "Downloading and installing .NET SDK using global.json..."
     curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
     chmod +x dotnet-install.sh
-    if ! ./dotnet-install.sh --jsonfile $GLOBAL_JSON --install-dir $DOTNET_INSTALL_DIR; then
-        echo "ERROR: .NET SDK install failed"
-        rm -f dotnet-install.sh
-        exit 2
-    fi
+    ./dotnet-install.sh --jsonfile $GLOBAL_JSON --install-dir $DOTNET_INSTALL_DIR >&1
     rm -f dotnet-install.sh
 else
     echo ".NET SDK already installed at $DOTNET_INSTALL_DIR"
@@ -44,11 +33,11 @@ fi
 # Add dotnet to PATH
 export PATH="$DOTNET_INSTALL_DIR:$PATH"
 export DOTNET_ROOT="$DOTNET_INSTALL_DIR"
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # Persist environment variables for Claude Code
-if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
-    echo "export DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR" >> "$CLAUDE_ENV_FILE"
-    echo "export DOTNET_ROOT=$DOTNET_INSTALL_DIR" >> "$CLAUDE_ENV_FILE"
+if [ -n "${CLAUDE_ENV_FILE}" ]; then
+    echo "export DOTNET_ROOT=$DOTNET_ROOT" >> "$CLAUDE_ENV_FILE"
     echo "export DOTNET_CLI_TELEMETRY_OPTOUT=1" >> "$CLAUDE_ENV_FILE"
     echo "export PATH=\"$DOTNET_INSTALL_DIR:\$PATH\"" >> "$CLAUDE_ENV_FILE"
 fi
@@ -60,6 +49,7 @@ dotnet --version
 # Function to start local auth proxy for NuGet
 start_auth_proxy() {
     if [ -z "${HTTP_PROXY:-}" ]; then
+        echo "No proxy configured"
         return 0  # No proxy configured, nothing to do
     fi
 
@@ -109,15 +99,8 @@ start_auth_proxy
 # Restore NuGet packages
 echo "Restoring NuGet packages..."
 if ! dotnet restore "$CLAUDE_PROJECT_DIR"; then
-    echo "ERROR: dotnet restore failed"
+    echo "ERROR: dotnet restore failed" >&2
     exit 2
 fi
 
-echo "Restoring tools"
-if ! dotnet tool restore; then
-    echo "ERROR: dotnet tool restore failed"
-    exit 2
-fi
-
-echo "Setup complete!"
 exit 0
