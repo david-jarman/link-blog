@@ -12,7 +12,6 @@ public interface ISyndicationFeed
 
 public class AtomFeed : ISyndicationFeed
 {
-    private readonly string blogUrl = "https://davidjarman.net";
     private readonly FeedOptions _options;
 
     public AtomFeed(IOptions<FeedOptions> options)
@@ -24,13 +23,12 @@ public class AtomFeed : ISyndicationFeed
     {
         StringBuilder sb = new();
 
-        // TODO: Remove hardcoded elements and pass them in to class from LinkBlog.Web
         sb.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         sb.Append("<feed xmlns=\"http://www.w3.org/2005/Atom\">");
-        sb.Append("<title>David Jarman's Blog</title>");
-        sb.Append(string.Create(CultureInfo.InvariantCulture, $"<link href=\"{blogUrl}/\" rel=\"alternate\"/>"));
-        sb.Append(string.Create(CultureInfo.InvariantCulture, $"<id>{blogUrl}/</id>"));
-        sb.Append("<author><name>David Jarman</name></author>");
+        sb.Append(string.Create(CultureInfo.InvariantCulture, $"<title>{_options.BlogTitle}</title>"));
+        sb.Append(string.Create(CultureInfo.InvariantCulture, $"<link href=\"{_options.BlogUrl}/\" rel=\"alternate\"/>"));
+        sb.Append(string.Create(CultureInfo.InvariantCulture, $"<id>{_options.BlogUrl}/</id>"));
+        sb.Append(string.Create(CultureInfo.InvariantCulture, $"<author><name>{_options.AuthorName}</name></author>"));
 
         var latestPost = posts.First();
         sb.Append(CultureInfo.InvariantCulture, $"<updated>{latestPost.CreatedDate.ToString("o")}</updated>");
@@ -48,7 +46,7 @@ public class AtomFeed : ISyndicationFeed
     private StringBuilder CreateEntryForPost(Post post)
     {
         StringBuilder sb = new();
-        string postUrl = $"{blogUrl}{post.UrlPath}";
+        string postUrl = $"{_options.BlogUrl}{post.UrlPath}";
 
         sb.Append("<entry>");
 
