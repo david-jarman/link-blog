@@ -34,11 +34,13 @@ fi
 export PATH="$DOTNET_INSTALL_DIR:$PATH"
 export DOTNET_ROOT="$DOTNET_INSTALL_DIR"
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
+export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 
 # Persist environment variables for Claude Code
 if [ -n "${CLAUDE_ENV_FILE}" ]; then
     echo "export DOTNET_ROOT=$DOTNET_ROOT" >> "$CLAUDE_ENV_FILE"
     echo "export DOTNET_CLI_TELEMETRY_OPTOUT=1" >> "$CLAUDE_ENV_FILE"
+    echo "export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1" >> "$CLAUDE_ENV_FILE"
     echo "export PATH=\"$DOTNET_INSTALL_DIR:\$PATH\"" >> "$CLAUDE_ENV_FILE"
 fi
 
