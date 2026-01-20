@@ -63,12 +63,8 @@ class ProxyHandler(BaseHTTPRequestHandler):
     upstream_auth: str | None
 
     def log_message(self, format: str, *args) -> None:
-        """Log to stderr with timestamp."""
-        if args:
-            message = format % args
-        else:
-            message = format
-        print(f"[proxy] {message}", file=sys.stderr)
+        """Suppress default HTTP request logging."""
+        pass
 
     def do_CONNECT(self) -> None:
         """Handle HTTPS CONNECT tunneling."""
