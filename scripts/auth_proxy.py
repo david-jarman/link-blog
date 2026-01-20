@@ -138,9 +138,10 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
     def _tunnel(self, client: socket.socket, upstream: socket.socket) -> None:
         """Bidirectional tunnel between client and upstream."""
-        # Keep sockets blocking but use select for multiplexing
-        client.setblocking(False)
-        upstream.setblocking(False)
+        # Keep sockets blocking - select() handles multiplexing, blocking ensures
+        # sendall() works correctly (non-blocking sendall can lose data)
+        client.setblocking(True)
+        upstream.setblocking(True)
 
         try:
             while True:
@@ -164,10 +165,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
                             # Connection closed cleanly
                             return
                         other.sendall(data)
-                    except BlockingIOError:
-                        # No data available yet, continue
-                        continue
-                    except (ConnectionResetError, BrokenPipeError, OSError) as e:
+                    except (ConnectionResetError, BrokenPipeError, OSError):
                         # Connection error
                         return
         finally:
