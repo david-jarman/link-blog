@@ -1,8 +1,9 @@
 ﻿@page "/"
+@page "/page/{PageNumber:int}"
 @using LinkBlog.Abstractions
 @using LinkBlog.Data
 @using LinkBlog.Web.Components.Posts
-@attribute [OutputCache(Duration = 60)]
+@attribute [OutputCache(Duration = 60, VaryByRouteValueNames = new[] { "PageNumber" })]
 
 @inject IPostStore PostStore
 
@@ -25,21 +26,38 @@
 
 <PostList Posts="posts" />
 
+@if (CurrentPage > 1 || hasMore)
+{
+    <nav class="pagination-nav">
+        @if (CurrentPage > 1)
+        {
+            <a href="@NewerPostsUrl" class="pagination-link newer-posts">← Newer Posts</a>
+        }
+        @if (hasMore)
+        {
+            <a href="/page/@(CurrentPage + 1)" class="pagination-link older-posts">Older Posts →</a>
+        }
+    </nav>
+}
+
 @code {
     private const string BlogTitle = "David Jarman's Blog";
-    private const int TopN = 10; // Retrieve the latest 10 posts for the home page
+    private const int PageSize = 2;
+
+    [Parameter]
+    public int PageNumber { get; set; } = 1;
 
     private Post[]? posts;
+    private bool hasMore;
+
+    private int CurrentPage => PageNumber < 1 ? 1 : PageNumber;
+
+    private string NewerPostsUrl => CurrentPage == 2 ? "/" : $"/page/{CurrentPage - 1}";
 
     protected override async Task OnInitializedAsync()
     {
-        // REVIEW: Is there a way to get a cancellation token?
-        List<Post> posts = new List<Post>();
-        await foreach (var post in PostStore.GetPosts(TopN))
-        {
-            posts.Add(post);
-        }
-
-        this.posts = posts.ToArray();
+        var result = await PostStore.GetPostsPagedAsync(CurrentPage, PageSize);
+        this.posts = result.Posts;
+        this.hasMore = result.HasMore;
     }
 }

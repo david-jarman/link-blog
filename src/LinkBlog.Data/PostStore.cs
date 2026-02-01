@@ -4,9 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LinkBlog.Data;
 
+public record PagedPostsResult(Post[] Posts, bool HasMore);
+
 public interface IPostStore
 {
     IAsyncEnumerable<Post> GetPosts(int topN, CancellationToken cancellationToken = default);
+
+    Task<PagedPostsResult> GetPostsPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default);
 
     Task<Post?> GetPostById(string id, CancellationToken cancellationToken = default);
 
@@ -61,6 +65,32 @@ public class PostStoreDb : IPostStore
 
             yield return post.ToPost();
         }
+    }
+
+    public async Task<PagedPostsResult> GetPostsPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        if (page < 1)
+        {
+            page = 1;
+        }
+
+        int skip = (page - 1) * pageSize;
+
+        var posts = await this.postDbContext.Posts
+            .Include(p => p.Tags)
+            .Where(p => !p.IsArchived)
+            .OrderByDescending(p => p.Date)
+            .Skip(skip)
+            .Take(pageSize + 1)
+            .ToListAsync(cancellationToken);
+
+        bool hasMore = posts.Count > pageSize;
+        var resultPosts = posts
+            .Take(pageSize)
+            .Select(p => p.ToPost())
+            .ToArray();
+
+        return new PagedPostsResult(resultPosts, hasMore);
     }
 
     public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)

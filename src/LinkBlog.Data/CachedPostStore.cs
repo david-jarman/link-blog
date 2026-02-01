@@ -109,6 +109,30 @@ public sealed class CachedPostStore : IPostStore, IDisposable
         }
     }
 
+    public async Task<PagedPostsResult> GetPostsPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        if (page < 1)
+        {
+            page = 1;
+        }
+
+        var posts = await this.GetCachedPostsAsync(cancellationToken);
+
+        int skip = (page - 1) * pageSize;
+
+        var orderedPosts = posts
+            .OrderByDescending(p => p.CreatedDate)
+            .ToList();
+
+        bool hasMore = orderedPosts.Count > skip + pageSize;
+        var resultPosts = orderedPosts
+            .Skip(skip)
+            .Take(pageSize)
+            .ToArray();
+
+        return new PagedPostsResult(resultPosts, hasMore);
+    }
+
     public async Task<Post?> GetPostById(string id, CancellationToken cancellationToken = default)
     {
         var posts = await this.GetCachedPostsAsync(cancellationToken);
