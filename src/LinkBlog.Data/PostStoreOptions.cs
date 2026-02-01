@@ -10,9 +10,4 @@ public sealed class PostStoreOptions
     /// Default is 5 minutes.
     /// </summary>
     public TimeSpan CacheRefreshInterval { get; set; } = TimeSpan.FromMinutes(5);
-
-    /// <summary>
-    /// Gets or sets whether to enable the in-memory post cache.
-    /// </summary>
-    public bool EnableInMemoryCache { get; set; }
 }

@@ -63,19 +63,10 @@ public sealed class PostCacheRefreshService : BackgroundService
     {
         try
         {
-            // Create a scope to resolve scoped services (PostStoreDb is scoped)
+            // Create a scope to resolve scoped services
             using var scope = this.serviceProvider.CreateScope();
-            var postStore = scope.ServiceProvider.GetRequiredService<IPostStore>();
-
-            // Only refresh if the store is CachedPostStore
-            if (postStore is CachedPostStore cachedStore)
-            {
-                await cachedStore.RefreshCacheAsync(cancellationToken);
-            }
-            else
-            {
-                this.logger.LogWarning("IPostStore is not CachedPostStore, skipping cache refresh");
-            }
+            var cachedStore = (CachedPostStore)scope.ServiceProvider.GetRequiredService<IPostStore>();
+            await cachedStore.RefreshCacheAsync(cancellationToken);
         }
         catch (Exception ex)
         {

@@ -1,12 +1,16 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using LinkBlog.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkBlog.Data;
 
+public record PagedPostsResult(Post[] Posts, bool HasMore);
+
 public interface IPostStore
 {
     IAsyncEnumerable<Post> GetPosts(int topN, CancellationToken cancellationToken = default);
+
+    Task<PagedPostsResult> GetPostsPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default);
 
     Task<Post?> GetPostById(string id, CancellationToken cancellationToken = default);
 
@@ -25,13 +29,32 @@ public interface IPostStore
     Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default);
 }
 
-public class PostStoreDb : IPostStore
+/// <summary>
+/// Database access layer for posts. Used by CachedPostStore for loading posts and persisting writes.
+/// </summary>
+public class PostDataAccess : IPostDataAccess
 {
     private readonly PostDbContext postDbContext;
 
-    public PostStoreDb(PostDbContext postDbContext)
+    public PostDataAccess(PostDbContext postDbContext)
     {
         this.postDbContext = postDbContext;
+    }
+
+    public async IAsyncEnumerable<Post> GetAllPostsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var posts = this.postDbContext.Posts
+            .Include(p => p.Tags)
+            .Where(p => !p.IsArchived)
+            .OrderByDescending(p => p.Date)
+            .AsAsyncEnumerable();
+
+        await foreach (var post in posts)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            yield return post.ToPost();
+        }
     }
 
     public async Task<bool> CreatePostAsync(Post post, List<string> tags, CancellationToken cancellationToken = default)
@@ -44,105 +67,6 @@ public class PostStoreDb : IPostStore
         this.postDbContext.Posts.Add(entity);
         await this.postDbContext.SaveChangesAsync(cancellationToken);
         return true;
-    }
-
-    public async IAsyncEnumerable<Post> GetPosts(int topN, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        var posts = this.postDbContext.Posts
-            .Include(p => p.Tags)
-            .Where(p => !p.IsArchived)
-            .OrderByDescending(p => p.Date)
-            .Take(topN)
-            .AsAsyncEnumerable();
-
-        await foreach (var post in posts)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            yield return post.ToPost();
-        }
-    }
-
-    public async IAsyncEnumerable<Post> GetPostsForTag(string tag, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        TagEntity? tagFromDb = await this.postDbContext.Tags
-            .Include(t => t.Posts)
-            .ThenInclude(p => p.Tags)
-            .FirstAsync(t => t.Name == tag, cancellationToken);
-        if (tagFromDb == null)
-        {
-            yield break;
-        }
-
-        foreach (var post in tagFromDb.Posts.Where(p => !p.IsArchived).OrderByDescending(p => p.Date))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            yield return post.ToPost();
-        }
-    }
-
-    public async IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset startDateTime, DateTimeOffset endDateTime, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        var posts = this.postDbContext.Posts
-            .Include(p => p.Tags)
-            .Where(p => p.Date >= startDateTime && p.Date <= endDateTime && !p.IsArchived)
-            .OrderByDescending(p => p.Date)
-            .AsAsyncEnumerable();
-
-        await foreach (var post in posts)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            yield return post.ToPost();
-        }
-    }
-
-    public async Task<Post?> GetPostForShortTitleAsync(string shortTitle, CancellationToken cancellationToken = default)
-    {
-        var post = await this.postDbContext.Posts
-            .Include(p => p.Tags)
-            .SingleOrDefaultAsync(p => p.ShortTitle == shortTitle && !p.IsArchived, cancellationToken: cancellationToken);
-
-        return post?.ToPost();
-    }
-
-    public async IAsyncEnumerable<Post> SearchPostsAsync(string searchQuery, int maxResults = 50, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        if (string.IsNullOrWhiteSpace(searchQuery))
-        {
-            yield break;
-        }
-
-        // Use PostgreSQL full-text search with the precomputed SearchVector column
-        // SearchVector is a computed column with weighted tsvector (Title: A, LinkTitle: B, Contents: C)
-        var posts = this.postDbContext.Posts
-            .FromSqlRaw(@"
-                SELECT p.*
-                FROM ""Posts"" p
-                WHERE p.""IsArchived"" = false
-                AND p.""SearchVector"" @@ plainto_tsquery('english', {0})
-                ORDER BY ts_rank(p.""SearchVector"", plainto_tsquery('english', {0})) DESC
-                LIMIT {1}",
-                searchQuery,
-                maxResults)
-            .Include(p => p.Tags)
-            .AsAsyncEnumerable();
-
-        await foreach (var post in posts)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            yield return post.ToPost();
-        }
-    }
-
-    public Task<Post?> GetPostById(string id, CancellationToken cancellationToken = default)
-    {
-        return this.postDbContext.Posts
-            .Include(p => p.Tags)
-            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken)
-            .ContinueWith(t => t.Result?.ToPost());
     }
 
     public async Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default)
