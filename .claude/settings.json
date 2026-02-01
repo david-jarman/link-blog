@@ -34,6 +34,17 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "dotnet format"
+          }
+        ]
+      }
     ]
   }
 }
