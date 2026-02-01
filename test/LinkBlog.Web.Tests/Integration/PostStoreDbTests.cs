@@ -637,9 +637,14 @@ public class PostStoreDbTests : PostStoreDbTestBase
         // Assert
         Assert.True(result);
 
-        var archived = await this.PostStore.GetPostById(postId);
-        Assert.NotNull(archived);
-        Assert.True(archived.IsArchived);
+        // Archived posts are not in the cache, so check the database directly
+        var archivedEntity = await this.DbContext.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+        Assert.NotNull(archivedEntity);
+        Assert.True(archivedEntity.IsArchived);
+
+        // Verify it's no longer returned by GetPostById (since it's archived)
+        var fromCache = await this.PostStore.GetPostById(postId);
+        Assert.Null(fromCache);
     }
 
     [Fact]
@@ -656,10 +661,10 @@ public class PostStoreDbTests : PostStoreDbTestBase
         // Act
         await this.PostStore.ArchivePostAsync(postId);
 
-        // Assert
-        var archived = await this.PostStore.GetPostById(postId);
-        Assert.NotNull(archived);
-        Assert.True(archived.LastUpdatedDate > originalUpdatedDate);
+        // Assert - Archived posts are not in the cache, so check the database directly
+        var archivedEntity = await this.DbContext.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+        Assert.NotNull(archivedEntity);
+        Assert.True(archivedEntity.UpdatedDate > originalUpdatedDate);
     }
 
     [Fact]
