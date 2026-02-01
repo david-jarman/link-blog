@@ -4,7 +4,6 @@
     <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <OpenTelemetryVersion>1.14.0</OpenTelemetryVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- Aspire -->
