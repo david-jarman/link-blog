@@ -17,12 +17,6 @@ if (builder.Environment.IsDevelopment())
 }
 var config = builder.Configuration;
 
-PostStoreOptions postStoreOptions = new();
-builder.Configuration.GetSection(nameof(PostStoreOptions))
-    .Bind(postStoreOptions);
-
-Console.WriteLine($"InMemory cache enabled: {postStoreOptions.EnableInMemoryCache}");
-
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
@@ -57,7 +51,7 @@ builder.AddPostStore("postgresdb", options =>
         var match = Regex.Match(config["DATABASE_URL"] ?? "", @"postgres://(.*):(.*)@(.*):(.*)/(.*)");
         options.ConnectionString = $"Server={match.Groups[3]};Port={match.Groups[4]};User Id={match.Groups[1]};Password={match.Groups[2]};Database={match.Groups[5]};sslmode=Prefer;Trust Server Certificate=true";
     }
-}, enableInMemoryCache: postStoreOptions.EnableInMemoryCache);
+});
 
 builder.AddAzureBlobServiceClient("blobstore");
 

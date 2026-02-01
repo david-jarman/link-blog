@@ -6,23 +6,23 @@ using Microsoft.Extensions.Logging;
 namespace LinkBlog.Data;
 
 /// <summary>
-/// In-memory cached implementation of IPostStore that wraps PostStoreDb.
+/// In-memory cached implementation of IPostStore.
 /// Caches all posts in memory and provides fast read access with cache invalidation on writes.
 /// </summary>
 public sealed class CachedPostStore : IPostStore, IDisposable
 {
     private const string AllPostsCacheKey = "CachedPostStore_AllPosts";
-    private readonly PostStoreDb innerStore;
+    private readonly IPostDataAccess dataAccess;
     private readonly IMemoryCache memoryCache;
     private readonly ILogger<CachedPostStore> logger;
     private readonly SemaphoreSlim cacheLock = new SemaphoreSlim(1, 1);
 
     public CachedPostStore(
-        PostStoreDb innerStore,
+        IPostDataAccess dataAccess,
         IMemoryCache memoryCache,
         ILogger<CachedPostStore> logger)
     {
-        this.innerStore = innerStore ?? throw new ArgumentNullException(nameof(innerStore));
+        this.dataAccess = dataAccess ?? throw new ArgumentNullException(nameof(dataAccess));
         this.memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -39,7 +39,7 @@ public sealed class CachedPostStore : IPostStore, IDisposable
             this.logger.LogInformation("Refreshing post cache from database...");
 
             var posts = new List<Post>();
-            await foreach (var post in this.innerStore.GetPosts(int.MaxValue, cancellationToken))
+            await foreach (var post in this.dataAccess.GetAllPostsAsync(cancellationToken))
             {
                 posts.Add(post);
             }
@@ -156,7 +156,7 @@ public sealed class CachedPostStore : IPostStore, IDisposable
 
     public async Task<bool> CreatePostAsync(Post post, List<string> tags, CancellationToken cancellationToken = default)
     {
-        var result = await this.innerStore.CreatePostAsync(post, tags, cancellationToken);
+        var result = await this.dataAccess.CreatePostAsync(post, tags, cancellationToken);
 
         if (result)
         {
@@ -293,7 +293,7 @@ public sealed class CachedPostStore : IPostStore, IDisposable
 
     public async Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default)
     {
-        var result = await this.innerStore.UpdatePostAsync(id, post, tags, cancellationToken);
+        var result = await this.dataAccess.UpdatePostAsync(id, post, tags, cancellationToken);
 
         if (result)
         {
@@ -306,7 +306,7 @@ public sealed class CachedPostStore : IPostStore, IDisposable
 
     public async Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default)
     {
-        var result = await this.innerStore.ArchivePostAsync(id, cancellationToken);
+        var result = await this.dataAccess.ArchivePostAsync(id, cancellationToken);
 
         if (result)
         {
