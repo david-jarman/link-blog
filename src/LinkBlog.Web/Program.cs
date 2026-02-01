@@ -4,6 +4,7 @@ using LinkBlog.Data;
 using LinkBlog.Data.Extensions;
 using LinkBlog.Feed;
 using LinkBlog.Images;
+using LinkBlog.Web;
 using LinkBlog.Web.Components;
 using LinkBlog.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -73,8 +74,9 @@ builder.Services.AddHttpsRedirection(options =>
     }
 });
 
+builder.Services.Configure<BlogOptions>(builder.Configuration.GetSection(nameof(BlogOptions)));
 builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection("Feed"));
-builder.Services.Configure<PostStoreOptions>(builder.Configuration.GetSection(key: nameof(PostStoreOptions)));
+builder.Services.Configure<PostStoreOptions>(builder.Configuration.GetSection(nameof(PostStoreOptions)));
 builder.Services.AddSingleton<ISyndicationFeed, AtomFeed>();
 builder.Services.AddSingleton<IImageConverter, ImageConverter>();
 
