@@ -36,7 +36,8 @@ echo "Restoring dotnet tools..."
 dotnet tool restore
 
 # Build the project
-dotnet build -c Release
+echo "Building web project"
+dotnet build -c Release --project src/LinkBlog.Web/LinkBlog.Web.csproj
 
 # Apply database migrations
 echo "Applying database migrations..."
