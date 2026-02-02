@@ -80,3 +80,29 @@ small.hint {
     color: #6c757d;
     font-size: 0.875rem;
 }
+
+/* Dark mode styles */
+:global([data-theme="dark"]) .post-editor {
+    background-color: #2d2d2d;
+    color: #f0f0f0;
+}
+
+:global([data-theme="dark"]) ::deep input {
+    background-color: #2d2d2d;
+    color: #f0f0f0;
+    border-color: #4a4a4a;
+}
+
+:global([data-theme="dark"]) .form-control {
+    background-color: #2d2d2d;
+    color: #f0f0f0;
+    border-color: #4a4a4a;
+}
+
+:global([data-theme="dark"]) .form-control::placeholder {
+    color: #888;
+}
+
+:global([data-theme="dark"]) small.hint {
+    color: #adb5bd;
+}

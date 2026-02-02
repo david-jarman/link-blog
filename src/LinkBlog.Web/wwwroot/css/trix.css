@@ -468,3 +468,89 @@ trix-editor .attachment__metadata .attachment__size {
   flex-basis: 50%;
   max-width: 50%;
 }
+
+/* Dark mode styles */
+[data-theme="dark"] trix-editor {
+  background-color: #2d2d2d;
+  color: #000000;
+  border-color: #4a4a4a;
+}
+
+[data-theme="dark"] trix-toolbar .trix-button-group {
+  border-color: #4a4a4a;
+  border-top-color: #555;
+  border-bottom-color: #333;
+}
+
+[data-theme="dark"] trix-toolbar .trix-button {
+  color: rgba(255, 255, 255, 0.7);
+  border-bottom-color: #4a4a4a;
+}
+
+[data-theme="dark"] trix-toolbar .trix-button:not(:first-child) {
+  border-left-color: #4a4a4a;
+}
+
+[data-theme="dark"] trix-toolbar .trix-button.trix-active {
+  background: #3a5f7d;
+  color: #fff;
+}
+
+[data-theme="dark"] trix-toolbar .trix-button:disabled {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="dark"] trix-toolbar .trix-button--icon::before {
+  filter: invert(1);
+}
+
+[data-theme="dark"] trix-toolbar .trix-dialog {
+  background: #2d2d2d;
+  box-shadow: 0 0.3em 1em #111;
+  border-top-color: #4a4a4a;
+}
+
+[data-theme="dark"] trix-toolbar .trix-input--dialog {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  border-color: #4a4a4a;
+}
+
+[data-theme="dark"] trix-editor .trix-button {
+  color: #ccc;
+}
+
+[data-theme="dark"] trix-editor .trix-button:not(:first-child) {
+  border-left-color: #4a4a4a;
+}
+
+[data-theme="dark"] trix-editor .trix-button.trix-active {
+  background: #3a5f7d;
+}
+
+[data-theme="dark"] trix-editor .trix-button--remove {
+  background-color: #2d2d2d;
+  border-color: #4a9eff;
+}
+
+[data-theme="dark"] trix-editor .trix-button--remove::before {
+  filter: invert(1);
+}
+
+[data-theme="dark"] .trix-content blockquote {
+  border-color: #4a4a4a;
+}
+
+[data-theme="dark"] .trix-content pre {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+}
+
+[data-theme="dark"] .trix-content .attachment--preview .attachment__caption {
+  color: #aaa;
+}
+
+[data-theme="dark"] .trix-content .attachment--file {
+  color: #f0f0f0;
+  border-color: #4a4a4a;
+}

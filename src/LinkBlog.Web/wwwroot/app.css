@@ -28,13 +28,13 @@ body {
 }
 
 a, .btn-link {
-    color: #006bb7;
+    color: black;
 }
 
 /* Dark mode links */
 [data-theme="dark"] a,
 [data-theme="dark"] .btn-link {
-    color: #4a9eff;
+    color: white;
 }
 
 .btn-primary {
