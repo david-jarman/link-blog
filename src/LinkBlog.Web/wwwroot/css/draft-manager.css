@@ -128,3 +128,42 @@
     background-color: #f8d7da;
     border-color: #f5c6cb;
 }
+
+/* Dark mode styles */
+[data-theme="dark"] .draft-manager {
+    border-color: #4a4a4a;
+    background-color: #2d2d2d;
+}
+
+[data-theme="dark"] #draft-toggle {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .draft-item {
+    border-color: #4a4a4a;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .form-control {
+    color: #f0f0f0;
+    background-color: #1a1a1a;
+    border-color: #4a4a4a;
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: #888;
+}
+
+[data-theme="dark"] .alert-success {
+    color: #75b798;
+    background-color: #051b11;
+    border-color: #0f5132;
+}
+
+[data-theme="dark"] .alert-danger {
+    color: #ea868f;
+    background-color: #2c0b0e;
+    border-color: #842029;
+}
