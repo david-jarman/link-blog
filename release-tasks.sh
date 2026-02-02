@@ -35,6 +35,9 @@ dotnet --version
 echo "Restoring dotnet tools..."
 dotnet tool restore
 
+# Build the project
+dotnet build -c Release
+
 # Apply database migrations
 echo "Applying database migrations..."
 
