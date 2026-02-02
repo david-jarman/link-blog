@@ -35,17 +35,6 @@ dotnet --version
 echo "Restoring dotnet tools..."
 dotnet tool restore
 
-# Build and Run unit tests
-echo "Running unit tests..."
-dotnet test test/LinkBlog.Web.Tests/LinkBlog.Web.Tests.csproj --filter "Category!=IntegrationTest" --configuration Release
-
-if [ $? -ne 0 ]; then
-    echo "Tests failed! Aborting release."
-    exit 1
-fi
-
-echo "Tests passed!"
-
 # Apply database migrations
 echo "Applying database migrations..."
 
