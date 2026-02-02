@@ -2,7 +2,7 @@
 
 # LinkBlog
 
-LinkBlog is a multi-project solution for building a comprehensive blogging platform.
+This is the source code for my personal blog: [davidjarman.net](https://davidjarman.net)
 
 ## Projects
 
