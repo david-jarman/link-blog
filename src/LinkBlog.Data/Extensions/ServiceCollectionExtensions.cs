@@ -6,7 +6,7 @@ namespace LinkBlog.Data.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IHostApplicationBuilder AddPostStore(this IHostApplicationBuilder app, string connectionName, Action<NpgsqlEntityFrameworkCorePostgreSQLSettings>? configureSettings)
+    public static IHostApplicationBuilder AddPostDbContext(this IHostApplicationBuilder app, string connectionName, Action<NpgsqlEntityFrameworkCorePostgreSQLSettings>? configureSettings = null)
     {
         app.AddNpgsqlDbContext<PostDbContext>(connectionName, configureSettings, dbContextBuilder =>
         {
@@ -15,6 +15,13 @@ public static class ServiceCollectionExtensions
                 dbContextBuilder.EnableSensitiveDataLogging();
             }
         });
+
+        return app;
+    }
+
+    public static IHostApplicationBuilder AddPostStore(this IHostApplicationBuilder app, string connectionName, Action<NpgsqlEntityFrameworkCorePostgreSQLSettings>? configureSettings = null)
+    {
+        app.AddPostDbContext(connectionName, configureSettings);
 
         // Register memory cache
         app.Services.AddMemoryCache(options =>
