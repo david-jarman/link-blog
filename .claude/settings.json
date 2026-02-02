@@ -8,6 +8,7 @@
       "Bash(dotnet build:*)",
       "Bash(just build:*)",
       "Bash(find:*)",
+      "Bash(ls:*)",
       "Bash(just test-all:*)",
       "Bash(dotnet test:*)",
       "Bash(aspire run:*)",
