@@ -62,8 +62,8 @@ public partial class DatabaseSeeder(PostDbContext dbContext, ILogger<DatabaseSee
         var faker = new Faker<PostEntity>()
             .RuleFor(p => p.Id, f => Guid.NewGuid().ToString())
             .RuleFor(p => p.Title, f => GenerateTitle(f))
-            .RuleFor(p => p.ShortTitle, (f, p) => GenerateShortTitle(p.Title))
-            .RuleFor(p => p.Date, f => f.Date.PastOffset(1))
+            .RuleFor(p => p.ShortTitle, (f, p) => GenerateShortTitle(p.Title, p.Id))
+            .RuleFor(p => p.Date, f => f.Date.PastOffset(1).ToUniversalTime())
             .RuleFor(p => p.UpdatedDate, (f, p) => p.Date)
             .RuleFor(p => p.Link, f => f.Random.Bool(0.7f) ? f.Internet.Url() : null)
             .RuleFor(p => p.LinkTitle, (f, p) => p.Link != null ? f.Company.CatchPhrase() : null)
@@ -97,9 +97,9 @@ public partial class DatabaseSeeder(PostDbContext dbContext, ILogger<DatabaseSee
         return f.PickRandom(templates)();
     }
 
-    private static string GenerateShortTitle(string title)
+    private static string GenerateShortTitle(string title, string id)
     {
-        return title.ToLowerInvariant()
+        var slug = title.ToLowerInvariant()
             .Replace(" ", "-")
             .Replace("'", "")
             .Replace("\"", "")
@@ -107,6 +107,9 @@ public partial class DatabaseSeeder(PostDbContext dbContext, ILogger<DatabaseSee
             .Replace(",", "")
             .Replace("?", "")
             .Replace("!", "");
+
+        // Append first 6 chars of ID to ensure uniqueness
+        return $"{slug}-{id[..6]}";
     }
 
     private static string GenerateMarkdownContent(Faker f)
