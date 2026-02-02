@@ -8,7 +8,7 @@
   <ItemGroup>
     <!-- Aspire -->
     <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="13.1.0" />
-    <PackageVersion Include="Bogus" Version="35.6.1" />
+    <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="13.1.0" />
     <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.1.0" />
     <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.1.0" />
