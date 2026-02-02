@@ -29,7 +29,6 @@ builder.AddProject<Projects.LinkBlog_Web>("webfrontend")
     .WithExternalHttpEndpoints()
     .WithReference(postgresdb)
     .WithReference(blobStore)
-    .WithReference(migrations)
     .WaitForCompletion(migrations);
 
 builder.Build().Run();

@@ -10,8 +10,18 @@ builder.AddPostDbContext("postgresdb");
 
 builder.Services.AddHostedService<Worker>();
 
+// Register seeder for development environment only
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddScoped<DatabaseSeeder>();
+}
+
 builder.Services.AddOpenTelemetry()
-    .WithTracing(tracing => tracing.AddSource(Worker.ActivitySource.Name));
+    .WithTracing(tracing =>
+    {
+        tracing.AddSource(Worker.ActivitySource.Name);
+        tracing.AddSource(DatabaseSeeder.ActivitySource.Name);
+    });
 
 var host = builder.Build();
 host.Run();
