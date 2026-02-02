@@ -4,6 +4,7 @@
       "Bash(git mv:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
+      "Bash(git push:*)",
       "Bash(dotnet build:*)",
       "Bash(just build:*)",
       "Bash(find:*)",

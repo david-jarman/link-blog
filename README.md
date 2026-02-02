@@ -6,34 +6,60 @@ LinkBlog is a multi-project solution for building a comprehensive blogging platf
 
 ## Projects
 
-- **LinkBlog.AppHost**  
-  Hosts the application services using Aspire. 
+- **LinkBlog.Abstractions**
+  Abstractions for entity definitions shared across the project.
+  [LinkBlog.Abstractions.csproj](src/LinkBlog.Abstractions/LinkBlog.Abstractions.csproj)
+
+- **LinkBlog.AppHost**
+  Hosts the application services using Aspire.
   [LinkBlog.AppHost.csproj](src/LinkBlog.AppHost/LinkBlog.AppHost.csproj)
 
-- **LinkBlog.ServiceDefaults**  
-  Provides default implementations for various services.  
+- **LinkBlog.Data**
+  Data access layer with Entity Framework Core entities and contexts.
+  [LinkBlog.Data.csproj](src/LinkBlog.Data/LinkBlog.Data.csproj)
+
+- **LinkBlog.Feed**
+  Atom feed for syndicating blog posts.
+  [LinkBlog.Feed.csproj](src/LinkBlog.Feed/LinkBlog.Feed.csproj)
+
+- **LinkBlog.Images**
+  Image processing functionality.
+  [LinkBlog.Images.csproj](src/LinkBlog.Images/LinkBlog.Images.csproj)
+
+- **LinkBlog.MigrationService**
+  Worker service for running database migrations.
+  [LinkBlog.MigrationService.csproj](src/LinkBlog.MigrationService/LinkBlog.MigrationService.csproj)
+
+- **LinkBlog.ServiceDefaults**
+  Provides default implementations for various services.
   [LinkBlog.ServiceDefaults.csproj](src/LinkBlog.ServiceDefaults/LinkBlog.ServiceDefaults.csproj)
 
-- **LinkBlog.Web**  
-  The web front-end for the blogging platform.  
+- **LinkBlog.Web**
+  The web front-end for the blogging platform.
   [LinkBlog.Web.csproj](src/LinkBlog.Web/LinkBlog.Web.csproj)
 
 ## Prerequisites
 
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 
-## Build and Test
+## Build and Run
 
-To build the entire solution, run the following command in the project root:
+To build the solution:
 
 ```sh
-dotnet build LinkBlog.slnx
+dotnet build
 ```
 
-Then, to run tests
+To run the application:
 
 ```sh
-dotnet test LinkBlog.slnx
+aspire run
+```
+
+To run tests:
+
+```sh
+dotnet test
 ```
 
 Connect to database

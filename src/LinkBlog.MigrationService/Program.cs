@@ -5,8 +5,8 @@ var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Register the database context with the same connection name used in AppHost
-builder.AddPostStore("postgresdb", null);
+// Register only the database context for migrations (not the full post store)
+builder.AddPostDbContext("postgresdb");
 
 builder.Services.AddHostedService<Worker>();
 
