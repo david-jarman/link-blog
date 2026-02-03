@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict khetsXW3OTen4e8CzCnUfR33Mz9aNWGEUbYrMpceUipYRPk7K0v3C4WVXKu12aD
+\restrict ZefLlx5GcvbsedVPWM9zYExsCttSuJd2TgIWcXSOYxldrbue4VIVrX5nWPKcNI2
 
 -- Dumped from database version 16.10
 -- Dumped by pg_dump version 16.11 (Ubuntu 16.11-1.pgdg24.04+1)
@@ -72,6 +72,7 @@ d9291083-b95d-470a-8254-462f44f5470e	GIFs!	2026-01-05 06:28:54.643364+00			<div>
 37deb520-d5bc-4a85-9465-79837644433e	File Pilot - Fast file explorer for Windows	2026-01-08 03:41:04.277875+00	https://filepilot.tech/	File Pilot	<div>It’s 2026 and you can buy a lightweight, super fast file explorer for windows for $250. I kind of love it.<br><br>The price obviously seems really high for a file explorer, but apparently it’s taken the developer 3 years to get to this point. You can also pay $50 but that only gets you a years worth of updates.<br><br>This project has got me thinking about an alternate reality where you have to pay for basic features of the OS. What if each program like notepad, paint, or task manager were priced this way? Or worse you had to pay a subscription! I’m actually shocked we didn’t end up in this world. Thankfully nerds write software for the love of the game and give it away. This puts downward pressure on the bugs corps to not nickel and dime software. All that said, I’m happy the file pilot dev values their own work and has priced this tool accordingly. If nothing else, I think it shows the windows team how software should run (fast) with few dependencies.<br><br><figure data-trix-attachment="{&quot;contentType&quot;:&quot;image/jpeg&quot;,&quot;filename&quot;:&quot;IMG_7526.jpeg&quot;,&quot;filesize&quot;:364870,&quot;height&quot;:1080,&quot;href&quot;:&quot;https://linkblog.blob.core.windows.net/images/2026/01/08/03/42/23/IMG_7526.png&quot;,&quot;url&quot;:&quot;https://linkblog.blob.core.windows.net/images/2026/01/08/03/42/23/IMG_7526.png&quot;,&quot;width&quot;:1080}" data-trix-content-type="image/jpeg" data-trix-attributes="{&quot;caption&quot;:&quot;Screenshot&quot;,&quot;presentation&quot;:&quot;gallery&quot;}" class="attachment attachment--preview attachment--jpeg"><a href="https://linkblog.blob.core.windows.net/images/2026/01/08/03/42/23/IMG_7526.png"><img src="https://linkblog.blob.core.windows.net/images/2026/01/08/03/42/23/IMG_7526.png" width="1080" height="1080"><figcaption class="attachment__caption attachment__caption--edited">Screenshot</figcaption></a></figure></div>	file-pilot	2026-01-08 15:06:20.799052+00	f
 a03b9d1e-b45c-416c-b26b-3fdc24c9f240	Get notifications from Claude Code on Windows with WSL	2026-01-09 23:31:51.453445+00	https://gist.github.com/david-jarman/27d6eec0ec0114f545d5dff84152a9ed	My ~/.claude/settings.json with full solution	<div>I've been looking for a way to get notified when Claude Code needs my input or is finished. Big shout out to u/Ok-Engineering2612 on Reddit for this post:&nbsp; <a href="https://www.reddit.com/r/ClaudeAI/comments/1m2qscz/wsl_toast_notifications_with_hooks_in_claude_code/">WSL Toast Notifications with Hooks in Claude Code : r/ClaudeAI</a>. I had been trying to do the same thing with BurntToast but I forget the way WSL interops with Windows.<br><br>The settings from the Reddit thread did need a little tweaking ($PAYLOAD is no longer supported and now Claude Code sends the JSON structure via stdin). Here's my change to the command:<br><br></div><pre> "command": "input=$(cat) &amp;&amp; powershell.exe -NoProfile -Command \\"Import-Module BurntToast; New-BurntToastNotification -Text 'Claude Code Notification', '$(echo \\"$input\\" | jq -r '.message')'\\""</pre><div>Here is the full documentation for hooks:&nbsp;<a href="https://code.claude.com/docs/en/hooks#notification-input">Hooks reference</a></div>	claude-code-notifications-wsl	2026-01-09 23:36:56.409433+00	f
 ae27b751-4a8b-4943-bacd-176ccaac8a1d	New blog feature: paging	2026-02-01 04:20:55.442583+00			<div>When scrolling to the bottom of the home page, you now should see an "older posts" button which will take you to the next page of posts. This feature has been on my TODO list since day 1 and am happy it's finally implemented. It's much easier now that all posts are cached in memory in the blog, so I can just use LINQ statements to "Skip" and "Take" over the full post collection to emulate paging.</div>	blog-feature-paging	2026-02-01 04:20:55.442583+00	f
+fac70fba-4e03-492d-bdd2-091c5686857b	We are the art by Brandon Sanderson	2026-02-03 04:44:20.087635+00	https://youtu.be/mb3uK-_QkOo	Brandon Sanderson’s Keynote speech 	<div>Brandon Sanderson offers his view on why AI art is not art. I highly recommend watching the whole video, it’s very entertaining and he makes a lot of good points from the perspective of those who make art.<br><br>I’m more of a consumer than a creator (although I do play guitar which scratches the itch), and my view on art and AI is that what makes art valuable to me is the context in which the art is made. It’s why I can hear the same song played by two different musicians and one version moves you more than another.<br><br>My example of this is listening to Townes Van Zandt play covers of songs, and they hit different. Knowing who he was as a person and the struggles he had throughout life really change how you experience a song. The pain is something you can hear in a raspy voice that is the result of years of smoking and hard living.<br><br>To echo, but slightly modify, Brandon’s point here, no matter how good AI gets at making art, it won’t have the same impact on me as a consumer because it’s completely void of any context that would give it meaning.&nbsp;</div>	we-are-the-art	2026-02-03 04:44:20.087635+00	f
 \.
 
 
@@ -272,6 +273,8 @@ a03b9d1e-b45c-416c-b26b-3fdc24c9f240	aa217264-5d70-4208-b4b2-adbeb9a8c890
 a03b9d1e-b45c-416c-b26b-3fdc24c9f240	d30f1a49-6fdb-4423-b9b6-5ba6f09db39c
 ae27b751-4a8b-4943-bacd-176ccaac8a1d	51560bdf-0d58-46c6-9539-dce9364fc642
 ae27b751-4a8b-4943-bacd-176ccaac8a1d	ce57c7a9-5ac0-48ef-b722-e63051efd4b2
+fac70fba-4e03-492d-bdd2-091c5686857b	421fb9fc-68c9-408f-801d-559be071836a
+fac70fba-4e03-492d-bdd2-091c5686857b	aa217264-5d70-4208-b4b2-adbeb9a8c890
 \.
 
 
@@ -293,5 +296,5 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 -- PostgreSQL database dump complete
 --
 
-\unrestrict khetsXW3OTen4e8CzCnUfR33Mz9aNWGEUbYrMpceUipYRPk7K0v3C4WVXKu12aD
+\unrestrict ZefLlx5GcvbsedVPWM9zYExsCttSuJd2TgIWcXSOYxldrbue4VIVrX5nWPKcNI2
 
