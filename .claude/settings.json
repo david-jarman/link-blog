@@ -11,7 +11,7 @@
       "Bash(ls:*)",
       "Bash(just test-all:*)",
       "Bash(dotnet test:*)",
-      "Bash(aspire run:*)",
+      "Bash(aspire:*)",
       "Bash(just run:*)",
       "WebFetch(domain:aspire.dev)",
       "mcp__aspire__list_resources",
