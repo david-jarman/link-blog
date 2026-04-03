@@ -1,0 +1,5 @@
+{
+  "appHost": {
+    "path": "src/LinkBlog.AppHost/LinkBlog.AppHost.csproj"
+  }
+}
