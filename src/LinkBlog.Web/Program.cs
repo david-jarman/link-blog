@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 using LinkBlog.Data;
 using LinkBlog.Data.Extensions;
 using LinkBlog.Feed;
@@ -45,14 +44,7 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 
 bool isHeroku = !string.IsNullOrEmpty(config["DYNO"]);
-builder.AddPostStore("postgresdb", options =>
-{
-    if (isHeroku)
-    {
-        var match = Regex.Match(config["DATABASE_URL"] ?? "", @"postgres://(.*):(.*)@(.*):(.*)/(.*)");
-        options.ConnectionString = $"Server={match.Groups[3]};Port={match.Groups[4]};User Id={match.Groups[1]};Password={match.Groups[2]};Database={match.Groups[5]};sslmode=Prefer;Trust Server Certificate=true";
-    }
-});
+builder.AddPostStore();
 
 builder.AddAzureBlobServiceClient("blobstore");
 

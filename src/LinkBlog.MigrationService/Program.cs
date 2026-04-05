@@ -1,13 +1,10 @@
-using LinkBlog.Data.Extensions;
 using LinkBlog.MigrationService;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Register only the database context for migrations (not the full post store)
-builder.AddPostDbContext("postgresdb");
-
+// TODO: MigrationService is being removed as part of the Blob Storage migration (Task 7/8)
 builder.Services.AddHostedService<Worker>();
 
 // Register seeder for development environment only
