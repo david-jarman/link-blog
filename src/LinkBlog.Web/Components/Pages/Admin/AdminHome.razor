@@ -5,7 +5,6 @@
 @using LinkBlog.Data
 @using Microsoft.AspNetCore.Authorization
 @using System.ComponentModel.DataAnnotations
-@using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IPostStore PostStore
@@ -225,13 +224,6 @@
                     OnError("Failed to update post");
                 }
             }
-            catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key") == true)
-            {
-                OnError("A post with this short title already exists. Please choose a different short title.", ex);
-                ErrorMessage = "A post with this short title already exists. Please choose a different short title.";
-                // Don't clear the form here so the user can fix the issue
-                SuccessMessage = null;
-            }
             catch (Exception ex)
             {
                 OnError($"Failed to update post: {ex.Message}", ex);
@@ -256,13 +248,6 @@
             {
                 OnError("Failed to create post");
             }
-        }
-        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key") == true)
-        {
-            OnError("A post with this short title already exists. Please choose a different short title.", ex);
-            // Don't clear the form here so the user can fix the issue
-            ErrorMessage = "A post with this short title already exists. Please choose a different short title.";
-            SuccessMessage = null;
         }
         catch (Exception ex)
         {

@@ -11,6 +11,7 @@
       "Bash(ls:*)",
       "Bash(just test-all:*)",
       "Bash(dotnet test:*)",
+      "Bash(dotnet restore:*)",
       "Bash(aspire:*)",
       "Bash(just run:*)",
       "WebFetch(domain:aspire.dev)",
@@ -31,8 +32,8 @@
         "hooks": [
           {
             "type": "command",
-            "timeout": 120,
-            "command": "${CLAUDE_PROJECT_DIR}/scripts/install_pkgs.sh 2>&1 || echo \"Script failed\""
+            "command": "${CLAUDE_PROJECT_DIR}/scripts/install_pkgs.sh 2>&1 || echo \"Script failed\"",
+            "timeout": 120
           }
         ]
       }
@@ -48,5 +49,8 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
   }
 }
