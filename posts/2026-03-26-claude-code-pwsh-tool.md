@@ -38,4 +38,4 @@ Now, Claude Code will see an additional tool called "PowerShell"
 It doesn't *replace* the Bash tool, it just adds PowerShell, so you may find that the agent defaults to using Bash for most things unless you ask it to use PowerShell explicitly. 
 
 You can also add { "defaultShell": "powershell" } to your settings.json file to make !commands run in PowerShell. This means you can now run cmdlets directly. For example: ! Write-Host "Hello" now works.
-[!\[\](https://linkblog.blob.core.windows.net/images/2026/03/26/17/52/17/image.png)hello world](https://linkblog.blob.core.windows.net/images/2026/03/26/17/52/17/image.png)
+[![hello world](https://linkblog.blob.core.windows.net/images/2026/03/26/17/52/17/image.png)](https://linkblog.blob.core.windows.net/images/2026/03/26/17/52/17/image.png)

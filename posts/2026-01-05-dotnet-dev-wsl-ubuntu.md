@@ -74,5 +74,5 @@ dotnet restore --interactive
 ```
 
 This should open your browser and you can sign in and restore packages! This only took me a full morning to figure out :(
-[!\[\](https://linkblog.blob.core.windows.net/images/2026/01/05/21/49/33/elmo.gif)me in 2026](https://linkblog.blob.core.windows.net/images/2026/01/05/21/49/33/elmo.gif)
+[![me in 2026](https://linkblog.blob.core.windows.net/images/2026/01/05/21/49/33/elmo.gif)](https://linkblog.blob.core.windows.net/images/2026/01/05/21/49/33/elmo.gif)
 [Microsoft Loves Linux - Microsoft Windows Server Blog](https://www.microsoft.com/en-us/windows-server/blog/2015/05/06/microsoft-loves-linux)

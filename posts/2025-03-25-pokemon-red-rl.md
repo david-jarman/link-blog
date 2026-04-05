@@ -45,4 +45,4 @@ uv run ./run_pretrained_interactive.py
 
 I first tried using Python 3.12, as the README suggested using Python 3.10+, but I found that there are package dependency conflicts with 3.12, so I changed my uv command to use 3.10 and everything worked. This is why I love uv. I can very easily try out other versions of python and not worry about messing up other projects. 
 
-[!\[\](https://linkblog.blob.core.windows.net/images/2025/03/25/15/54/59/Screenshot%202025-03-25%20at%208.53.37%E2%80%AFAM.png)Running Pokemon Red with RL](https://linkblog.blob.core.windows.net/images/2025/03/25/15/54/59/Screenshot%202025-03-25%20at%208.53.37%E2%80%AFAM.png)
+[![Running Pokemon Red with RL](https://linkblog.blob.core.windows.net/images/2025/03/25/15/54/59/Screenshot%202025-03-25%20at%208.53.37%E2%80%AFAM.png)](https://linkblog.blob.core.windows.net/images/2025/03/25/15/54/59/Screenshot%202025-03-25%20at%208.53.37%E2%80%AFAM.png)

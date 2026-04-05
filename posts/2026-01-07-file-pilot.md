@@ -18,4 +18,4 @@ The price obviously seems really high for a file explorer, but apparently it’s
 
 This project has got me thinking about an alternate reality where you have to pay for basic features of the OS. What if each program like notepad, paint, or task manager were priced this way? Or worse you had to pay a subscription! I’m actually shocked we didn’t end up in this world. Thankfully nerds write software for the love of the game and give it away. This puts downward pressure on the bugs corps to not nickel and dime software. All that said, I’m happy the file pilot dev values their own work and has priced this tool accordingly. If nothing else, I think it shows the windows team how software should run (fast) with few dependencies.
 
-[!\[\](https://linkblog.blob.core.windows.net/images/2026/01/08/03/42/23/IMG_7526.png)Screenshot](https://linkblog.blob.core.windows.net/images/2026/01/08/03/42/23/IMG_7526.png)
+[![Screenshot](https://linkblog.blob.core.windows.net/images/2026/01/08/03/42/23/IMG_7526.png)](https://linkblog.blob.core.windows.net/images/2026/01/08/03/42/23/IMG_7526.png)

@@ -20,4 +20,4 @@ The last two months have been tough, I had been really looking forward to skiing
 
 Here's to looking forward to many more rides soon.
 
-[!\[\](https://linkblog.blob.core.windows.net/images/2025/03/03/06/39/56/IMG_4915.jpeg)The Snoqualmie Valley is beautiful and reminds me of home](https://linkblog.blob.core.windows.net/images/2025/03/03/06/39/56/IMG_4915.jpeg)
+[![The Snoqualmie Valley is beautiful and reminds me of home](https://linkblog.blob.core.windows.net/images/2025/03/03/06/39/56/IMG_4915.jpeg)](https://linkblog.blob.core.windows.net/images/2025/03/03/06/39/56/IMG_4915.jpeg)

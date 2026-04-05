@@ -82,6 +82,14 @@ foreach (var post in posts)
         markdownBody = converter.Convert(post.Contents);
     }
 
+    // ReverseMarkdown escapes brackets inside link text, turning linked images
+    // [<img src="url" alt="text">](url) into [!\[\](url)text](url).
+    // Fix this back to proper linked-image syntax: [![text](url)](url)
+    markdownBody = Regex.Replace(
+        markdownBody,
+        @"\[!\\\[\\\]\(([^)]+)\)([^\]]*)\]\(([^)]+)\)",
+        "[![$2]($1)]($3)");
+
     var localDate = TimeZoneInfo.ConvertTime(post.Date, pacificZone);
 
     var frontmatter = new PostFrontmatter

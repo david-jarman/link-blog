@@ -15,4 +15,4 @@ tags:
 
 Created a small PowerShell scripts to split up MKV files by chapters. I wanted to avoid downloading yet another tool (handbrake or MKVToolNix) and I like the idea that I can use ffmpeg to do everything. For context, I have a DVD of Weird Al's ultimate music video collection that I got in middle school that I want available in Plex. I used MakeMKV to rip the DVD but all the music videos are in a single file, separated by chapters. 
 
-[!\[\](https://linkblog.blob.core.windows.net/images/2025/12/31/04/26/13/image.png)Weird Al](https://linkblog.blob.core.windows.net/images/2025/12/31/04/26/13/image.png)
+[![Weird Al](https://linkblog.blob.core.windows.net/images/2025/12/31/04/26/13/image.png)](https://linkblog.blob.core.windows.net/images/2025/12/31/04/26/13/image.png)

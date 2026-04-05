@@ -23,4 +23,4 @@ The last piece of the puzzle was hooking up my new endpoint to the Trix editor. 
 
 I edited my last post to add a picture from my bike ride, so I know it's working, but I better add one to this post too :)
 
-[!\[\](https://linkblog.blob.core.windows.net/images/2025/03/03/07/01/49/2025012600044699778.jpeg)Being a goofball with my Instax camera](https://linkblog.blob.core.windows.net/images/2025/03/03/07/01/49/2025012600044699778.jpeg)
+[![Being a goofball with my Instax camera](https://linkblog.blob.core.windows.net/images/2025/03/03/07/01/49/2025012600044699778.jpeg)](https://linkblog.blob.core.windows.net/images/2025/03/03/07/01/49/2025012600044699778.jpeg)
