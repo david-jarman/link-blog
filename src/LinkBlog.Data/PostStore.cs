@@ -127,10 +127,10 @@ public class PostDataAccess : IPostDataAccess
         return true;
     }
 
-    public async Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<bool> ArchivePostAsync(Post post, CancellationToken cancellationToken = default)
     {
         var postEntity = await this.postDbContext.Posts
-            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == post.Id, cancellationToken);
 
         if (postEntity == null)
         {
