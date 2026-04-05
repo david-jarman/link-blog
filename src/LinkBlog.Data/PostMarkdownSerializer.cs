@@ -54,7 +54,7 @@ public sealed class PostMarkdownSerializer
             LinkTitle = fm.LinkTitle,
             Contents = renderedHtml,
             MarkdownSource = markdownBody,
-            IsArchived = fm.Archived,
+            IsArchived = fm.Archived ?? false,
             Tags = (fm.Tags ?? []).Select(t => new Tag { Id = t, Name = t }),
         };
     }
@@ -72,7 +72,7 @@ public sealed class PostMarkdownSerializer
             Link = post.Link,
             LinkTitle = post.LinkTitle,
             Tags = post.Tags.Select(t => t.Name).ToList(),
-            Archived = post.IsArchived,
+            Archived = post.IsArchived ? true : null,
         };
 
         var yaml = yamlSerializer.Serialize(fm);
@@ -122,5 +122,5 @@ internal sealed class PostFrontmatter
     public string? Link { get; set; }
     public string? LinkTitle { get; set; }
     public List<string>? Tags { get; set; }
-    public bool Archived { get; set; }
+    public bool? Archived { get; set; }
 }

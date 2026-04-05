@@ -17,7 +17,7 @@ var connectionString = args.Length > 0
 // Parse Heroku postgres:// URL format
 if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase))
 {
-    var match = Regex.Match(connectionString, @"postgres://(.*):(.*)@(.*):(.*)/(.*)");
+    var match = Regex.Match(connectionString, @"^postgres://([^:]+):([^@]+)@([^:]+):(\d+)/([^?]+)");
     if (!match.Success) throw new InvalidOperationException("Could not parse DATABASE_URL");
     connectionString = $"Server={match.Groups[3]};Port={match.Groups[4]};User Id={match.Groups[1]};Password={match.Groups[2]};Database={match.Groups[5]};sslmode=Prefer;Trust Server Certificate=true";
 }
@@ -52,6 +52,13 @@ int warnings = 0;
 foreach (var post in posts)
 {
     string markdownBody;
+
+    if (string.IsNullOrEmpty(post.Contents))
+    {
+        Console.WriteLine($"[WARNING] '{post.ShortTitle}' has empty Contents — skipping");
+        warnings++;
+        continue;
+    }
 
     if (post.Contents.Contains("ridewithgps.com", StringComparison.OrdinalIgnoreCase))
     {
