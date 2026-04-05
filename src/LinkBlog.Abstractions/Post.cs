@@ -2,7 +2,7 @@ namespace LinkBlog.Abstractions;
 
 public sealed class Post
 {
-    private readonly TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+    private readonly TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
 
     public string Id { get; set; } = string.Empty;
 

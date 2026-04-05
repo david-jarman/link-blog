@@ -8,7 +8,7 @@ namespace LinkBlog.Data;
 public sealed class PostMarkdownSerializer
 {
     private static readonly TimeZoneInfo PacificZone =
-        TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+        TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
 
     private readonly MarkdownPipeline pipeline;
     private readonly IDeserializer yamlDeserializer;
@@ -35,6 +35,10 @@ public sealed class PostMarkdownSerializer
     public Post Deserialize(string fileContent)
     {
         var (frontmatterYaml, markdownBody) = SplitFrontmatter(fileContent);
+        if (string.IsNullOrWhiteSpace(frontmatterYaml))
+        {
+            throw new InvalidOperationException("Markdown file is missing YAML frontmatter. Expected content starting with '---'.");
+        }
         var fm = yamlDeserializer.Deserialize<PostFrontmatter>(frontmatterYaml);
         var renderedHtml = Markdown.ToHtml(markdownBody, pipeline);
 
@@ -64,7 +68,7 @@ public sealed class PostMarkdownSerializer
             ShortTitle = post.ShortTitle,
             Type = post.Type,
             Created = post.CreatedDate,
-            Updated = DateTimeOffset.UtcNow,
+            Updated = post.LastUpdatedDate,
             Link = post.Link,
             LinkTitle = post.LinkTitle,
             Tags = post.Tags.Select(t => t.Name).ToList(),
@@ -83,6 +87,9 @@ public sealed class PostMarkdownSerializer
 
     private static (string frontmatter, string body) SplitFrontmatter(string content)
     {
+        // Normalize CRLF to LF
+        content = content.Replace("\r\n", "\n", StringComparison.Ordinal);
+
         if (!content.StartsWith("---\n", StringComparison.Ordinal))
         {
             return (string.Empty, content);
