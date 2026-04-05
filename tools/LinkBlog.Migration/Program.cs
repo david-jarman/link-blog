@@ -123,7 +123,7 @@ namespace LinkBlog.Migration
             modelBuilder.Entity<PostEntity>()
                 .HasMany(p => p.Tags)
                 .WithMany(t => t.Posts)
-                .UsingEntity(j => j.ToTable("PostTags"));
+                .UsingEntity(j => j.ToTable("PostTag"));
         }
     }
 
