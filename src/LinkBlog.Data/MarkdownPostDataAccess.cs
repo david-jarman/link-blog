@@ -45,7 +45,7 @@ public sealed class MarkdownPostDataAccess : IPostDataAccess
     {
         await this.containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
 
-        post.Tags = tags.Select(t => new Tag { Id = t, Name = t });
+        post.Tags = tags.Select(t => new Tag { Id = t, Name = t }).ToList();
         var blobName = PostMarkdownSerializer.GetBlobName(post);
         var content = this.serializer.Serialize(post);
         var blobClient = this.containerClient.GetBlobClient(blobName);
@@ -56,7 +56,7 @@ public sealed class MarkdownPostDataAccess : IPostDataAccess
 
     public async Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default)
     {
-        post.Tags = tags.Select(t => new Tag { Id = t, Name = t });
+        post.Tags = tags.Select(t => new Tag { Id = t, Name = t }).ToList();
         post.LastUpdatedDate = DateTimeOffset.UtcNow;
 
         var blobName = PostMarkdownSerializer.GetBlobName(post);
