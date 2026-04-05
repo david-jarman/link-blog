@@ -90,8 +90,8 @@ foreach (var post in posts)
         Title = post.Title,
         ShortTitle = post.ShortTitle,
         Type = "post",
-        Created = post.Date,
-        Updated = post.UpdatedDate,
+        Created = post.Date.ToString("o"),
+        Updated = post.UpdatedDate.ToString("o"),
         Link = post.Link,
         LinkTitle = post.LinkTitle,
         Tags = post.Tags.Select(t => t.Name).ToList(),
@@ -156,8 +156,8 @@ namespace LinkBlog.Migration
         public string Title { get; set; } = string.Empty;
         public string ShortTitle { get; set; } = string.Empty;
         public string Type { get; set; } = "post";
-        public DateTimeOffset Created { get; set; }
-        public DateTimeOffset Updated { get; set; }
+        public string Created { get; set; } = string.Empty;
+        public string Updated { get; set; } = string.Empty;
         public string? Link { get; set; }
         public string? LinkTitle { get; set; }
         public List<string> Tags { get; set; } = new();

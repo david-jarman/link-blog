@@ -48,8 +48,8 @@ public sealed class PostMarkdownSerializer
             Title = fm.Title,
             ShortTitle = fm.ShortTitle,
             Type = fm.Type ?? "post",
-            CreatedDate = fm.Created,
-            LastUpdatedDate = fm.Updated,
+            CreatedDate = DateTimeOffset.Parse(fm.Created, null, System.Globalization.DateTimeStyles.RoundtripKind),
+            LastUpdatedDate = DateTimeOffset.Parse(fm.Updated, null, System.Globalization.DateTimeStyles.RoundtripKind),
             Link = fm.Link,
             LinkTitle = fm.LinkTitle,
             Contents = renderedHtml,
@@ -67,10 +67,10 @@ public sealed class PostMarkdownSerializer
             Title = post.Title,
             ShortTitle = post.ShortTitle,
             Type = post.Type,
-            Created = post.CreatedDate,
-            Updated = post.LastUpdatedDate,
-            Link = post.Link,
-            LinkTitle = post.LinkTitle,
+            Created = post.CreatedDate.ToString("o"),
+            Updated = post.LastUpdatedDate.ToString("o"),
+            Link = string.IsNullOrEmpty(post.Link) ? null : post.Link,
+            LinkTitle = string.IsNullOrEmpty(post.LinkTitle) ? null : post.LinkTitle,
             Tags = post.Tags.Select(t => t.Name).ToList(),
             Archived = post.IsArchived ? true : null,
         };
@@ -117,8 +117,8 @@ internal sealed class PostFrontmatter
     public string Title { get; set; } = string.Empty;
     public string ShortTitle { get; set; } = string.Empty;
     public string? Type { get; set; }
-    public DateTimeOffset Created { get; set; }
-    public DateTimeOffset Updated { get; set; }
+    public string Created { get; set; } = string.Empty;
+    public string Updated { get; set; } = string.Empty;
     public string? Link { get; set; }
     public string? LinkTitle { get; set; }
     public List<string>? Tags { get; set; }

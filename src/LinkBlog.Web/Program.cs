@@ -25,20 +25,35 @@ builder.Services.AddRazorComponents();
 
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication(options =>
+bool disableAdminAuth = builder.Environment.IsDevelopment() &&
+    builder.Configuration.GetValue<bool>("DisableAdminAuth");
+
+var authBuilder = builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = GitHubAccountDefaults.AuthenticationScheme;
+        if (!disableAdminAuth)
+            options.DefaultChallengeScheme = GitHubAccountDefaults.AuthenticationScheme;
     })
-    .AddGitHubAccount(options =>
+    .AddCookie();
+
+if (!disableAdminAuth)
+{
+    authBuilder.AddGitHubAccount(options =>
     {
         options.ClientId = config["CLIENT_ID"] ?? throw new InvalidOperationException("GitHub:ClientId is required.");
         options.ClientSecret = config["CLIENT_SECRET"] ?? throw new InvalidOperationException("GitHub:ClientSecret is required.");
-    })
-    .AddCookie();
+    });
+}
+
 builder.Services.AddAuthorization(policy =>
 {
-    policy.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.NameIdentifier, AdminIdentifiers.DavidJarmanGitHubId));
+    policy.AddPolicy("Admin", p =>
+    {
+        if (disableAdminAuth)
+            p.RequireAssertion(_ => true);
+        else
+            p.RequireClaim(ClaimTypes.NameIdentifier, AdminIdentifiers.DavidJarmanGitHubId);
+    });
 });
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
