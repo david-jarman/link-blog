@@ -76,7 +76,7 @@ public class UploadImageController : Controller
             {
                 logger.LogInformation("Blob {BlobPath} successfully created", blobPath);
             }
-            return Created(blobClient.Uri.AbsoluteUri, null);
+            return Ok(new { data = new { filePath = blobClient.Uri.AbsoluteUri } });
         }
         else
         {
