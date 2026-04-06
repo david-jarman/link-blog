@@ -7,6 +7,8 @@ public static class ServiceCollectionExtensions
 {
     public static IHostApplicationBuilder AddPostStore(this IHostApplicationBuilder app)
     {
+        // REVIEW: Do we need a memory cache for storing posts in memory?
+        // How much memory does a post take up?
         app.Services.AddMemoryCache(options =>
         {
             options.SizeLimit = 100;
