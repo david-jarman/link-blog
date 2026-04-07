@@ -26,10 +26,6 @@ This is the source code for my personal blog: [davidjarman.net](https://davidjar
   Image processing functionality.
   [LinkBlog.Images.csproj](src/LinkBlog.Images/LinkBlog.Images.csproj)
 
-- **LinkBlog.MigrationService**
-  Worker service for running database migrations.
-  [LinkBlog.MigrationService.csproj](src/LinkBlog.MigrationService/LinkBlog.MigrationService.csproj)
-
 - **LinkBlog.ServiceDefaults**
   Provides default implementations for various services.
   [LinkBlog.ServiceDefaults.csproj](src/LinkBlog.ServiceDefaults/LinkBlog.ServiceDefaults.csproj)
@@ -60,10 +56,4 @@ To run tests:
 
 ```sh
 dotnet test
-```
-
-Connect to database
-
-```sh
-heroku config:get DATABASE_URL | xargs pgweb --url
 ```

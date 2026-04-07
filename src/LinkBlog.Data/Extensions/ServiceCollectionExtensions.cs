@@ -1,4 +1,3 @@
-using Aspire.Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -6,36 +5,18 @@ namespace LinkBlog.Data.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IHostApplicationBuilder AddPostDbContext(this IHostApplicationBuilder app, string connectionName, Action<NpgsqlEntityFrameworkCorePostgreSQLSettings>? configureSettings = null)
+    public static IHostApplicationBuilder AddPostStore(this IHostApplicationBuilder app)
     {
-        app.AddNpgsqlDbContext<PostDbContext>(connectionName, configureSettings, dbContextBuilder =>
-        {
-            if (app.Environment.IsDevelopment())
-            {
-                dbContextBuilder.EnableSensitiveDataLogging();
-            }
-        });
-
-        return app;
-    }
-
-    public static IHostApplicationBuilder AddPostStore(this IHostApplicationBuilder app, string connectionName, Action<NpgsqlEntityFrameworkCorePostgreSQLSettings>? configureSettings = null)
-    {
-        app.AddPostDbContext(connectionName, configureSettings);
-
-        // Register memory cache
+        // REVIEW: Do we need a memory cache for storing posts in memory?
+        // How much memory does a post take up?
         app.Services.AddMemoryCache(options =>
         {
-            options.SizeLimit = 100; // Limit cache to 100 items (posts cache counts as 1)
+            options.SizeLimit = 100;
         });
 
-        // Register PostDataAccess for database operations
-        app.Services.AddScoped<IPostDataAccess, PostDataAccess>();
-
-        // Register CachedPostStore as the IPostStore implementation
+        app.Services.AddSingleton<PostMarkdownSerializer>();
+        app.Services.AddScoped<IPostDataAccess, MarkdownPostDataAccess>();
         app.Services.AddScoped<IPostStore, CachedPostStore>();
-
-        // Register background service for periodic cache refresh
         app.Services.AddHostedService<PostCacheRefreshService>();
 
         return app;

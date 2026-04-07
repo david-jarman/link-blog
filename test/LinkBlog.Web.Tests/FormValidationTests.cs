@@ -2,7 +2,6 @@ using Bunit;
 using LinkBlog.Abstractions;
 using LinkBlog.Data;
 using LinkBlog.Web.Components.Pages.Admin;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -99,31 +98,6 @@ public class FormValidationTests : BunitContext
         component.Find("form").Submit();
 
         // Verify the creation was attempted
-        _mockPostStore.Verify(
-            store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()),
-            Times.Once);
-    }
-
-    [Fact]
-    public void CreatePost_HandlesUniqueViolationException()
-    {
-        // Arrange
-        _mockPostStore
-            .Setup(store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
-            .Throws(new DbUpdateException("Duplicate key", new Exception("duplicate key value violates unique constraint")));
-
-        var component = Render<AdminHome>();
-
-        // Fill in all required fields
-        component.Find("#PostTitle").Change("Test Title");
-        component.Find("#ShortTitle").Change("test-title");
-        component.Find("#PostContent").Change("Test content");
-        component.Find("#PostTags").Change("test-tag");
-
-        // Act - Submit the form
-        component.Find("form").Submit();
-
-        // Verify the PostStore was called
         _mockPostStore.Verify(
             store => store.CreatePostAsync(It.IsAny<Post>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()),
             Times.Once);

@@ -5,25 +5,37 @@
 @using LinkBlog.Data
 @using Microsoft.AspNetCore.Authorization
 @using System.ComponentModel.DataAnnotations
-@using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IPostStore PostStore
 @inject ILogger<AdminHome> Logger
 
-@* Add trix WYSIWYG editor and drafts functionality *@
 <HeadContent>
-    <link rel="stylesheet" type="text/css" href="/css/trix.css">
-    <script type="text/javascript" src="/js/trix.js"></script>
-    <script type="text/javascript" src="/js/upload-attachments.js"></script>
-    <script type="text/javascript" src="/js/trix-extensions.js"></script>
-
-    @if (EnableDrafts)
-    {
-        <link rel="stylesheet" type="text/css" href="/css/draft-manager.css">
-        <script type="text/javascript" src="/js/draft-manager.js"></script>
-    }
-
+    <link rel="stylesheet" type="text/css" href="/css/easymde.min.css">
+    <script type="text/javascript" src="/js/easymde.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var easyMDE = new EasyMDE({
+                element: document.getElementById("PostContent"),
+                spellChecker: false,
+                autosave: {
+                    enabled: true,
+                    uniqueId: "admin-post-editor",
+                    delay: 1000,
+                },
+                toolbar: [
+                    "bold", "italic", "heading", "|",
+                    "quote", "unordered-list", "ordered-list", "|",
+                    "link", "upload-image", "|",
+                    "preview", "side-by-side", "fullscreen", "|",
+                    "guide"
+                ],
+                imageUploadEndpoint: "/api/upload",
+                imagePathAbsolute: true,
+                imageAccept: "image/png, image/jpeg, image/gif, image/webp",
+            });
+        });
+    </script>
 </HeadContent>
 
 <PageTitle>Admin</PageTitle>
@@ -44,26 +56,6 @@
     </div>
 }
 
-@if (EnableDrafts)
-{
-    @* Draft Manager UI *@
-    <div class="draft-manager">
-        <div id="draft-toggle">► Draft Manager</div>
-        <div id="draft-container" class="hidden">
-            <div class="draft-actions">
-                <input type="text" id="draft-name" class="form-control" placeholder="Enter draft name" />
-                <button id="save-draft-btn" class="btn btn-success">Save Draft</button>
-            </div>
-            <div id="draft-message" class="alert" style="display: none;"></div>
-            <div class="draft-list">
-                <h4>Saved Drafts</h4>
-                <div id="draft-list">
-                    <p>No drafts saved yet.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-}
 
 <EditForm Model="PostForm" FormName="postForm" OnValidSubmit="HandleSubmitAsync">
     <DataAnnotationsValidator />
@@ -83,8 +75,7 @@
 
     <div class="form-group">
         <label for="PostContent" class="form-label">Post content: </label>
-        <InputText id="PostContent" type="hidden" @bind-Value="PostForm.Contents" />
-        <trix-editor input="PostContent" class="post-editor"></trix-editor>
+        <InputTextArea id="PostContent" @bind-Value="PostForm.Contents" class="post-editor" />
         <ValidationMessage For="@(() => PostForm.Contents)" class="validation-message" />
     </div>
 
@@ -132,8 +123,6 @@
     [SupplyParameterFromForm]
     private PostFormModel? PostForm { get; set; }
 
-    private bool EnableDrafts { get; set; }
-
     private string? ErrorMessage { get; set; }
 
     private string? SuccessMessage { get; set; }
@@ -170,9 +159,6 @@
             SuccessMessage = Message;
         }
 
-        // Enable drafts only if the post is new
-        EnableDrafts = string.IsNullOrWhiteSpace(Id);
-
         if (PostForm == null && !string.IsNullOrWhiteSpace(Id))
         {
             // This is the "edit post" case on first load (not on submit).
@@ -184,7 +170,7 @@
             {
                 PostForm!.Title = post.Title;
                 PostForm!.ShortTitle = post.ShortTitle;
-                PostForm!.Contents = post.Contents;
+                PostForm!.Contents = post.MarkdownSource;
                 PostForm!.Link = post.Link;
                 PostForm!.LinkTitle = post.LinkTitle;
                 PostForm!.Tags = string.Join(",", post.Tags.Select(t => t.Name));
@@ -202,7 +188,7 @@
         {
             Title = PostForm!.Title,
             ShortTitle = PostForm!.ShortTitle,
-            Contents = PostForm!.Contents,
+            MarkdownSource = PostForm!.Contents,
             Link = PostForm!.Link,
             LinkTitle = PostForm!.LinkTitle,
         };
@@ -214,6 +200,13 @@
 
         if (!string.IsNullOrWhiteSpace(Id))
         {
+            var existingPost = await PostStore.GetPostById(Id);
+            if (existingPost != null)
+            {
+                post.Id = existingPost.Id;
+                post.CreatedDate = existingPost.CreatedDate;
+            }
+
             try
             {
                 if (await PostStore.UpdatePostAsync(Id, post, tagNames))
@@ -224,13 +217,6 @@
                 {
                     OnError("Failed to update post");
                 }
-            }
-            catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key") == true)
-            {
-                OnError("A post with this short title already exists. Please choose a different short title.", ex);
-                ErrorMessage = "A post with this short title already exists. Please choose a different short title.";
-                // Don't clear the form here so the user can fix the issue
-                SuccessMessage = null;
             }
             catch (Exception ex)
             {
@@ -256,13 +242,6 @@
             {
                 OnError("Failed to create post");
             }
-        }
-        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key") == true)
-        {
-            OnError("A post with this short title already exists. Please choose a different short title.", ex);
-            // Don't clear the form here so the user can fix the issue
-            ErrorMessage = "A post with this short title already exists. Please choose a different short title.";
-            SuccessMessage = null;
         }
         catch (Exception ex)
         {

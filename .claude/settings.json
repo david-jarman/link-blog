@@ -11,17 +11,23 @@
       "Bash(ls:*)",
       "Bash(just test-all:*)",
       "Bash(dotnet test:*)",
+      "Bash(dotnet run:*)",
+      "Bash(dotnet restore:*)",
       "Bash(aspire:*)",
       "Bash(just run:*)",
       "WebFetch(domain:aspire.dev)",
       "mcp__aspire__list_resources",
       "mcp__aspire__list_apphosts",
+      "mcp__aspire__list_console_logs",
+      "mcp__aspire__list_structured_logs",
+      "mcp__aspire__execute_resource_command",
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_wait_for",
       "mcp__playwright__browser_take_screenshot",
       "mcp__playwright__browser_click",
       "mcp__playwright__browser_snapshot",
-      "mcp__playwright__browser_console_messages"
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_fill_form"
     ]
   },
   "hooks": {
@@ -31,8 +37,8 @@
         "hooks": [
           {
             "type": "command",
-            "timeout": 120,
-            "command": "${CLAUDE_PROJECT_DIR}/scripts/install_pkgs.sh 2>&1 || echo \"Script failed\""
+            "command": "${CLAUDE_PROJECT_DIR}/scripts/install_pkgs.sh 2>&1 || echo \"Script failed\"",
+            "timeout": 120
           }
         ]
       }
@@ -48,5 +54,8 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
   }
 }

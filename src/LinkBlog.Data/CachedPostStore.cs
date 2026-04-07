@@ -306,11 +306,17 @@ public sealed class CachedPostStore : IPostStore, IDisposable
 
     public async Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default)
     {
-        var result = await this.dataAccess.ArchivePostAsync(id, cancellationToken);
+        var posts = await this.GetCachedPostsAsync(cancellationToken);
+        var post = posts.FirstOrDefault(p => p.Id == id);
+        if (post == null)
+        {
+            return false;
+        }
+
+        var result = await this.dataAccess.ArchivePostAsync(post, cancellationToken);
 
         if (result)
         {
-            // Invalidate cache to reflect archived post
             this.InvalidateCache();
         }
 

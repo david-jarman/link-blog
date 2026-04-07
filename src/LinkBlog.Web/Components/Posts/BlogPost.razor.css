@@ -61,6 +61,18 @@ button.edit-btn:hover svg {
     transform: scale(1.1);
 }
 
+/* Ensure images in post content are block-level so they don't wrap with text */
+::deep .post-content p img {
+    display: block;
+    max-width: 100%;
+    margin: 0.5rem auto;
+}
+
+/* Ensure anchor tags wrapping images are also block-level */
+::deep .post-content p a:has(img) {
+    display: block;
+}
+
 /* Style block quotes to look more like markdown-style quotes */
 ::deep blockquote {
     padding: 10px 20px;

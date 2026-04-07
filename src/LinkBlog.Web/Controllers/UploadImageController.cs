@@ -25,9 +25,9 @@ public class UploadImageController : Controller
 
     [HttpPost("upload")]
     [RequireAntiforgeryToken(required: false)]
-    public async Task<ActionResult> UploadAsync(IFormFile file, CancellationToken ct)
+    public async Task<ActionResult> UploadAsync(IFormFile image, CancellationToken ct)
     {
-        if (file is null)
+        if (image is null)
         {
             logger.NoFileUploaded();
             return BadRequest();
@@ -37,11 +37,11 @@ public class UploadImageController : Controller
         var containerClient = blobServiceClient.GetBlobContainerClient("images");
         await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob, cancellationToken: ct);
 
-        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(image.FileName);
 
         // Load and process the image from the stream
-        using Stream originalImage = file.OpenReadStream();
-        using var processedImage = await imageConverter.ProcessImageAsync(originalImage, file.Length, ct);
+        using Stream originalImage = image.OpenReadStream();
+        using var processedImage = await imageConverter.ProcessImageAsync(originalImage, image.Length, ct);
 
         // Blob path should be prefixed with the current datetime to ensure uniqueness.
         // Example: "2025/08/01/12/00/00/imagename.png" or "2025/08/01/12/00/00/imagename.gif"
@@ -76,7 +76,7 @@ public class UploadImageController : Controller
             {
                 logger.LogInformation("Blob {BlobPath} successfully created", blobPath);
             }
-            return Created(blobClient.Uri.AbsoluteUri, null);
+            return Ok(new { data = new { filePath = blobClient.Uri.AbsoluteUri } });
         }
         else
         {

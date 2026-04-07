@@ -2,13 +2,16 @@ namespace LinkBlog.Abstractions;
 
 public sealed class Post
 {
-    private readonly TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+    private readonly TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
 
     public string Id { get; set; } = string.Empty;
 
     public string Title { get; set; } = string.Empty;
 
     public string ShortTitle { get; set; } = string.Empty;
+
+    /// <summary>Content type. Defaults to "post". Reserved for future types (note, fyi, etc.).</summary>
+    public string Type { get; set; } = "post";
 
     public DateTimeOffset CreatedDate { get; set; }
 
@@ -18,14 +21,15 @@ public sealed class Post
 
     public string? LinkTitle { get; set; }
 
+    /// <summary>Rendered HTML content, populated when loading from Blob Storage.</summary>
     public string Contents { get; set; } = string.Empty;
+
+    /// <summary>Raw markdown source, used by admin editor and serialized to the blob file body.</summary>
+    public string MarkdownSource { get; set; } = string.Empty;
 
     public bool IsArchived { get; set; }
 
-    // Chose IEnumerable over List because otherwise we can get into
-    // an infinite loop resolving tags -> posts -> tags etc when calling
-    // ToList() in the extensions to convert between contracts.
-    public IEnumerable<Tag> Tags { get; init; } = Enumerable.Empty<Tag>();
+    public IEnumerable<Tag> Tags { get; set; } = Enumerable.Empty<Tag>();
 
     public DateTimeOffset LocalCreatedTime => TimeZoneInfo.ConvertTime(CreatedDate, pacificZone);
 
