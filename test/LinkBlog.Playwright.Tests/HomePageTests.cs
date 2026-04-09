@@ -32,29 +32,15 @@ public class HomePageTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task HomePage_HasCorrectTitle()
-    {
-        var page = await _browser!.NewPageAsync();
-        await page.GotoAsync(_baseUrl);
-
-        await Assertions.Expect(page).ToHaveTitleAsync("David Jarman's Blog");
-    }
-
-    [Fact]
-    public async Task HomePage_ReturnsSuccessStatusCode()
+    public async Task HomePage_LoadsCorrectly()
     {
         var page = await _browser!.NewPageAsync();
         var response = await page.GotoAsync(_baseUrl);
 
         Assert.NotNull(response);
         Assert.True(response.Ok, $"Expected OK response but got {response.Status}");
-    }
 
-    [Fact]
-    public async Task HomePage_ContainsNavigationLinks()
-    {
-        var page = await _browser!.NewPageAsync();
-        await page.GotoAsync(_baseUrl);
+        await Assertions.Expect(page).ToHaveTitleAsync("David Jarman's Blog");
 
         var nav = page.Locator("nav.page-links");
         await Assertions.Expect(nav).ToBeVisibleAsync();
