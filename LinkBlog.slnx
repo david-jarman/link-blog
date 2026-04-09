@@ -8,5 +8,6 @@
     <Project Path="src/LinkBlog.ServiceDefaults/LinkBlog.ServiceDefaults.csproj" />
     <Project Path="src/LinkBlog.Web/LinkBlog.Web.csproj" />
     <Project Path="test/LinkBlog.Web.Tests/LinkBlog.Web.Tests.csproj" />
+    <Project Path="test/LinkBlog.Playwright.Tests/LinkBlog.Playwright.Tests.csproj" />
   </Folder>
 </Solution>
