@@ -1,4 +1,5 @@
 using Aspire.Hosting;
+using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Testing;
 using Microsoft.Playwright;
 
@@ -20,8 +21,10 @@ public class AdminPageTests : IAsyncLifetime
         _app = await appHost.BuildAsync();
         await _app.StartAsync();
 
-        var httpClient = _app.CreateHttpClient("webfrontend");
-        _baseUrl = httpClient.BaseAddress!.ToString().TrimEnd('/');
+        var webResource = appHost.Resources.First(r=>r.Name == "webfrontend");
+        var endpoint = webResource.Annotations.OfType<EndpointAnnotation>().First(x => x.Name == "http");
+
+        _baseUrl = endpoint.AllocatedEndpoint!.UriString;
 
         _playwright = await Microsoft.Playwright.Playwright.CreateAsync();
         _browser = await _playwright.Chromium.LaunchAsync();
