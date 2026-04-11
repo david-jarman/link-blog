@@ -1,6 +1,7 @@
 using LinkBlog.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace LinkBlog.Web.Controllers;
 
@@ -9,10 +10,12 @@ namespace LinkBlog.Web.Controllers;
 public class AdminController : Controller
 {
     private readonly IPostStore postStore;
+    private readonly IOutputCacheStore outputCacheStore;
 
-    public AdminController(IPostStore postStore)
+    public AdminController(IPostStore postStore, IOutputCacheStore outputCacheStore)
     {
         this.postStore = postStore;
+        this.outputCacheStore = outputCacheStore;
     }
 
     [HttpPost("{id}/archive")]
@@ -24,6 +27,7 @@ public class AdminController : Controller
             return NotFound();
         }
 
+        await outputCacheStore.EvictByTagAsync("posts", ct);
         return Redirect("/admin?message=Post%20archived%20successfully");
     }
 }

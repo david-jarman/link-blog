@@ -2,6 +2,7 @@ using Bunit;
 using LinkBlog.Abstractions;
 using LinkBlog.Data;
 using LinkBlog.Web.Components.Pages.Admin;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -12,14 +13,17 @@ public class FormValidationTests : BunitContext
 {
     private readonly Mock<IPostStore> _mockPostStore;
     private readonly Mock<ILogger<AdminHome>> _mockLogger;
+    private readonly Mock<IOutputCacheStore> _mockOutputCacheStore;
 
     public FormValidationTests()
     {
         _mockPostStore = new Mock<IPostStore>();
         _mockLogger = new Mock<ILogger<AdminHome>>();
+        _mockOutputCacheStore = new Mock<IOutputCacheStore>();
 
         Services.AddSingleton(_mockPostStore.Object);
         Services.AddSingleton(_mockLogger.Object);
+        Services.AddSingleton(_mockOutputCacheStore.Object);
 
         // Setup authorization (since the component has [Authorize] attribute)
         Services.AddAuthorization(options =>

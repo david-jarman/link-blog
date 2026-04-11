@@ -4,11 +4,13 @@
 @using LinkBlog.Abstractions
 @using LinkBlog.Data
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.OutputCaching
 @using System.ComponentModel.DataAnnotations
 @attribute [Authorize(Policy = "Admin")]
 
 @inject IPostStore PostStore
 @inject ILogger<AdminHome> Logger
+@inject IOutputCacheStore OutputCacheStore
 
 <HeadContent>
     <link rel="stylesheet" type="text/css" href="/css/easymde.min.css">
@@ -211,6 +213,7 @@
             {
                 if (await PostStore.UpdatePostAsync(Id, post, tagNames))
                 {
+                    await OutputCacheStore.EvictByTagAsync("posts", CancellationToken.None);
                     OnSuccess("Post updated successfully");
                 }
                 else
@@ -236,6 +239,7 @@
 
             if (success)
             {
+                await OutputCacheStore.EvictByTagAsync("posts", CancellationToken.None);
                 OnSuccess("Post created successfully");
             }
             else

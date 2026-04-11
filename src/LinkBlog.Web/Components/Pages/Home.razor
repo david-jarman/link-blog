@@ -4,7 +4,7 @@
 @using LinkBlog.Data
 @using LinkBlog.Web.Components.Posts
 @using Microsoft.Extensions.Options
-@attribute [OutputCache(Duration = 60, VaryByRouteValueNames = new[] { "PageNumber" })]
+@attribute [OutputCache(Duration = 60, VaryByRouteValueNames = new[] { "PageNumber" }, Tags = new[] { "posts" })]
 
 @inject IPostStore PostStore
 @inject IOptions<BlogOptions> BlogOptions
