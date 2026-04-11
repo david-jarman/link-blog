@@ -48,7 +48,11 @@ public class AdminPageTests : IAsyncLifetime
         const string postContent = "This is a test post created by Playwright.";
         const string postTags = "test";
 
-        var page = await _browser!.NewPageAsync();
+        BrowserNewPageOptions options = new()
+        {
+            IgnoreHTTPSErrors = true
+        };
+        var page = await _browser!.NewPageAsync(options);
 
         // Navigate to the admin page
         await page.GotoAsync($"{_baseUrl}/admin");

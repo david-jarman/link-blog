@@ -40,7 +40,11 @@ public class HomePageTests : IAsyncLifetime
     [Fact]
     public async Task HomePage_LoadsCorrectly()
     {
-        var page = await _browser!.NewPageAsync();
+        BrowserNewPageOptions options = new()
+        {
+            IgnoreHTTPSErrors = true
+        };
+        var page = await _browser!.NewPageAsync(options);
         var response = await page.GotoAsync(_baseUrl);
 
         Assert.NotNull(response);
