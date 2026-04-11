@@ -21,7 +21,7 @@ public class HomePageTests : IAsyncLifetime
         _app = await appHost.BuildAsync();
         await _app.StartAsync();
 
-        var webResource = appHost.Resources.First(r=>r.Name == "webfrontend");
+        var webResource = appHost.Resources.First(r => r.Name == "webfrontend");
         var endpoint = webResource.Annotations.OfType<EndpointAnnotation>().First(x => x.Name == "http");
 
         _baseUrl = endpoint.AllocatedEndpoint!.UriString;
