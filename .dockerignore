@@ -1,0 +1,11 @@
+# directories
+**/bin/
+**/obj/
+**/out/
+test/
+posts/
+
+# files
+fly.toml
+Dockerfile*
+**/*.md

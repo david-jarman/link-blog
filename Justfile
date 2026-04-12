@@ -49,4 +49,4 @@ lint:
 
 deploy: test-all
   dotnet format --verify-no-changes
-  git push heroku main
+  fly deploy
