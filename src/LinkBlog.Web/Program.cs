@@ -58,7 +58,6 @@ builder.Services.AddAuthorization(policy =>
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 
-bool isHeroku = !string.IsNullOrEmpty(config["DYNO"]);
 builder.AddPostStore();
 
 builder.AddAzureBlobServiceClient("blobstore");
@@ -66,19 +65,9 @@ builder.AddAzureBlobServiceClient("blobstore");
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    if (isHeroku)
-    {
-        options.KnownIPNetworks.Clear();
-        options.KnownProxies.Clear();
-    }
-});
-builder.Services.AddHttpsRedirection(options =>
-{
-    if (isHeroku)
-    {
-        options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-        options.HttpsPort = 443;
-    }
+
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
 });
 
 builder.Services.Configure<BlogOptions>(builder.Configuration.GetSection(nameof(BlogOptions)));
