@@ -2,6 +2,8 @@
 **/bin/
 **/obj/
 **/out/
+test/
+posts/
 
 # files
 fly.toml
