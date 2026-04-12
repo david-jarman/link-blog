@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for link-blog on 2026-04-11T08:20:30-07:00
+# fly.toml app configuration file generated for linkblog-web on 2026-04-11T15:20:55-07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'link-blog'
+app = 'linkblog-web'
 primary_region = 'sjc'
 
 [http_service]
@@ -15,6 +15,6 @@ primary_region = 'sjc'
   processes = ['app']
 
 [[vm]]
-  memory = '512mb'
+  cpu_kind = 'shared'
   cpus = 1
   memory_mb = 512
