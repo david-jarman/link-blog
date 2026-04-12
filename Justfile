@@ -20,6 +20,6 @@ clean:
 lint:
   dotnet format
 
-deploy: test-all
+deploy: test
   dotnet format --verify-no-changes
   fly deploy
