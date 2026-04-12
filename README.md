@@ -15,7 +15,7 @@ This is the source code for my personal blog: [davidjarman.net](https://davidjar
   [LinkBlog.AppHost.csproj](src/LinkBlog.AppHost/LinkBlog.AppHost.csproj)
 
 - **LinkBlog.Data**
-  Data access layer with Entity Framework Core entities and contexts.
+  Data access layer.
   [LinkBlog.Data.csproj](src/LinkBlog.Data/LinkBlog.Data.csproj)
 
 - **LinkBlog.Feed**
