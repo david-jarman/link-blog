@@ -17,11 +17,13 @@
     <script type="text/javascript" src="/js/easymde.min.js"></script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
+            var isNewPost = @(string.IsNullOrWhiteSpace(Id).ToString().ToLower())
+
             var easyMDE = new EasyMDE({
                 element: document.getElementById("PostContent"),
                 spellChecker: false,
                 autosave: {
-                    enabled: true,
+                    enabled: isNewPost,
                     uniqueId: "admin-post-editor",
                     delay: 1000,
                 },
@@ -170,12 +172,12 @@
             var post = await PostStore.GetPostById(Id);
             if (post != null)
             {
-                PostForm!.Title = post.Title;
-                PostForm!.ShortTitle = post.ShortTitle;
-                PostForm!.Contents = post.MarkdownSource;
-                PostForm!.Link = post.Link;
-                PostForm!.LinkTitle = post.LinkTitle;
-                PostForm!.Tags = string.Join(",", post.Tags.Select(t => t.Name));
+                PostForm.Title = post.Title;
+                PostForm.ShortTitle = post.ShortTitle;
+                PostForm.Contents = post.MarkdownSource;
+                PostForm.Link = post.Link;
+                PostForm.LinkTitle = post.LinkTitle;
+                PostForm.Tags = string.Join(",", post.Tags.Select(t => t.Name));
             }
         }
 
