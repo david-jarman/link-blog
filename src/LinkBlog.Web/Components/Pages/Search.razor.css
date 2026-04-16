@@ -1,98 +1,62 @@
 .search-page {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+    max-width: var(--max-width);
+    margin-inline: auto;
+    padding: 1.5rem 1rem 2rem;
 }
 
 .search-header {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .search-header h2 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    color: #333;
-}
-
-/* Dark mode search header */
-[data-theme="dark"] .search-header h2 {
-    color: #f0f0f0;
+    font-size: 1.75rem;
+    margin-bottom: 0.4rem;
+    color: var(--color-text);
 }
 
 .search-query {
-    font-size: 1.1rem;
-    color: #666;
-    margin: 0.5rem 0;
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+    margin: 0.35rem 0;
 }
 
 .search-query strong {
-    color: #333;
-}
-
-/* Dark mode search query */
-[data-theme="dark"] .search-query {
-    color: #b0b0b0;
-}
-
-[data-theme="dark"] .search-query strong {
-    color: #f0f0f0;
+    color: var(--color-text);
 }
 
 .loading {
     text-align: center;
     padding: 3rem 0;
-    color: #666;
-    font-size: 1.1rem;
-}
-
-/* Dark mode loading */
-[data-theme="dark"] .loading {
-    color: #b0b0b0;
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
 }
 
 .search-results {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .results-count {
-    font-size: 0.95rem;
-    color: #666;
-    margin-bottom: 1.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: 1.25rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-/* Dark mode results count */
-[data-theme="dark"] .results-count {
-    color: #b0b0b0;
-    border-bottom-color: #555;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .no-results,
 .no-query {
     text-align: center;
     padding: 3rem 1rem;
-    color: #666;
+    color: var(--color-text-muted);
 }
 
 .no-results p,
 .no-query p {
-    font-size: 1.1rem;
-    margin: 0.5rem 0;
+    font-size: var(--text-lg);
+    margin: 0.35rem 0;
 }
 
 .no-results p:first-child {
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
 }
-
-/* Dark mode no results */
-[data-theme="dark"] .no-query,
-[data-theme="dark"] .no-results {
-    color: #b0b0b0;
-}
-
-[data-theme="dark"] .no-results p:first-child {
-    color: #f0f0f0;
-}
-

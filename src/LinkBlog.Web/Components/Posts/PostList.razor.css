@@ -1,4 +1,4 @@
 .post-list-container {
-    max-width: 50rem;
-    margin: 0 auto;
+    max-width: var(--max-width);
+    margin-inline: auto;
 }

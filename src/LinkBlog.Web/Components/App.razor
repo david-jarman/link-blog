@@ -7,17 +7,18 @@
     <meta name="author" content="David Jarman" />
     <base href="/" />
     <link rel="alternate" href="/atom/all" type="application/atom+xml" title="David Jarman's Blog" />
-    <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["LinkBlog.Web.styles.css"]" />
     <ImportMap />
     <link rel="icon" type="image/png" href="favicon.ico" />
     <script>
-        // Inline script to set theme before page renders (prevents FOUC)
+        // Inline script to set theme + style before page renders (prevents FOUC)
         (function() {
-            const stored = localStorage.getItem('theme-preference');
-            const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const theme = localStorage.getItem('theme-preference') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const style = localStorage.getItem('style-preference') || 'modern';
             document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('data-style', style);
         })();
     </script>
     <HeadOutlet />

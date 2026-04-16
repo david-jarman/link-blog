@@ -1,7 +1,8 @@
 .page-links-container {
-    max-width: 50rem;
-    margin: 1.5rem auto;
-    padding: 0 1rem;
+    max-width: var(--max-width);
+    margin-inline: auto;
+    margin-block: 1.25rem 0.5rem;
+    padding-inline: 1rem;
     display: flex;
     justify-content: center;
 }
@@ -9,46 +10,35 @@
 .page-links {
     display: inline-flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    padding: 1rem;
-    background-color: lightskyblue;
-    border-style: solid;
-    border-radius: 1rem;
-    box-shadow: 10px 10px;
-}
-
-/* Dark mode page links */
-[data-theme="dark"] .page-links {
-    background-color: #2b5278;
-    border-color: #e0e0e0;
-    box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
+    gap: 0.25rem;
+    padding: 0.4rem;
+    background-color: var(--nav-box-bg);
+    border: 1px solid var(--nav-box-border);
+    border-radius: var(--nav-box-radius);
+    box-shadow: var(--nav-box-shadow);
 }
 
 .page-link {
-    color: #333;
+    color: var(--color-text);
     text-decoration: none;
-    font-size: 1rem;
+    font-size: var(--text-sm);
     font-weight: 500;
-    transition: color 0.3s ease;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition), color var(--transition);
 }
 
 .page-link:hover {
-    color: #005fa3;
+    background-color: var(--color-accent);
+    color: white;
 }
 
-/* Dark mode page link */
-[data-theme="dark"] .page-link {
-    color: #f0f0f0;
-}
-
-[data-theme="dark"] .page-link:hover {
-    color: #4a9eff;
-}
-
+/* ── Pagination ── */
 .pagination-nav {
-    max-width: 50rem;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    max-width: var(--max-width);
+    margin-inline: auto;
+    margin-block: 1.5rem 2rem;
+    padding-inline: 1rem;
     display: flex;
     justify-content: space-between;
     gap: 1rem;
@@ -56,20 +46,21 @@
 
 .pagination-link {
     display: inline-block;
-    padding: 0.75rem 1.25rem;
-    background-color: lightskyblue;
-    border: 2px solid #333;
-    border-radius: 0.5rem;
-    color: #333;
+    padding: 0.6rem 1.1rem;
+    background-color: var(--pagination-bg);
+    border: 1px solid var(--pagination-border);
+    border-radius: var(--radius-md);
+    color: var(--pagination-text);
     text-decoration: none;
-    font-size: 1rem;
+    font-size: var(--text-sm);
     font-weight: 500;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
 }
 
 .pagination-link:hover {
-    background-color: #005fa3;
-    color: white;
+    background-color: var(--pagination-hover-bg);
+    color: var(--pagination-hover-text);
+    border-color: var(--pagination-hover-bg);
 }
 
 .newer-posts {
@@ -78,15 +69,4 @@
 
 .older-posts {
     margin-left: auto;
-}
-
-[data-theme="dark"] .pagination-link {
-    background-color: #2b5278;
-    border-color: #e0e0e0;
-    color: #f0f0f0;
-}
-
-[data-theme="dark"] .pagination-link:hover {
-    background-color: #4a9eff;
-    color: #1a1a1a;
 }
