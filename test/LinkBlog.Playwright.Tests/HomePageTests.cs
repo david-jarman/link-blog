@@ -14,9 +14,6 @@ public class HomePageTests : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        // Bypass GitHub OAuth for admin pages in test environment
-        Environment.SetEnvironmentVariable("DisableAdminAuth", "true");
-
         var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.LinkBlog_AppHost>();
         _app = await appHost.BuildAsync();
         await _app.StartAsync();

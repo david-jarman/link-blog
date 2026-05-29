@@ -52,9 +52,6 @@ public static class Extensions
             .WithTracing(tracing =>
             {
                 tracing
-                    .AddSource(
-                        builder.Environment.ApplicationName,
-                        "LinkBlog.Images.ImageConversion")
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation();
             });
