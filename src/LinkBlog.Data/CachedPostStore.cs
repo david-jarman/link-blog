@@ -70,15 +70,6 @@ public sealed class CachedPostStore : IPostStore, IDisposable
     }
 
     /// <summary>
-    /// Invalidates the cache, forcing a refresh on next access.
-    /// </summary>
-    private void InvalidateCache()
-    {
-        this.memoryCache.Remove(AllPostsCacheKey);
-        this.logger.LogInformation("Post cache invalidated");
-    }
-
-    /// <summary>
     /// Gets all cached posts or loads them from database if not cached.
     /// </summary>
     private async Task<List<Post>> GetCachedPostsAsync(CancellationToken cancellationToken = default)
@@ -152,19 +143,6 @@ public sealed class CachedPostStore : IPostStore, IDisposable
             cancellationToken.ThrowIfCancellationRequested();
             yield return post;
         }
-    }
-
-    public async Task<bool> CreatePostAsync(Post post, List<string> tags, CancellationToken cancellationToken = default)
-    {
-        var result = await this.dataAccess.CreatePostAsync(post, tags, cancellationToken);
-
-        if (result)
-        {
-            // Invalidate cache to include new post
-            this.InvalidateCache();
-        }
-
-        return result;
     }
 
     public async IAsyncEnumerable<Post> GetPostsForDateRange(
@@ -289,38 +267,6 @@ public sealed class CachedPostStore : IPostStore, IDisposable
             index += term.Length;
         }
         return count;
-    }
-
-    public async Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default)
-    {
-        var result = await this.dataAccess.UpdatePostAsync(id, post, tags, cancellationToken);
-
-        if (result)
-        {
-            // Invalidate cache to reflect updates
-            this.InvalidateCache();
-        }
-
-        return result;
-    }
-
-    public async Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default)
-    {
-        var posts = await this.GetCachedPostsAsync(cancellationToken);
-        var post = posts.FirstOrDefault(p => p.Id == id);
-        if (post == null)
-        {
-            return false;
-        }
-
-        var result = await this.dataAccess.ArchivePostAsync(post, cancellationToken);
-
-        if (result)
-        {
-            this.InvalidateCache();
-        }
-
-        return result;
     }
 
     public void Dispose()

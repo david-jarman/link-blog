@@ -40,43 +40,4 @@ public sealed class MarkdownPostDataAccess : IPostDataAccess
             }
         }
     }
-
-    public async Task<bool> CreatePostAsync(Post post, List<string> tags, CancellationToken cancellationToken = default)
-    {
-        await this.containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
-
-        post.Tags = tags.Select(t => new Tag { Id = t, Name = t }).ToList();
-        var blobName = PostMarkdownSerializer.GetBlobName(post);
-        var content = this.serializer.Serialize(post);
-        var blobClient = this.containerClient.GetBlobClient(blobName);
-
-        await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: false, cancellationToken);
-        return true;
-    }
-
-    public async Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default)
-    {
-        post.Tags = tags.Select(t => new Tag { Id = t, Name = t }).ToList();
-        post.LastUpdatedDate = DateTimeOffset.UtcNow;
-
-        var blobName = PostMarkdownSerializer.GetBlobName(post);
-        var content = this.serializer.Serialize(post);
-        var blobClient = this.containerClient.GetBlobClient(blobName);
-
-        await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true, cancellationToken);
-        return true;
-    }
-
-    public async Task<bool> ArchivePostAsync(Post post, CancellationToken cancellationToken = default)
-    {
-        post.IsArchived = true;
-        post.LastUpdatedDate = DateTimeOffset.UtcNow;
-
-        var blobName = PostMarkdownSerializer.GetBlobName(post);
-        var content = this.serializer.Serialize(post);
-        var blobClient = this.containerClient.GetBlobClient(blobName);
-
-        await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true, cancellationToken);
-        return true;
-    }
 }
