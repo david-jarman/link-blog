@@ -1,37 +1,3 @@
-/* Theme toggle button styling */
-.theme-toggle-button {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.1);
-    border: none;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.theme-toggle-button:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-    transform: scale(1.1);
-}
-
-.theme-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    transition: opacity 0.3s ease;
-}
-
-/* Default: light mode - show moon icon */
-.sun-icon {
-    display: none;
-}
-
-.moon-icon {
-    display: block;
-}
-
 .header {
     background-color: #d96704;
     border-top: 5px solid black;
