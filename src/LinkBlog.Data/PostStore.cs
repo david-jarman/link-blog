@@ -14,15 +14,9 @@ public interface IPostStore
 
     IAsyncEnumerable<Post> GetPostsForTag(string tag, CancellationToken cancellationToken = default);
 
-    Task<bool> CreatePostAsync(Post post, List<string> tags, CancellationToken cancellationToken = default);
-
     IAsyncEnumerable<Post> GetPostsForDateRange(DateTimeOffset startDateTime, DateTimeOffset endDateTime, CancellationToken cancellationToken = default);
 
     Task<Post?> GetPostForShortTitleAsync(string shortTitle, CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<Post> SearchPostsAsync(string searchQuery, int maxResults = 50, CancellationToken cancellationToken = default);
-
-    Task<bool> UpdatePostAsync(string id, Post post, List<string> tags, CancellationToken cancellationToken = default);
-
-    Task<bool> ArchivePostAsync(string id, CancellationToken cancellationToken = default);
 }

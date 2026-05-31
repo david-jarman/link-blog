@@ -24,7 +24,7 @@ public sealed class Post
     /// <summary>Rendered HTML content, populated when loading from Blob Storage.</summary>
     public string Contents { get; set; } = string.Empty;
 
-    /// <summary>Raw markdown source, used by admin editor and serialized to the blob file body.</summary>
+    /// <summary>Raw markdown source.</summary>
     public string MarkdownSource { get; set; } = string.Empty;
 
     public bool IsArchived { get; set; }

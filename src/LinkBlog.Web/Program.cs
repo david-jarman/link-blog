@@ -1,12 +1,8 @@
-using System.Security.Claims;
 using LinkBlog.Data;
 using LinkBlog.Data.Extensions;
 using LinkBlog.Feed;
-using LinkBlog.Images;
 using LinkBlog.Web;
 using LinkBlog.Web.Components;
-using LinkBlog.Web.Security;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,40 +18,7 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddRazorComponents();
-
 builder.Services.AddControllers();
-
-bool disableAdminAuth = builder.Environment.IsDevelopment() &&
-    builder.Configuration.GetValue<bool>("DisableAdminAuth");
-
-var authBuilder = builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        if (!disableAdminAuth)
-            options.DefaultChallengeScheme = GitHubAccountDefaults.AuthenticationScheme;
-    })
-    .AddCookie();
-
-if (!disableAdminAuth)
-{
-    authBuilder.AddGitHubAccount(options =>
-    {
-        options.ClientId = config["CLIENT_ID"] ?? throw new InvalidOperationException("GitHub:ClientId is required.");
-        options.ClientSecret = config["CLIENT_SECRET"] ?? throw new InvalidOperationException("GitHub:ClientSecret is required.");
-    });
-}
-
-builder.Services.AddAuthorization(policy =>
-{
-    policy.AddPolicy("Admin", p =>
-    {
-        if (disableAdminAuth)
-            p.RequireAssertion(_ => true);
-        else
-            p.RequireClaim(ClaimTypes.NameIdentifier, AdminIdentifiers.DavidJarmanGitHubId);
-    });
-});
-builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOutputCache();
 
 builder.AddPostStore();
@@ -74,7 +37,6 @@ builder.Services.Configure<BlogOptions>(builder.Configuration.GetSection(nameof(
 builder.Services.Configure<FeedOptions>(builder.Configuration.GetSection("Feed"));
 builder.Services.Configure<PostStoreOptions>(builder.Configuration.GetSection(nameof(PostStoreOptions)));
 builder.Services.AddSingleton<ISyndicationFeed, AtomFeed>();
-builder.Services.AddSingleton<IImageConverter, ImageConverter>();
 
 var app = builder.Build();
 
@@ -106,21 +68,12 @@ else
     app.UseDeveloperExceptionPage();
 }
 
-// Now we can authenticate the user, if the requested route requires it.
-app.UseAuthentication();
-app.UseAuthorization();
-
 // Make sure the user is not a CSRF attack.
 app.UseAntiforgery();
-
 app.UseOutputCache();
-
 app.MapStaticAssets();
-
 app.MapRazorComponents<App>();
-
 app.MapControllers();
-
 app.MapDefaultEndpoints();
 
 app.Run();
