@@ -7,32 +7,14 @@
     <meta name="author" content="David Jarman" />
     <base href="/" />
     <link rel="alternate" href="/atom/all" type="application/atom+xml" title="David Jarman's Blog" />
-    <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["LinkBlog.Web.styles.css"]" />
-    <ImportMap />
     <link rel="icon" type="image/png" href="favicon.ico" />
-    <script>
-        // Inline script to set theme before page renders (prevents FOUC)
-        (function() {
-            const stored = localStorage.getItem('theme-preference');
-            const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
-    </script>
     <HeadOutlet />
 </head>
 
 <body>
     <Routes  />
-    @* Disable enhanced navigation, which causes issues when writing javascript to react to page load events *@
-    <script src="_framework/blazor.web.js" autostart="false"></script>
-    <script>
-        Blazor.start({
-            ssr: { disableDomPreservation: true }
-        });
-    </script>
-    <script src="@Assets["theme.js"]"></script>
 </body>
 
 </html>
