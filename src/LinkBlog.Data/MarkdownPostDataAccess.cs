@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Azure.Storage.Blobs;
 using LinkBlog.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace LinkBlog.Data;
 
@@ -13,17 +14,19 @@ public sealed class MarkdownPostDataAccess : IPostDataAccess
     private const string ContainerName = "posts";
     private readonly BlobContainerClient containerClient;
     private readonly PostMarkdownSerializer serializer;
+    private readonly ILogger<MarkdownPostDataAccess> logger;
 
-    public MarkdownPostDataAccess(BlobServiceClient blobServiceClient, PostMarkdownSerializer serializer)
+    public MarkdownPostDataAccess(BlobServiceClient blobServiceClient, PostMarkdownSerializer serializer, ILogger<MarkdownPostDataAccess> logger)
     {
         this.containerClient = blobServiceClient.GetBlobContainerClient(ContainerName);
         this.serializer = serializer;
+        this.logger = logger;
     }
 
     public async IAsyncEnumerable<Post> GetAllPostsAsync(
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        await this.containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
+        await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
 
         await foreach (var blobItem in this.containerClient.GetBlobsAsync(cancellationToken: cancellationToken))
         {
@@ -33,8 +36,19 @@ public sealed class MarkdownPostDataAccess : IPostDataAccess
             var response = await blobClient.DownloadContentAsync(cancellationToken);
             var content = response.Value.Content.ToString();
 
-            var post = this.serializer.Deserialize(content);
-            if (!post.IsArchived)
+            Post? post = null;
+
+            try
+            {
+                post = this.serializer.Deserialize(content);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Unable to parse post.");
+                continue;
+            }
+
+            if (post is not null && !post.IsArchived)
             {
                 yield return post;
             }
