@@ -12,13 +12,6 @@
     background-color: #d96704;
 }
 
-/* Dark mode post */
-[data-theme="dark"] .post {
-    background-color: #b35503;
-    border-color: #e0e0e0;
-    box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
-}
-
 .post-meta {
     font-size: .9rem;
     font-style: italic;
@@ -81,11 +74,4 @@ button.edit-btn:hover svg {
     color: #555;
     font-style: italic;
     border-radius: 4px;
-}
-
-/* Dark mode blockquote */
-[data-theme="dark"] .post ::deep blockquote {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-left-color: #e0e0e0;
-    color: #ccc;
 }

@@ -17,13 +17,6 @@
     box-shadow: 10px 10px;
 }
 
-/* Dark mode page links */
-[data-theme="dark"] .page-links {
-    background-color: #2b5278;
-    border-color: #e0e0e0;
-    box-shadow: 10px 10px rgba(224, 224, 224, 0.3);
-}
-
 .page-link {
     color: #333;
     text-decoration: none;
@@ -34,15 +27,6 @@
 
 .page-link:hover {
     color: #005fa3;
-}
-
-/* Dark mode page link */
-[data-theme="dark"] .page-link {
-    color: #f0f0f0;
-}
-
-[data-theme="dark"] .page-link:hover {
-    color: #4a9eff;
 }
 
 .pagination-nav {
@@ -78,15 +62,4 @@
 
 .older-posts {
     margin-left: auto;
-}
-
-[data-theme="dark"] .pagination-link {
-    background-color: #2b5278;
-    border-color: #e0e0e0;
-    color: #f0f0f0;
-}
-
-[data-theme="dark"] .pagination-link:hover {
-    background-color: #4a9eff;
-    color: #1a1a1a;
 }
